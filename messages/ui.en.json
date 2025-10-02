@@ -1,0 +1,110 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "open": "Open",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK"
+  },
+  "navigation": {
+    "home": "Home",
+    "leagues": "Leagues",
+    "teams": "Teams",
+    "fixtures": "Fixtures",
+    "venues": "Venues",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "home": {
+    "searchPlaceholder": "Search for games, teams or leagues...",
+    "popularLeagues": "Popular Leagues",
+    "upcomingFixtures": "Upcoming Fixtures",
+    "featuredTeams": "Featured Teams",
+    "topVenues": "Top Venues"
+  },
+  "fixture": {
+    "date": "Date",
+    "time": "Time",
+    "venue": "Venue",
+    "league": "League",
+    "homeTeam": "Home Team",
+    "awayTeam": "Away Team",
+    "score": "Score",
+    "status": "Status",
+    "offers": "Offers",
+    "tickets": "Tickets"
+  },
+  "team": {
+    "name": "Team Name",
+    "country": "Country",
+    "league": "League",
+    "venue": "Home Venue",
+    "founded": "Founded",
+    "website": "Official Website",
+    "upcomingFixtures": "Upcoming Fixtures",
+    "recentResults": "Recent Results"
+  },
+  "league": {
+    "name": "League Name",
+    "country": "Country",
+    "season": "Season",
+    "teams": "Teams",
+    "fixtures": "Fixtures",
+    "table": "Table",
+    "topScorers": "Top Scorers"
+  },
+  "venue": {
+    "name": "Venue Name",
+    "city": "City",
+    "country": "Country",
+    "capacity": "Capacity",
+    "opened": "Opened",
+    "surface": "Surface",
+    "address": "Address"
+  },
+  "offer": {
+    "price": "Price",
+    "currency": "Currency",
+    "seller": "Seller",
+    "quantity": "Quantity",
+    "section": "Section",
+    "row": "Row",
+    "seat": "Seat",
+    "description": "Description",
+    "buyNow": "Buy Now",
+    "addToCart": "Add to Cart"
+  },
+  "search": {
+    "placeholder": "Search...",
+    "noResults": "No results found",
+    "results": "Results",
+    "filters": "Filters",
+    "sortBy": "Sort by",
+    "clearFilters": "Clear filters"
+  },
+  "errors": {
+    "notFound": "Not Found",
+    "serverError": "Server Error",
+    "networkError": "Network Error",
+    "unauthorized": "Unauthorized",
+    "forbidden": "Forbidden",
+    "validationError": "Validation Error",
+    "timeout": "Timeout",
+    "unknown": "Unknown Error"
+  }
+}
