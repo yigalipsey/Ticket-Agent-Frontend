@@ -1,15 +1,12 @@
 "use client";
 
 import React from "react";
-import { useTranslations, useLocale } from "next-intl";
 import { TeamCard } from "@/components";
 import { usePopularTeams } from "@/hooks";
 import { Spinner } from "@/components/ui";
 
 export default function TeamsPage() {
-  const t = useTranslations();
-  const locale = useLocale();
-  const { teams, isLoading, error } = usePopularTeams(20, locale);
+  const { teams, isLoading, error } = usePopularTeams(20);
 
   if (error) {
     return (

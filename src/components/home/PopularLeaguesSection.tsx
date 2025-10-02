@@ -1,14 +1,12 @@
 "use client";
 
 import React from "react";
-import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { LeagueList } from "@/components";
 import { useAllLeagues } from "@/hooks";
 import { Spinner } from "@/components/ui";
 
 export default function PopularLeaguesSection() {
-  const t = useTranslations();
-
   // Fetch all leagues and filter popular ones
   const {
     leagues: allLeagues,
@@ -29,15 +27,13 @@ export default function PopularLeaguesSection() {
   return (
     <section className="mb-16">
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-3xl font-bold text-gray-900">
-          {t("home.popularLeagues")}
-        </h2>
-        <a
+        <h2 className="text-3xl font-bold text-gray-900">ליגות פופולריות</h2>
+        <Link
           href="/leagues"
           className="text-blue-600 hover:text-blue-700 transition-colors font-medium"
         >
           צפה בכל הליגות →
-        </a>
+        </Link>
       </div>
 
       {leaguesLoading ? (

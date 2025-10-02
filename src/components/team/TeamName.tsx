@@ -1,7 +1,3 @@
-"use client";
-
-import { useTeamTranslation } from "@/lib/hooks/useDataTranslation";
-
 interface TeamNameProps {
   slug: string;
   fallback?: string;
@@ -9,17 +5,10 @@ interface TeamNameProps {
 }
 
 /**
- * קומפוננט לתרגום שמות קבוצות
- * משתמש במערכת Data Translation החדשה
+ * קומפוננט פשוט להצגת שמות קבוצות
  */
 export default function TeamName({ slug, fallback, className }: TeamNameProps) {
-  const { getTeamName, loading } = useTeamTranslation();
+  const displayName = fallback || slug;
 
-  const displayName = getTeamName(slug, fallback);
-
-  return (
-    <span className={className}>
-      {loading ? fallback || slug : displayName}
-    </span>
-  );
+  return <span className={className}>{displayName}</span>;
 }

@@ -1,57 +1,64 @@
 import { apiClient } from "@/lib/api";
 import { API_ENDPOINTS } from "@/lib/constants";
-import { League, LeagueQuery, PaginatedResponse } from "@/types";
+import { League } from "@/types";
+
+interface ServiceResult<T> {
+  data: T | null;
+  error: string | null;
+  success: boolean;
+}
 
 export class LeagueService {
-  static async getLeagues(
-    query?: LeagueQuery
-  ): Promise<PaginatedResponse<League>> {
-    return apiClient.getPaginated<League>(API_ENDPOINTS.LEAGUES, query);
+  /**
+   * מקבל ליגה ספציפית לפי מזהה
+   */
+  static async getLeague(id: string): ServiceResult<League> {
+    try {
+      const league = await apiClient.get<League>(
+        `${API_ENDPOINTS.LEAGUES}/${id}`
+      );
+      return {
+        data: league,
+        error: null,
+        success: true,
+      };
+    } catch (error: any) {
+      console.error("שגיאה בטעינת ליגה:", error);
+      return {
+        data: null,
+        error: `שגיאה בטעינת הליגה: ${error.message || "שגיאה לא ידועה"}`,
+        success: false,
+      };
+    }
   }
 
-  static async getLeague(id: string): Promise<League> {
-    return apiClient.get<League>(`${API_ENDPOINTS.LEAGUES}/${id}`);
-  }
+  /**
+   * מקבל את כל הליגות עם הקבוצות שלהן
+   */
+  static async getAllLeaguesWithTeams(): ServiceResult<League[]> {
+    try {
+      const response = await apiClient.get(
+        `${API_ENDPOINTS.LEAGUES}?withTeams=true`
+      );
 
-  // פונקציות שמשתמשות ב-API
-  static async getActiveLeagues(): Promise<League[]> {
-    // קריאה ל-API לליגות פעילות
-    const response = await apiClient.get(
-      `${API_ENDPOINTS.LEAGUES}?isActive=true`
-    );
-    return response.data || [];
-  }
+      console.log("LeagueService.getAllLeaguesWithTeams - Response:", response);
 
-  static async getPopularLeagues(limit: number = 10): Promise<League[]> {
-    // קריאה ל-API החדש לליגות פופולריות
-    const response = await apiClient.get<League[]>(
-      `${API_ENDPOINTS.LEAGUES}/popular?limit=${limit}`
-    );
-    console.log("LeagueService.getPopularLeagues - Response:", response);
-    return response || [];
-  }
+      // וידוא שהתגובה היא מערך ליגות
+      const leagues = Array.isArray(response) ? response : response?.data || [];
 
-  static async searchLeagues(query: string): Promise<League[]> {
-    // קריאה ל-API לחיפוש ליגות
-    const response = await apiClient.get(
-      `${API_ENDPOINTS.LEAGUES}?search=${encodeURIComponent(query)}`
-    );
-    return response.data || [];
-  }
-
-  static async getLeaguesByCountry(countryCode: string): Promise<League[]> {
-    // קריאה ל-API לליגות לפי מדינה
-    const response = await apiClient.get(
-      `${API_ENDPOINTS.LEAGUES}?country=${encodeURIComponent(countryCode)}`
-    );
-    return response.data || [];
-  }
-
-  static async getAllAvailableLeagues(): Promise<League[]> {
-    // קריאה ל-API לכל הליגות
-    const response = await apiClient.get(`${API_ENDPOINTS.LEAGUES}`);
-    console.log("LeagueService.getAllAvailableLeagues - Response:", response);
-    return response || [];
+      return {
+        data: leagues,
+        error: null,
+        success: true,
+      };
+    } catch (error: any) {
+      console.error("שגיאה בטעינת ליגות עם קבוצות:", error);
+      return {
+        data: null,
+        error: `שגיאה בטעינת הליגות: ${error.message || "שגיאה לא ידועה"}`,
+        success: false,
+      };
+    }
   }
 }
 

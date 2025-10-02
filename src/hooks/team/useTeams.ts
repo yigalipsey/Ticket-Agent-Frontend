@@ -35,12 +35,12 @@ export function useTeams(query?: TeamQuery) {
   };
 }
 
-export function useTeam(slug: string, locale: string = "he") {
+export function useTeam(slug: string) {
   const [state, setState] = useState<LoadingState>({ isLoading: false });
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["team", slug, locale],
-    queryFn: () => TeamService.getTeam(slug, locale),
+    queryKey: ["team", slug],
+    queryFn: () => TeamService.getTeam(slug),
     enabled: !!slug,
     staleTime: 10 * 60 * 1000,
     retry: 2,
@@ -64,12 +64,12 @@ export function useTeam(slug: string, locale: string = "he") {
   };
 }
 
-export function usePopularTeams(limit: number = 10, locale: string = "he") {
+export function usePopularTeams(limit: number = 10) {
   const [state, setState] = useState<LoadingState>({ isLoading: false });
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["popular-teams", limit, locale],
-    queryFn: () => TeamService.getPopularTeams(limit, locale),
+    queryKey: ["popular-teams", limit],
+    queryFn: () => TeamService.getPopularTeams(limit),
     staleTime: 10 * 60 * 1000,
     retry: 2,
   });
@@ -92,20 +92,17 @@ export function usePopularTeams(limit: number = 10, locale: string = "he") {
   };
 }
 
-export function useTeamsByLeague(
-  leagueIdOrSlug: string,
-  locale: string = "he"
-) {
+export function useTeamsByLeague(leagueIdOrSlug: string) {
   const [state, setState] = useState<LoadingState>({ isLoading: false });
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["teams-by-league", leagueIdOrSlug, locale],
+    queryKey: ["teams-by-league", leagueIdOrSlug],
     queryFn: async () => {
       console.log(
         "useTeamsByLeague - calling TeamService.getTeamsByLeague with:",
-        { leagueIdOrSlug, locale }
+        { leagueIdOrSlug }
       );
-      const result = await TeamService.getTeamsByLeague(leagueIdOrSlug, locale);
+      const result = await TeamService.getTeamsByLeague(leagueIdOrSlug);
       console.log("useTeamsByLeague - TeamService returned:", result);
       return result;
     },
@@ -132,12 +129,12 @@ export function useTeamsByLeague(
   };
 }
 
-export function useTeamsByCountry(country: string, locale: string = "he") {
+export function useTeamsByCountry(country: string) {
   const [state, setState] = useState<LoadingState>({ isLoading: false });
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["teams-by-country", country, locale],
-    queryFn: () => TeamService.getTeamsByCountry(country, locale),
+    queryKey: ["teams-by-country", country],
+    queryFn: () => TeamService.getTeamsByCountry(country),
     enabled: !!country,
     staleTime: 10 * 60 * 1000,
     retry: 2,
@@ -161,7 +158,7 @@ export function useTeamsByCountry(country: string, locale: string = "he") {
   };
 }
 
-export function useSearchTeams(locale: string = "he") {
+export function useSearchTeams() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Team[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -175,7 +172,7 @@ export function useSearchTeams(locale: string = "he") {
 
       setIsSearching(true);
       try {
-        const data = await TeamService.searchTeams(searchQuery, locale);
+        const data = await TeamService.searchTeams(searchQuery);
         setResults(data);
       } catch (error) {
         console.error("Search error:", error);
@@ -184,7 +181,7 @@ export function useSearchTeams(locale: string = "he") {
         setIsSearching(false);
       }
     },
-    [locale]
+    []
   );
 
   const clearSearch = useCallback(() => {

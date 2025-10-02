@@ -4,13 +4,9 @@ import { Fixture, FixtureQuery, PaginatedResponse } from "@/types";
 
 export class FixtureService {
   static async getFixtures(
-    query?: FixtureQuery,
-    locale: string = "he"
+    query?: FixtureQuery
   ): Promise<PaginatedResponse<Fixture>> {
-    return apiClient.getPaginated<Fixture>(API_ENDPOINTS.FIXTURES, {
-      ...query,
-      locale,
-    });
+    return apiClient.getPaginated<Fixture>(API_ENDPOINTS.FIXTURES, query);
   }
 
   static async getFixture(slug: string): Promise<Fixture> {

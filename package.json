@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
+    "@tanstack/query-sync-storage-persister": "^5.90.2",
     "@tanstack/react-query": "^5.90.2",
     "@tanstack/react-query-devtools": "^5.90.2",
+    "@tanstack/react-query-persist-client": "^5.90.2",
     "axios": "^1.12.2",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",

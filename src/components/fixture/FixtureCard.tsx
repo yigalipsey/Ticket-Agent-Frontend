@@ -6,7 +6,6 @@ import Image from "next/image";
 import { MapPin, Users, Calendar } from "lucide-react";
 import { Fixture } from "@/types";
 import { formatDate, formatTime, formatCurrency } from "@/lib/utils";
-import { useTeamTranslation } from "@/lib/hooks/useDataTranslation";
 import Card, { CardContent, CardFooter } from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 
@@ -27,8 +26,6 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
   className,
   onClick,
 }) => {
-  const { getTeamName } = useTeamTranslation();
-
   const handleCardClick = () => {
     onClick?.(fixture);
   };
@@ -53,10 +50,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                     (fixture.homeTeam.logo ||
                       fixture.homeTeam.logoUrl) as string
                   }
-                  alt={getTeamName(
-                    fixture.homeTeam.slug,
-                    fixture.homeTeam.name
-                  )}
+                  alt={fixture.homeTeam.name}
                   width={40}
                   height={40}
                   className="rounded-full"
@@ -64,11 +58,8 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
               )}
               <div className="text-center md:text-right">
                 <h3 className="font-semibold text-gray-900 text-sm md:text-base">
-                  {getTeamName(fixture.homeTeam.slug, fixture.homeTeam.name)}
+                  {fixture.homeTeam.name}
                 </h3>
-                <p className="text-xs md:text-sm text-gray-500">
-                  {fixture.homeTeam.city}
-                </p>
               </div>
             </div>
 
@@ -98,10 +89,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                     (fixture.awayTeam.logo ||
                       fixture.awayTeam.logoUrl) as string
                   }
-                  alt={getTeamName(
-                    fixture.awayTeam.slug,
-                    fixture.awayTeam.name
-                  )}
+                  alt={fixture.awayTeam.name}
                   width={40}
                   height={40}
                   className="rounded-full"
@@ -109,11 +97,8 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
               )}
               <div className="text-center md:text-left">
                 <h3 className="font-semibold text-gray-900 text-sm md:text-base">
-                  {getTeamName(fixture.awayTeam.slug, fixture.awayTeam.name)}
+                  {fixture.awayTeam.name}
                 </h3>
-                <p className="text-xs md:text-sm text-gray-500">
-                  {fixture.awayTeam.city}
-                </p>
               </div>
             </div>
           </div>
@@ -126,7 +111,6 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
               <div className="flex items-center space-x-2 space-x-reverse">
                 <MapPin className="h-4 w-4" />
                 <span>{fixture.venue.name}</span>
-                <span>{fixture.venue.city}</span>
               </div>
               <div className="flex items-center space-x-1 space-x-reverse">
                 <Calendar className="h-4 w-4" />

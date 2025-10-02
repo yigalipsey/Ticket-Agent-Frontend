@@ -1,13 +1,11 @@
 "use client";
 
 import React from "react";
-import { useTranslations } from "next-intl";
 import { FixtureCard } from "@/components";
 import { useUpcomingFixtures } from "@/hooks";
 import { Spinner } from "@/components/ui";
 
 export default function FixturesPage() {
-  const t = useTranslations();
   const { fixtures, isLoading, error } = useUpcomingFixtures(20);
 
   if (error) {
@@ -16,7 +14,7 @@ export default function FixturesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-red-600 mb-4">
-              {t("errors.loadingError")}
+              שגיאה בטעינת משחקים
             </h1>
             <p className="text-gray-600">{error}</p>
           </div>
@@ -32,7 +30,7 @@ export default function FixturesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-text-dark mb-4">
-              {t("fixtures.title")}
+              משחקים קרובים
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               גלו את כל המשחקים הקרובים וההצעות הטובות ביותר לכרטיסים

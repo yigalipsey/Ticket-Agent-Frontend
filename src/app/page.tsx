@@ -1,13 +1,10 @@
 "use client";
 
 import React from "react";
-import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { SearchBar, PopularLeaguesSection } from "@/components";
-import { Spinner } from "@/components/ui";
 
 export default function HomePage() {
-  const t = useTranslations();
-
   // Data fetching moved to PopularLeaguesSection component
 
   const handleSearch = (query: string) => {
@@ -41,7 +38,7 @@ export default function HomePage() {
             {/* Search Bar */}
             <div className="max-w-2xl mx-auto animate-slide-up">
               <SearchBar
-                placeholder={t("home.searchPlaceholder")}
+                placeholder="חפש משחקים, קבוצות או ליגות..."
                 onSearch={handleSearch}
                 onFilterClick={handleFilterClick}
                 showFilters={true}
@@ -61,20 +58,18 @@ export default function HomePage() {
         {/* Featured Teams */}
         <section className="mb-16">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-gray-900">
-              {t("home.featuredTeams")}
-            </h2>
-            <a
+            <h2 className="text-3xl font-bold text-gray-900">קבוצות מובילות</h2>
+            <Link
               href="/teams"
               className="text-blue-600 hover:text-blue-700 transition-colors font-medium"
             >
               צפה בכל הקבוצות →
-            </a>
+            </Link>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {/* ריאל מדריד */}
-            <a href="/teams/real-madrid" className="block">
+            <Link href="/teams/real-madrid" className="block">
               <div className="bg-white rounded-xl p-6 text-center shadow-soft hover:shadow-md transition-shadow cursor-pointer">
                 <div className="text-4xl mb-3">⚪</div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">
@@ -82,10 +77,10 @@ export default function HomePage() {
                 </h3>
                 <p className="text-sm text-gray-600">ספרד</p>
               </div>
-            </a>
+            </Link>
 
             {/* ברצלונה */}
-            <a href="/teams/barcelona" className="block">
+            <Link href="/teams/barcelona" className="block">
               <div className="bg-white rounded-xl p-6 text-center shadow-soft hover:shadow-md transition-shadow cursor-pointer">
                 <div className="text-4xl mb-3">🔵</div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">
@@ -93,10 +88,10 @@ export default function HomePage() {
                 </h3>
                 <p className="text-sm text-gray-600">ספרד</p>
               </div>
-            </a>
+            </Link>
 
             {/* ארסנל */}
-            <a href="/teams/arsenal" className="block">
+            <Link href="/teams/arsenal" className="block">
               <div className="bg-white rounded-xl p-6 text-center shadow-soft hover:shadow-md transition-shadow cursor-pointer">
                 <div className="text-4xl mb-3">🔴</div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">
@@ -104,10 +99,10 @@ export default function HomePage() {
                 </h3>
                 <p className="text-sm text-gray-600">אנגליה</p>
               </div>
-            </a>
+            </Link>
 
             {/* ליברפול */}
-            <a href="/teams/liverpool" className="block">
+            <Link href="/teams/liverpool" className="block">
               <div className="bg-white rounded-xl p-6 text-center shadow-soft hover:shadow-md transition-shadow cursor-pointer">
                 <div className="text-4xl mb-3">🔴</div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">
@@ -115,10 +110,10 @@ export default function HomePage() {
                 </h3>
                 <p className="text-sm text-gray-600">אנגליה</p>
               </div>
-            </a>
+            </Link>
 
             {/* צ'לסי */}
-            <a href="/teams/chelsea" className="block">
+            <Link href="/teams/chelsea" className="block">
               <div className="bg-white rounded-xl p-6 text-center shadow-soft hover:shadow-md transition-shadow cursor-pointer">
                 <div className="text-4xl mb-3">🔵</div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">
@@ -126,10 +121,10 @@ export default function HomePage() {
                 </h3>
                 <p className="text-sm text-gray-600">אנגליה</p>
               </div>
-            </a>
+            </Link>
 
             {/* מנצ'סטר סיטי */}
-            <a href="/teams/manchester-city" className="block">
+            <Link href="/teams/manchester-city" className="block">
               <div className="bg-white rounded-xl p-6 text-center shadow-soft hover:shadow-md transition-shadow cursor-pointer">
                 <div className="text-4xl mb-3">🔵</div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">
@@ -137,7 +132,7 @@ export default function HomePage() {
                 </h3>
                 <p className="text-sm text-gray-600">אנגליה</p>
               </div>
-            </a>
+            </Link>
           </div>
         </section>
 
@@ -145,14 +140,14 @@ export default function HomePage() {
         <section className="mb-16">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold text-gray-900">
-              {t("home.topVenues")}
+              אצטדיונים מובילים
             </h2>
-            <a
+            <Link
               href="/venues"
               className="text-blue-600 hover:text-blue-700 transition-colors font-medium"
             >
               צפה בכל האצטדיונים →
-            </a>
+            </Link>
           </div>
 
           <div className="bg-white rounded-xl p-8 text-center shadow-soft">

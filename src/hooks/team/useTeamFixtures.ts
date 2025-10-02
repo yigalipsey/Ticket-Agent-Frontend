@@ -29,7 +29,6 @@ export function useTeamFixtures(
         );
         return result || [];
       } catch (err) {
-        console.error("Hook query error:", err);
         throw err;
       }
     },

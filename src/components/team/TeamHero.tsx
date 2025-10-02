@@ -1,18 +1,10 @@
 import Image from "next/image";
 
 interface Team {
-  _id: string;
+  id?: string;
   name: string;
-  code: string;
-  slug: string;
-  country: string;
+  logo?: string;
   logoUrl?: string;
-  teamId: number;
-  venueId: string;
-  externalIds: {
-    apiFootball: number;
-  };
-  updatedAt: string;
 }
 
 interface TeamHeroProps {
@@ -38,26 +30,19 @@ export function TeamHero({ team }: TeamHeroProps) {
       {/* Team Info Overlay */}
       <div className="relative z-10 flex items-center justify-center h-full px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          {/* Team Logo */}
-          {team.logoUrl && (
-            <div className="mb-6">
-              <div className="w-32 h-32 rounded-full bg-white p-2 shadow-lg mx-auto">
-                <Image
-                  src={team.logoUrl}
-                  alt={team.name}
-                  width={120}
-                  height={120}
-                  className="rounded-full w-full h-full object-contain"
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Team Name */}
-          <h1 className="text-5xl font-bold text-white mb-4">{team.name}</h1>
-
-          {/* Country */}
-          <p className="text-xl text-gray-200">{team.country}</p>
+          {/* Team Name with Logo */}
+          <div className="flex items-center justify-center mb-6">
+            {(team.logo || team.logoUrl) && (
+              <Image
+                src={team.logo || team.logoUrl || ""}
+                alt={team.name}
+                width={64}
+                height={64}
+                className="mr-6"
+              />
+            )}
+            <h1 className="text-5xl font-bold text-white">{team.name}</h1>
+          </div>
         </div>
       </div>
     </div>

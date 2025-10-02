@@ -11,7 +11,8 @@ export function useLeagues(query?: LeagueQuery) {
   const { data, isLoading, error, refetch, isFetching } = useQuery({
     queryKey: ["leagues", query],
     queryFn: () => LeagueService.getLeagues(query),
-    staleTime: 10 * 60 * 1000, // 10 minutes - leagues don't change often
+    staleTime: 60 * 60 * 1000, // 1 שעה
+
     retry: 2,
   });
 
@@ -141,14 +142,20 @@ export function useAllLeagues() {
   const [state, setState] = useState<LoadingState>({ isLoading: false });
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["all-leagues-v2"],
+    queryKey: ["all-leagues-with-teams"],
     queryFn: async () => {
       console.log(
-        "useAllLeagues - Calling LeagueService.getAllAvailableLeagues"
+        "useAllLeagues - Calling LeagueService.getAllLeaguesWithTeams"
       );
-      const result = await LeagueService.getAllAvailableLeagues();
-      console.log("useAllLeagues - LeagueService returned:", result);
-      return result;
+      const serviceResult = await LeagueService.getAllLeaguesWithTeams();
+      console.log("useAllLeagues - LeagueService returned:", serviceResult);
+
+      // Handle ServiceResult - if not successful, throw error for React Query
+      if (!serviceResult.success) {
+        throw new Error(serviceResult.error || "שגיאה בטעינת הליגות");
+      }
+
+      return serviceResult.data;
     },
     staleTime: 10 * 60 * 1000,
     retry: 2,
@@ -166,7 +173,7 @@ export function useAllLeagues() {
   }, [refetch]);
 
   const result = {
-    leagues: data || [],
+    leagues: Array.isArray(data) ? data : [],
     ...state,
     refresh,
   };

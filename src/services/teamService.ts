@@ -5,32 +5,10 @@ import type { Team } from "@/types";
 export class TeamService {
   private static client = apiClient;
 
-  // פונקציות שמשתמשות ב-API (קבוצות מהדאטה בייס)
-  static async getAllAvailableTeams(locale: string = "he"): Promise<Team[]> {
-    try {
-      const response = await apiClient.client.get("/teams", {
-        params: { locale },
-      });
-
-      const responseData = response.data;
-      if (responseData && responseData.success && responseData.data) {
-        return responseData.data;
-      }
-      return [];
-    } catch (error) {
-      console.error("Error fetching all teams:", error);
-      throw error;
-    }
-  }
-
-  static async getPopularTeams(
-    limit: number = 20,
-    locale: string = "he"
-  ): Promise<Team[]> {
+  static async getPopularTeams(limit: number = 20): Promise<Team[]> {
     try {
       const response = await apiClient.client.get("/teams", {
         params: {
-          locale,
           limit: limit.toString(),
           sortBy: "priority",
           sortOrder: "asc",
@@ -43,25 +21,17 @@ export class TeamService {
       }
       return [];
     } catch (error) {
-      console.error("Error fetching popular teams:", error);
       throw error;
     }
   }
 
-  static async getTeamsByLeague(
-    leagueIdOrSlug: string,
-    locale: string = "he"
-  ): Promise<Team[]> {
+  static async getTeamsByLeague(leagueIdOrSlug: string): Promise<Team[]> {
     try {
       // בדיקה אם זה ObjectID או slug
       const isObjectId = /^[0-9a-fA-F]{24}$/.test(leagueIdOrSlug);
       const endpoint = `/teams/league/${leagueIdOrSlug}`;
 
-      const response = await apiClient.client.get(endpoint, {
-        params: {
-          locale,
-        },
-      });
+      const response = await apiClient.client.get(endpoint);
 
       const responseData = response.data;
       if (responseData && responseData.success && responseData.data) {
@@ -69,19 +39,14 @@ export class TeamService {
       }
       return [];
     } catch (error) {
-      console.error("Error fetching teams by league:", error);
       throw error;
     }
   }
 
-  static async getTeamsByCountry(
-    countryCode: string,
-    locale: string = "he"
-  ): Promise<Team[]> {
+  static async getTeamsByCountry(countryCode: string): Promise<Team[]> {
     try {
       const response = await apiClient.client.get("/teams", {
         params: {
-          locale,
           country: countryCode,
         },
       });
@@ -92,19 +57,14 @@ export class TeamService {
       }
       return [];
     } catch (error) {
-      console.error("Error fetching teams by country:", error);
       throw error;
     }
   }
 
-  static async searchTeams(
-    query: string,
-    locale: string = "he"
-  ): Promise<Team[]> {
+  static async searchTeams(query: string): Promise<Team[]> {
     try {
       const response = await apiClient.client.get("/teams/search", {
         params: {
-          locale,
           q: query,
         },
       });
@@ -115,7 +75,6 @@ export class TeamService {
       }
       return [];
     } catch (error) {
-      console.error("Error searching teams:", error);
       throw error;
     }
   }
@@ -126,29 +85,18 @@ export class TeamService {
       const response = await apiClient.client.get(`/teams/slug/${slug}`, {
         params: { locale },
       });
-      console.log("TeamService.getTeam response:", response);
 
       // Handle different response formats
       const responseData = (response as any).data;
-      console.log("TeamService.getTeam responseData:", responseData);
 
       // If response has success property, extract data from it
       if (responseData && responseData.success && responseData.data) {
-        console.log(
-          "TeamService.getTeam returning data from success wrapper:",
-          responseData.data
-        );
         return responseData.data;
       }
 
       // Otherwise, return the response directly
-      console.log(
-        "TeamService.getTeam returning response directly:",
-        responseData
-      );
       return responseData || null;
     } catch (error) {
-      console.error("Error fetching team:", error);
       throw error;
     }
   }
@@ -156,7 +104,6 @@ export class TeamService {
   static async getTeamDetails(teamId: string) {
     try {
       const response = await this.client.get(`/teams/${teamId}`);
-      console.log("TeamService.getTeamDetails response:", response);
 
       // Handle different response formats
       const responseData = (response as any).data;
@@ -169,7 +116,6 @@ export class TeamService {
       // Otherwise, return the response directly
       return responseData;
     } catch (error) {
-      console.error("Error fetching team details:", error);
       throw error;
     }
   }
@@ -269,7 +215,6 @@ export class TeamService {
           totalOffers: 0,
         }));
 
-        console.log("Mapped fixtures:", mappedFixtures); // Debug log
         return mappedFixtures;
       }
 

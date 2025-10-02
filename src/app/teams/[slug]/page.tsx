@@ -1,46 +1,65 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useTeamData } from "@/hooks";
-import { TeamHero, TeamFixtures } from "@/components";
+import { useState } from "react";
+import React from "react";
+import { TeamHero, TeamFixtures, TeamFilters } from "@/components";
 import { Spinner } from "@/components/ui";
-import { useState, useEffect } from "react";
-import { TeamService } from "@/services";
+import { useTeamData } from "@/hooks";
+import { navigationService } from "@/services/navigationService";
 
 export default function TeamPage() {
-  const params = useParams();
-  const teamSlug = params.slug as string;
-  const [teamObjectId, setTeamObjectId] = useState<string | null>(null);
+  const { slug: teamSlug } = useParams();
+  const [selectedFilter, setSelectedFilter] = useState<"all" | "home" | "away">(
+    "all"
+  );
+  const [selectedRound, setSelectedRound] = useState<string>("");
 
-  // Get ObjectID from slug by fetching all teams
-  useEffect(() => {
-    const fetchTeamId = async () => {
-      if (teamSlug) {
-        try {
-          console.log("🔍 Fetching team ID for slug:", teamSlug);
-          const teams = await TeamService.getAllAvailableTeams("he");
-          const team = teams.find((t) => t.slug === teamSlug);
-          if (team && (team._id || team.id)) {
-            const id = team._id || team.id || "";
-            setTeamObjectId(id);
-            console.log("✅ Found team ObjectID:", id);
-          } else {
-            console.error("❌ Team not found for slug:", teamSlug);
-          }
-        } catch (error) {
-          console.error("❌ Error fetching team ID:", error);
-        }
+  // הוק יחיד שמטפל בכל הלוגיקה של טעינת דאטה
+  const { teamId, fixtures, isLoading, error } = useTeamData(
+    teamSlug as string,
+    {
+      limit: 50,
+      upcoming: "true",
+    }
+  );
+
+  // חילוץ פרטי הקבוצה מהנתונים המאוחסנים
+  const teamData = React.useMemo(() => {
+    // קודם ננסה למצוא את פרטי הקבוצה מהנתונים המאוחסנים
+    if (navigationService.isInitialized()) {
+      const teamInfo = navigationService.getTeamBySlug(teamSlug as string);
+      console.log("🔍 חיפוש פרטי קבוצה עבור", teamSlug, ":", teamInfo);
+      if (teamInfo) {
+        return {
+          id: teamId,
+          name: teamInfo.name,
+          logo: teamInfo.logo, // לקבל את הלוגו מהנתונים המאוחסנים
+        };
       }
-    };
+    }
 
-    fetchTeamId();
-  }, [teamSlug]);
+    // אם לא מצאנו, נקח מהמשחקים
+    if (fixtures && fixtures.length > 0) {
+      return {
+        id: teamId,
+        name:
+          fixtures[0].homeTeam?.name || fixtures[0].awayTeam?.name || "הקבוצה",
+        logo:
+          fixtures[0].homeTeam?.logo ||
+          fixtures[0].awayTeam?.logo ||
+          fixtures[0].homeTeam?.logoUrl ||
+          fixtures[0].awayTeam?.logoUrl,
+      };
+    }
 
-  const { team, isLoading, error, fixtures, fixturesLoading, fixturesError } =
-    useTeamData(teamObjectId || "");
+    return null;
+  }, [teamId, teamSlug, fixtures]);
 
-  // Loading state
-  if (isLoading) {
+  const team = teamData;
+
+  // מצב טעינה
+  if (isLoading && !teamId) {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -52,19 +71,20 @@ export default function TeamPage() {
     );
   }
 
-  // Error state - only show if we don't have team data AND no fixtures
+  // מצב שגיאה
   if (error && (!fixtures || fixtures.length === 0)) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-red-600 mb-4">
-              קבוצה לא נמצאה
-            </h1>
-            <p className="text-gray-600">
-              {error || "אנא ודא שהכתובת נכונה או חזור לדף הקבוצות."}
-            </p>
-          </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            קבוצה לא נמצאה
+          </h1>
+          <p className="text-gray-600">
+            הקבוצה "{teamSlug}" לא קיימת במערכת או שאין לה משחקים
+          </p>
+          {error && (
+            <p className="text-red-600 text-sm mt-2">{error.message}</p>
+          )}
         </div>
       </div>
     );
@@ -72,12 +92,27 @@ export default function TeamPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* כותרת הקבוצה */}
       <TeamHero team={team as any} />
+
+      {/* פילטרים */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-5">
+        <TeamFilters
+          fixtures={fixtures || []}
+          teamId={teamId || ""}
+          selectedFilter={selectedFilter}
+          setSelectedFilter={setSelectedFilter}
+          selectedRound={selectedRound}
+          setSelectedRound={setSelectedRound}
+        />
+      </div>
+
+      {/* משחקי הקבוצה */}
       <TeamFixtures
-        fixtures={fixtures as any}
-        isLoading={fixturesLoading}
-        error={fixturesError}
-        teamName={team?.name}
+        fixtures={filteredFixtures}
+        isLoading={isLoading}
+        error={error}
+        teamName={team?.name || "הקבוצה"}
       />
     </div>
   );
