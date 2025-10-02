@@ -65,6 +65,7 @@ export default function LeaguePage({
         <LeagueFixturesSection
           fixtures={fixtures || []}
           isLoading={fixturesLoading}
+          error={null}
         />
       </div>
     </div>
