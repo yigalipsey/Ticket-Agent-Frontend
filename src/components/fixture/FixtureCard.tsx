@@ -54,6 +54,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                   width={40}
                   height={40}
                   className="rounded-full"
+                  style={{ width: "auto", height: "auto" }}
                 />
               )}
               <div className="text-center md:text-right">
@@ -73,6 +74,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                     width={40}
                     height={40}
                     className="rounded-full"
+                    style={{ width: "auto", height: "auto" }}
                   />
                 )}
                 <span className="text-xs font-medium text-gray-700 mt-1">
@@ -93,6 +95,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                   width={40}
                   height={40}
                   className="rounded-full"
+                  style={{ width: "auto", height: "auto" }}
                 />
               )}
               <div className="text-center md:text-left">

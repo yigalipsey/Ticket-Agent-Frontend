@@ -51,24 +51,16 @@ class ApiClient {
   }
 
   async get<T>(url: string, params?: Record<string, unknown>): Promise<T> {
-    console.log("🌐 apiClient.get called with:", { url, params });
-
     const response = await this.client.get(url, { params });
-    console.log("📡 apiClient.get response:", {
-      status: response.status,
-      data: response.data,
-    });
 
     const responseData = response.data;
 
     // If response has success property (backend format), extract data from it
     if (responseData && responseData.success && responseData.data) {
-      console.log("✅ apiClient.get returning:", responseData.data);
       return responseData.data;
     }
 
     // Otherwise, return the response directly
-    console.log("✅ apiClient.get returning direct:", responseData);
     return responseData;
   }
 

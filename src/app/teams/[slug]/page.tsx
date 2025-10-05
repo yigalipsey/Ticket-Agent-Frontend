@@ -34,7 +34,7 @@ export default function TeamPage() {
         return {
           id: teamId,
           name: teamInfo.name,
-          logo: teamInfo.logo, // לקבל את הלוגו מהנתונים המאוחסנים
+          logo: (teamInfo as any).logo, // לקבל את הלוגו מהנתונים המאוחסנים
         };
       }
     }
@@ -80,7 +80,7 @@ export default function TeamPage() {
             קבוצה לא נמצאה
           </h1>
           <p className="text-gray-600">
-            הקבוצה "{teamSlug}" לא קיימת במערכת או שאין לה משחקים
+            הקבוצה &quot;{teamSlug}&quot; לא קיימת במערכת או שאין לה משחקים
           </p>
           {error && (
             <p className="text-red-600 text-sm mt-2">{error.message}</p>
@@ -98,7 +98,7 @@ export default function TeamPage() {
       {/* פילטרים */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-5">
         <TeamFilters
-          fixtures={fixtures || []}
+          fixtures={(fixtures || []) as any}
           teamId={teamId || ""}
           selectedFilter={selectedFilter}
           setSelectedFilter={setSelectedFilter}
@@ -109,9 +109,9 @@ export default function TeamPage() {
 
       {/* משחקי הקבוצה */}
       <TeamFixtures
-        fixtures={filteredFixtures}
+        fixtures={fixtures as any}
         isLoading={isLoading}
-        error={error}
+        error={error?.message || null}
         teamName={team?.name || "הקבוצה"}
       />
     </div>

@@ -41,8 +41,6 @@ export class LeagueService {
         `${API_ENDPOINTS.LEAGUES}?withTeams=true`
       );
 
-      console.log("LeagueService.getAllLeaguesWithTeams - Response:", response);
-
       // וידוא שהתגובה היא מערך ליגות
       const leagues = Array.isArray(response) ? response : response?.data || [];
 

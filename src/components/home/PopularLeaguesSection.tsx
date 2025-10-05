@@ -17,13 +17,6 @@ export default function PopularLeaguesSection() {
   // Filter popular leagues in frontend
   const popularLeagues = allLeagues?.filter((league) => league.isPopular) || [];
 
-  console.log("PopularLeaguesSection - Debug:", {
-    popularLeagues,
-    leaguesLoading,
-    error,
-    count: popularLeagues?.length,
-  });
-
   return (
     <section className="mb-16">
       <div className="flex items-center justify-between mb-8">

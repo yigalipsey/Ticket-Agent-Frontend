@@ -45,7 +45,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           },
         }}
         onSuccess={() => {
-          console.log("🚀 Query Client restored from localStorage");
+          // Query Client restored from localStorage
         }}
       >
         {children}

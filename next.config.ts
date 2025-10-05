@@ -12,6 +12,8 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Disable source maps in development to avoid DevTools errors
+  productionBrowserSourceMaps: false,
 };
 
 export default nextConfig;

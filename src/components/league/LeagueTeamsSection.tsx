@@ -109,6 +109,7 @@ export function LeagueTeamsSection({ teams }: LeagueTeamsSectionProps) {
                     width={48}
                     height={48}
                     className="mb-3 object-contain"
+                    style={{ width: "auto", height: "auto" }}
                   />
                 ) : (
                   <div className="w-12 h-12 bg-gray-100 rounded-full mb-3 flex items-center justify-center">

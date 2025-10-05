@@ -99,12 +99,7 @@ export function usePopularLeagues(limit: number = 10) {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["popular-leagues", limit],
     queryFn: async () => {
-      console.log(
-        "usePopularLeagues - Calling LeagueService.getPopularLeagues with limit:",
-        limit
-      );
       const result = await LeagueService.getPopularLeagues(limit);
-      console.log("usePopularLeagues - LeagueService returned:", result);
       return result;
     },
     staleTime: 10 * 60 * 1000,
@@ -128,13 +123,6 @@ export function usePopularLeagues(limit: number = 10) {
     refresh,
   };
 
-  console.log("usePopularLeagues - Returning:", {
-    data,
-    leagues: result.leagues,
-    isLoading: result.isLoading,
-    error: result.error,
-  });
-
   return result;
 }
 
@@ -144,11 +132,7 @@ export function useAllLeagues() {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["all-leagues-with-teams"],
     queryFn: async () => {
-      console.log(
-        "useAllLeagues - Calling LeagueService.getAllLeaguesWithTeams"
-      );
       const serviceResult = await LeagueService.getAllLeaguesWithTeams();
-      console.log("useAllLeagues - LeagueService returned:", serviceResult);
 
       // Handle ServiceResult - if not successful, throw error for React Query
       if (!serviceResult.success) {
@@ -177,13 +161,6 @@ export function useAllLeagues() {
     ...state,
     refresh,
   };
-
-  console.log("useAllLeagues - Returning:", {
-    data,
-    leagues: result.leagues,
-    isLoading: result.isLoading,
-    error: result.error,
-  });
 
   return result;
 }
