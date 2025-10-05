@@ -201,7 +201,7 @@ export class TeamService {
             id: fixture.league._id,
             name: fixture.league.name,
             country: fixture.league.country,
-            logo: fixture.league.logoUrl,
+            logoUrl: fixture.league.logoUrl,
           },
           date: fixture.date,
           time: new Date(fixture.date).toLocaleTimeString(),

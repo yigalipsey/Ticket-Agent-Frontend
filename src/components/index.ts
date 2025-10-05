@@ -5,6 +5,9 @@ export * from "./ui";
 
 // Domain Components
 export { default as FixtureCard } from "./fixture/FixtureCard";
+export { default as OfferCard } from "./fixture/OfferCard";
+export { default as FixtureHeader } from "./fixture/FixtureHeader";
+export { default as OffersSection } from "./fixture/OffersSection";
 export { default as OfferList } from "./fixture/OfferList";
 
 export { default as LeagueList } from "./league/LeagueList";

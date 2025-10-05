@@ -35,13 +35,13 @@ export function useFixtures(query?: FixtureQuery) {
   };
 }
 
-export function useFixture(slug: string) {
+export function useFixture(idOrSlug: string, options?: { enabled?: boolean }) {
   const [state, setState] = useState<LoadingState>({ isLoading: false });
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["fixture", slug],
-    queryFn: () => FixtureService.getFixture(slug),
-    enabled: !!slug,
+    queryKey: ["fixture", idOrSlug],
+    queryFn: () => FixtureService.getFixture(idOrSlug),
+    enabled: !!idOrSlug && options?.enabled !== false,
     staleTime: 5 * 60 * 1000,
     retry: 2,
   });

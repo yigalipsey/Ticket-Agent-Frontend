@@ -6,11 +6,25 @@ export class FixtureService {
   static async getFixtures(
     query?: FixtureQuery
   ): Promise<PaginatedResponse<Fixture>> {
-    return apiClient.getPaginated<Fixture>(API_ENDPOINTS.FIXTURES, query);
+    return apiClient.getPaginated<Fixture>(
+      API_ENDPOINTS.FIXTURES,
+      query as Record<string, unknown>
+    );
   }
 
-  static async getFixture(slug: string): Promise<Fixture> {
-    return apiClient.get<Fixture>(`${API_ENDPOINTS.FIXTURES}/${slug}`);
+  static async getFixture(idOrSlug: string): Promise<Fixture> {
+    // בדיקה אם זה ObjectID או slug
+    const isObjectId = /^[0-9a-fA-F]{24}$/.test(idOrSlug);
+
+    if (!isObjectId) {
+      // אם זה לא ObjectID, נזרוק שגיאה כי אין endpoint ל-slug
+      throw new Error(
+        `Invalid fixture ID format: ${idOrSlug}. Expected MongoDB ObjectId.`
+      );
+    }
+
+    const endpoint = `${API_ENDPOINTS.FOOTBALL_EVENTS}/${idOrSlug}`;
+    return apiClient.get<Fixture>(endpoint);
   }
 
   static async getFixturesByLeague(

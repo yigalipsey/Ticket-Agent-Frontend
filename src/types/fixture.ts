@@ -1,5 +1,6 @@
 export interface Fixture {
   id: string;
+  _id?: string; // MongoDB ObjectId
   slug: string;
   homeTeam: Team;
   awayTeam: Team;

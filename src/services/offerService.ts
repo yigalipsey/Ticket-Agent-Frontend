@@ -4,7 +4,10 @@ import { Offer, OfferQuery, PaginatedResponse } from "@/types";
 
 export class OfferService {
   static async getOffers(query: OfferQuery): Promise<PaginatedResponse<Offer>> {
-    return apiClient.getPaginated<Offer>(API_ENDPOINTS.OFFERS, query);
+    return apiClient.getPaginated<Offer>(
+      API_ENDPOINTS.OFFERS,
+      query as unknown as Record<string, unknown>
+    );
   }
 
   static async getOffer(id: string): Promise<Offer> {
@@ -16,7 +19,7 @@ export class OfferService {
     query?: Omit<OfferQuery, "fixtureId">
   ): Promise<PaginatedResponse<Offer>> {
     return apiClient.getPaginated<Offer>(
-      `${API_ENDPOINTS.FIXTURES}/${fixtureId}/offers`,
+      `${API_ENDPOINTS.OFFERS}/fixture/${fixtureId}`,
       query
     );
   }
@@ -24,7 +27,7 @@ export class OfferService {
   static async getLowestOffer(fixtureId: string): Promise<Offer | null> {
     try {
       const response = await apiClient.getPaginated<Offer>(
-        `${API_ENDPOINTS.FIXTURES}/${fixtureId}/offers`,
+        `${API_ENDPOINTS.OFFERS}/fixture/${fixtureId}`,
         {
           limit: 1,
           sortBy: "price",
@@ -55,7 +58,7 @@ export class OfferService {
     query?: Omit<OfferQuery, "fixtureId">
   ): Promise<PaginatedResponse<Offer>> {
     return apiClient.getPaginated<Offer>(
-      `${API_ENDPOINTS.FIXTURES}/${fixtureId}/offers`,
+      `${API_ENDPOINTS.OFFERS}/fixture/${fixtureId}`,
       {
         ...query,
         filters: {
@@ -72,7 +75,7 @@ export class OfferService {
     query?: Omit<OfferQuery, "fixtureId">
   ): Promise<PaginatedResponse<Offer>> {
     return apiClient.getPaginated<Offer>(
-      `${API_ENDPOINTS.FIXTURES}/${fixtureId}/offers`,
+      `${API_ENDPOINTS.OFFERS}/fixture/${fixtureId}`,
       {
         ...query,
         filters: {

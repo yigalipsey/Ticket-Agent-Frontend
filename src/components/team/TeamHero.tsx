@@ -35,7 +35,7 @@ export function TeamHero({ team }: TeamHeroProps) {
             {(team.logo || team.logoUrl) && (
               <Image
                 src={team.logo || team.logoUrl || ""}
-                alt={team.name}
+                alt={team.name || "Team logo"}
                 width={64}
                 height={64}
                 className="mr-6"

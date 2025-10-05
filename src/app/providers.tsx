@@ -34,12 +34,16 @@ export function Providers({ children }: { children: React.ReactNode }) {
           persister: persistQueryClient,
           maxAge: QUERY_CACHE_TIME,
           dehydrateOptions: {
-            shouldDehydrateQuery: (query) => {
-              // נשמור רק מפתחות של ליגות וקבוצות
+            shouldDehydrateQuery: (query): boolean => {
+              // נשמור מפתחות של ליגות, קבוצות ומשחקים
+              const queryKey = query.queryKey[0] as string;
               return (
-                query.queryKey[0] === "all-leagues-with-teams" ||
-                (query.queryKey[0] === "league-" && query.queryKey[1]) ||
-                (query.queryKey[0] === "team-fixtures" && query.queryKey[1])
+                queryKey === "all-leagues-with-teams" ||
+                queryKey === "league-fixtures" ||
+                queryKey === "fixtures" ||
+                queryKey === "football-events" ||
+                (queryKey.startsWith("league-") && !!query.queryKey[1]) ||
+                (queryKey === "team-fixtures" && !!query.queryKey[1])
               );
             },
           },

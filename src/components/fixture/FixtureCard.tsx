@@ -70,7 +70,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                 {fixture.league.logoUrl && (
                   <Image
                     src={fixture.league.logoUrl}
-                    alt={fixture.league.name}
+                    alt={fixture.league.name || "League Logo"}
                     width={40}
                     height={40}
                     className="rounded-full"
@@ -150,7 +150,10 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
       </CardContent>
 
       <CardFooter className="p-4 pt-0">
-        <Link href={`/fixtures/${fixture.slug}`} className="w-full">
+        <Link
+          href={`/fixtures/${fixture._id || fixture.id}/${fixture.slug}`}
+          className="w-full"
+        >
           <Button
             variant="outline"
             size="sm"

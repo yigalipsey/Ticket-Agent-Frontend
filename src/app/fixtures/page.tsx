@@ -1,64 +1,78 @@
 "use client";
 
-import React from "react";
+import { useState } from "react";
+import { useFixtures } from "@/hooks";
 import { FixtureCard } from "@/components";
-import { useUpcomingFixtures } from "@/hooks";
 import { Spinner } from "@/components/ui";
+import { FixtureQuery } from "@/types";
 
 export default function FixturesPage() {
-  const { fixtures, isLoading, error } = useUpcomingFixtures(20);
+  const [query, setQuery] = useState<FixtureQuery>({
+    limit: 20,
+    sortBy: "date",
+    sortOrder: "asc",
+    upcoming: "true",
+  });
+
+  const { fixtures, isLoading, error, total } = useFixtures(query);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex justify-center items-center">
+        <Spinner size="lg" />
+      </div>
+    );
+  }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-background-light">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-red-600 mb-4">
-              שגיאה בטעינת משחקים
-            </h1>
-            <p className="text-gray-600">{error}</p>
-          </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            שגיאה בטעינת המשחקים
+          </h1>
+          <p className="text-gray-600">{error}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background-light">
-      {/* Header */}
-      <div className="bg-white shadow-soft">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-text-dark mb-4">
-              משחקים קרובים
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              גלו את כל המשחקים הקרובים וההצעות הטובות ביותר לכרטיסים
-            </p>
-          </div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* כותרת הדף */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            משחקי כדורגל
+          </h1>
+          <p className="text-gray-600">
+            {total > 0 ? `${total} משחקים זמינים` : "אין משחקים זמינים כרגע"}
+          </p>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {isLoading ? (
-          <div className="flex justify-center py-12">
-            <Spinner size="lg" />
-          </div>
-        ) : (
-          <div className="flex flex-col gap-4">
-            {fixtures.map((fixture, index) => (
-              <FixtureCard
-                key={fixture.id || `fixture-${index}`}
-                fixture={fixture}
-                showOffers={true}
-                showVenue={true}
-                showLeague={true}
-              />
-            ))}
+        {/* רשימת המשחקים */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {fixtures.map((fixture) => (
+            <FixtureCard
+              key={fixture.id}
+              fixture={fixture}
+              showOffers={true}
+              showVenue={true}
+              showLeague={true}
+            />
+          ))}
+        </div>
+
+        {/* הודעת ריק */}
+        {fixtures.length === 0 && !isLoading && (
+          <div className="text-center py-12">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              אין משחקים זמינים
+            </h2>
+            <p className="text-gray-600">כרגע אין משחקים זמינים במערכת</p>
           </div>
         )}
-      </main>
+      </div>
     </div>
   );
 }
