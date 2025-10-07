@@ -1,9 +1,14 @@
 export interface Venue {
-  id: string;
-  name: string;
+  id?: string;
+  _id?: string;
+  name?: string;
+  name_en?: string;
+  name_he?: string;
   nameHe?: string;
   slug: string;
-  city: string;
+  city?: string;
+  city_en?: string;
+  city_he?: string;
   country: string;
   address?: string;
   capacity: number;

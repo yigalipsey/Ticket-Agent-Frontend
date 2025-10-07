@@ -4,48 +4,51 @@ import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { League } from "@/types/league";
+import { Fixture } from "@/types/fixture";
 
 interface ReactQueryProviderProps {
   children: React.ReactNode;
   initialLeagues?: League[];
+  initialFixtures?: Fixture[];
 }
 
-const STORAGE_KEY = "allLeaguesCache";
+const LEAGUES_STORAGE_KEY = "allLeaguesCache";
+const FIXTURES_STORAGE_KEY = "hotFixturesCache";
 const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24h
 
-interface CachedData {
-  data: League[];
+interface CachedData<T> {
+  data: T[];
   timestamp: number;
 }
 
-function saveToLocalStorage(leagues: League[]): void {
+function saveToLocalStorage<T>(data: T[], storageKey: string): void {
   // Only run on client side
   if (typeof window === "undefined") return;
 
   try {
-    const cacheData: CachedData = {
-      data: leagues,
+    const cacheData: CachedData<T> = {
+      data,
       timestamp: Date.now(),
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cacheData));
+    localStorage.setItem(storageKey, JSON.stringify(cacheData));
   } catch (error) {
     console.error("❌ [LocalStorage] Error saving to cache:", error);
   }
 }
 
-function loadFromLocalStorage(): League[] | null {
+function loadFromLocalStorage<T>(storageKey: string): T[] | null {
   // Only run on client side
   if (typeof window === "undefined") return null;
 
   try {
-    const cached = localStorage.getItem(STORAGE_KEY);
+    const cached = localStorage.getItem(storageKey);
     if (!cached) return null;
 
-    const cacheData: CachedData = JSON.parse(cached);
+    const cacheData: CachedData<T> = JSON.parse(cached);
     const isExpired = Date.now() - cacheData.timestamp > CACHE_DURATION;
 
     if (isExpired) {
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(storageKey);
       return null;
     }
 
@@ -59,6 +62,7 @@ function loadFromLocalStorage(): League[] | null {
 export default function ReactQueryProvider({
   children,
   initialLeagues,
+  initialFixtures,
 }: ReactQueryProviderProps) {
   const [client] = React.useState(() => {
     const queryClient = new QueryClient({
@@ -72,14 +76,25 @@ export default function ReactQueryProvider({
       },
     });
 
-    // Hydrate with SSR data or localStorage
+    // Hydrate leagues with SSR data or localStorage
     if (initialLeagues?.length) {
       queryClient.setQueryData(["all-leagues-with-teams"], initialLeagues);
-      saveToLocalStorage(initialLeagues);
+      saveToLocalStorage(initialLeagues, LEAGUES_STORAGE_KEY);
     } else {
-      const cached = loadFromLocalStorage();
+      const cached = loadFromLocalStorage<League>(LEAGUES_STORAGE_KEY);
       if (cached) {
         queryClient.setQueryData(["all-leagues-with-teams"], cached);
+      }
+    }
+
+    // Hydrate fixtures with SSR data or localStorage
+    if (initialFixtures?.length) {
+      queryClient.setQueryData(["hot-fixtures"], initialFixtures);
+      saveToLocalStorage(initialFixtures, FIXTURES_STORAGE_KEY);
+    } else {
+      const cached = loadFromLocalStorage<Fixture>(FIXTURES_STORAGE_KEY);
+      if (cached) {
+        queryClient.setQueryData(["hot-fixtures"], cached);
       }
     }
 

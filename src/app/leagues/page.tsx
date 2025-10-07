@@ -2,11 +2,11 @@
 
 import React from "react";
 import { LeagueList } from "@/components";
-import { useActiveLeagues } from "@/hooks";
+import { useAllLeagues } from "@/hooks";
 import { Spinner } from "@/components/ui";
 
 export default function LeaguesPage() {
-  const { leagues, isLoading, error } = useActiveLeagues();
+  const { leagues, isLoading, error } = useAllLeagues();
 
   if (error) {
     return (

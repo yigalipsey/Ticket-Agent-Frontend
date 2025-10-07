@@ -13,7 +13,9 @@ export class FixtureService {
   /**
    * קבלת משחקים חמים
    */
-  static async getHotFixtures(limit: number = 5): Promise<ServiceResult<Fixture[]>> {
+  static async getHotFixtures(
+    limit: number = 5
+  ): Promise<ServiceResult<Fixture[]>> {
     try {
       const fixtures = await apiClient.get<Fixture[]>(
         `${API_ENDPOINTS.FIXTURES}/hot`,
@@ -29,7 +31,9 @@ export class FixtureService {
       console.error("❌ שגיאה בטעינת משחקים חמים:", error);
       return {
         data: null,
-        error: `שגיאה בטעינת המשחקים החמים: ${error.message || "שגיאה לא ידועה"}`,
+        error: `שגיאה בטעינת המשחקים החמים: ${
+          error.message || "שגיאה לא ידועה"
+        }`,
         success: false,
       };
     }
