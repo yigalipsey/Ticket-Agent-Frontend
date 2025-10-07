@@ -1,5 +1,6 @@
 export interface League {
   _id: string;
+  id?: string; // Alias for _id
   leagueId: number;
   name: string;
   nameHe: string;
@@ -9,6 +10,21 @@ export interface League {
   logoUrl: string;
   type: string;
   isPopular: boolean;
+  teams?: Team[]; // Optional teams array
+}
+
+export interface Team {
+  _id: string;
+  id?: string; // Alias for _id
+  name: string;
+  name_he: string;
+  name_en: string;
+  code: string;
+  slug: string;
+  logoUrl: string;
+  country: string;
+  country_he: string;
+  country_en: string;
 }
 
 export interface LeagueFilters {

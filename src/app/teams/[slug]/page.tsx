@@ -29,7 +29,6 @@ export default function TeamPage() {
     // קודם ננסה למצוא את פרטי הקבוצה מהנתונים המאוחסנים
     if (navigationService.isInitialized()) {
       const teamInfo = navigationService.getTeamBySlug(teamSlug as string);
-      console.log("🔍 חיפוש פרטי קבוצה עבור", teamSlug, ":", teamInfo);
       if (teamInfo) {
         return {
           id: teamId,

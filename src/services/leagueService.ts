@@ -34,6 +34,32 @@ export class LeagueService {
   }
 
   /**
+   * קבלת ליגה לפי slug
+   */
+  static async getLeagueBySlug(
+    slug: string,
+    withTeams: boolean = false
+  ): Promise<ServiceResult<League>> {
+    try {
+      const league = await apiClient.get<League>(
+        `${API_ENDPOINTS.LEAGUES}/slug/${slug}?withTeams=${withTeams}`
+      );
+      return {
+        data: league,
+        error: null,
+        success: true,
+      };
+    } catch (error: any) {
+      console.error("❌ שגיאה בטעינת ליגה לפי slug:", error);
+      return {
+        data: null,
+        error: `שגיאה בטעינת הליגה: ${error.message || "שגיאה לא ידועה"}`,
+        success: false,
+      };
+    }
+  }
+
+  /**
    * קבלת כל הליגות (עם או בלי קבוצות)
    */
   static async getAllLeagues(

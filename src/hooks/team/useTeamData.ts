@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { LeagueService } from "@/services";
 import { navigationService } from "@/services/navigationService";
 import { useTeamFixtures } from "@/hooks/team/useTeamFixtures";
 import { Fixture } from "@/types";
-import { League } from "@/types";
 
 interface TeamFilters {
   limit?: number;
@@ -37,7 +36,7 @@ export function useTeamData(
       );
       setTeamId(foundTeamId);
     } else {
-      console.log("⚠️ NavigationService לא מאותחל - נטען נתונים מהשרת");
+      console.log("NavigationService לא מאותחל עדיין");
     }
   }, [teamSlug]);
 
@@ -49,9 +48,7 @@ export function useTeamData(
   } = useQuery({
     queryKey: ["all-leagues-with-teams"], // שימוש באותו queryKey כמו בדף הבית
     queryFn: async () => {
-      console.log("🔄 טעינת ליגות עם קבוצות ב-useTeamData ל-", teamSlug);
       const serviceResult = await LeagueService.getAllLeaguesWithTeams();
-      console.log("📥 תגובת LeagueService:", serviceResult);
 
       if (!serviceResult.success) {
         throw new Error(serviceResult.error || "שגיאה בטעינת הליגות");
@@ -62,7 +59,7 @@ export function useTeamData(
     enabled: !navigationService.isInitialized(), // טעינה רק אם אין נתונים מקומיים
   });
 
-  const allLeagues = result || [];
+  const allLeagues = useMemo(() => result || [], [result]);
 
   // אם טעינו נתונים מהשרת, נאתחל את NavigationService
   useEffect(() => {
@@ -83,7 +80,8 @@ export function useTeamData(
     }
   }, [allLeagues, teamSlug]);
 
-  console.log("🌐 נתוני ליגות ב-useTeamData:", {
+  // לוג לדיבוג
+  console.log("🔍 [useTeamData] Debug:", {
     leaguesCount: allLeagues.length,
     isLoading: leaguesLoading,
     error: leaguesError,
@@ -105,12 +103,18 @@ export function useTeamData(
   // חישוב סבבים זמינים
   const availableRounds =
     fixtures && fixtures.length > 0
-      ? Array.from(new Set(fixtures.map((f: any) => f.round).filter(Boolean)))
-          .sort((a: any, b: any) => Number(a) - Number(b))
+      ? Array.from(
+          new Set(fixtures.map((f: Fixture) => f.round).filter(Boolean))
+        )
+          .sort(
+            (a: unknown, b: unknown) =>
+              Number(a as string) - Number(b as string)
+          )
           .map(String)
       : [];
 
-  console.log("📊 נתוני קבוצה:", {
+  // לוג לדיבוג
+  console.log("🔍 [useTeamData] Fixtures Debug:", {
     teamSlug,
     teamId,
     fixturesCount: fixtures.length,
@@ -124,7 +128,7 @@ export function useTeamData(
     teamId,
     fixtures,
     isLoading: fixturesLoading,
-    error: fixturesError,
+    error: fixturesError ? new Error(fixturesError) : null,
     availableRounds,
   };
 }

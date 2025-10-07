@@ -1,9 +1,7 @@
 export interface Team {
   _id?: string;
   id?: string;
-  name?: string;
-  name_en?: string;
-  name_he?: string;
+  name: string;
   nameHe?: string;
   slug: string;
   logo?: string;

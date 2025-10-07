@@ -83,14 +83,12 @@ class ApiClient {
     url: string,
     params?: Record<string, unknown>
   ): Promise<PaginatedResponse<T>> {
-    console.log("🌐 apiClient.getPaginated called with:", { url, params });
-
     try {
       const response = await this.client.get(url, {
         params,
       });
 
-      console.log("📡 apiClient.getPaginated response:", {
+      console.log("🔍 [ApiClient] Response:", {
         status: response.status,
         data: response.data,
       });
@@ -104,8 +102,6 @@ class ApiClient {
           "🔍 responseData.data type:",
           Array.isArray(responseData.data) ? "Array" : typeof responseData.data
         );
-        console.log("🔍 responseData.data:", responseData.data);
-        console.log("🔍 responseData.pagination:", responseData.pagination);
 
         const result = {
           data: Array.isArray(responseData.data)
@@ -113,12 +109,10 @@ class ApiClient {
             : responseData.data.fixtures || responseData.data,
           pagination: responseData.pagination || responseData.data.pagination,
         };
-        console.log("✅ apiClient.getPaginated processed result:", result);
         return result;
       }
 
       // Otherwise, return the response directly (expected format)
-      console.log("✅ apiClient.getPaginated direct result:", responseData);
       return responseData;
     } catch (error) {
       console.error("❌ apiClient.getPaginated error:", error);

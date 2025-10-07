@@ -103,7 +103,6 @@ export function useTeamsByLeague(leagueIdOrSlug: string) {
         { leagueIdOrSlug }
       );
       const result = await TeamService.getTeamsByLeague(leagueIdOrSlug);
-      console.log("useTeamsByLeague - TeamService returned:", result);
       return result;
     },
     enabled: !!leagueIdOrSlug,
@@ -163,26 +162,23 @@ export function useSearchTeams() {
   const [results, setResults] = useState<Team[]>([]);
   const [isSearching, setIsSearching] = useState(false);
 
-  const searchTeams = useCallback(
-    async (searchQuery: string) => {
-      if (!searchQuery.trim()) {
-        setResults([]);
-        return;
-      }
+  const searchTeams = useCallback(async (searchQuery: string) => {
+    if (!searchQuery.trim()) {
+      setResults([]);
+      return;
+    }
 
-      setIsSearching(true);
-      try {
-        const data = await TeamService.searchTeams(searchQuery);
-        setResults(data);
-      } catch (error) {
-        console.error("Search error:", error);
-        setResults([]);
-      } finally {
-        setIsSearching(false);
-      }
-    },
-    []
-  );
+    setIsSearching(true);
+    try {
+      const data = await TeamService.searchTeams(searchQuery);
+      setResults(data);
+    } catch (error) {
+      console.error("Search error:", error);
+      setResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  }, []);
 
   const clearSearch = useCallback(() => {
     setQuery("");

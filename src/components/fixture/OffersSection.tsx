@@ -19,7 +19,7 @@ export default function OffersSection({
   fixture,
 }: OffersSectionProps) {
   // לוג לדיבוג
-  console.log("🔍 OffersSection Debug:", {
+  console.log("🔍 [OffersSection] Debug:", {
     offers,
     offersLength: offers?.length,
     offersLoading,

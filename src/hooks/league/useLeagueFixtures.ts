@@ -60,6 +60,11 @@ export function useLeagueFixtures(
       isLoading: isLoading || isFetching,
       error: error?.message,
     });
+
+    // שמירת מפת slug->id כשמביאים משחקים
+    if (data?.data && data.data.length > 0) {
+      FixtureSlugMapper.saveSlugMapping(data.data);
+    }
   }, [isLoading, isFetching, error, data]);
 
   const refresh = useCallback(() => {

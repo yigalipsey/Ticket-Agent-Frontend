@@ -6,12 +6,10 @@ import { SearchBar } from "@/components";
 export default function SearchSection() {
   const handleSearch = (query: string) => {
     // TODO: Implement search functionality
-    console.log("Search query:", query);
   };
 
   const handleFilterClick = () => {
     // TODO: Implement filter functionality
-    console.log("Filter clicked");
   };
 
   return (

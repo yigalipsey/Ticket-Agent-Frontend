@@ -43,13 +43,8 @@ export class TeamService {
         params: defaultParams,
       });
 
-      console.log("Raw response:", response);
-      console.log("Response data:", response.data);
-
       // החזרת הנתונים בפורמט הנכון
       const responseData = response.data;
-
-      console.log("TeamService response:", responseData); // Debug log
 
       // הבקאנד מחזיר את הנתונים ישירות ב-data
       if (
@@ -102,7 +97,6 @@ export class TeamService {
         return mappedFixtures;
       }
 
-      console.log("No data found in response:", responseData); // Debug log
       return []; // החזרת מערך ריק אם אין נתונים
     } catch (error) {
       console.error("Error fetching team fixtures:", error);

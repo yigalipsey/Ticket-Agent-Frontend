@@ -43,7 +43,7 @@ export function useOffersByFixture(
   const total = pagination?.total || 0;
 
   // לוג לדיבוג
-  console.log("🔍 useOffersByFixture Debug:", {
+  console.log("🔍 [useOffers] Debug:", {
     fixtureId,
     data,
     dataData: data?.data,
