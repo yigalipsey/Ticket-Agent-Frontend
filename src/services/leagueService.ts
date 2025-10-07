@@ -1,8 +1,9 @@
+// services/LeagueService.ts
 import { apiClient } from "@/lib/api";
 import { API_ENDPOINTS } from "@/lib/constants";
 import { League } from "@/types";
 
-interface ServiceResult<T> {
+export interface ServiceResult<T> {
   data: T | null;
   error: string | null;
   success: boolean;
@@ -10,9 +11,9 @@ interface ServiceResult<T> {
 
 export class LeagueService {
   /**
-   * מקבל ליגה ספציפית לפי מזהה
+   * קבלת ליגה ספציפית לפי מזהה
    */
-  static async getLeague(id: string): ServiceResult<League> {
+  static async getLeague(id: string): Promise<ServiceResult<League>> {
     try {
       const league = await apiClient.get<League>(
         `${API_ENDPOINTS.LEAGUES}/${id}`
@@ -23,7 +24,7 @@ export class LeagueService {
         success: true,
       };
     } catch (error: any) {
-      console.error("שגיאה בטעינת ליגה:", error);
+      console.error("❌ שגיאה בטעינת ליגה:", error);
       return {
         data: null,
         error: `שגיאה בטעינת הליגה: ${error.message || "שגיאה לא ידועה"}`,
@@ -33,16 +34,16 @@ export class LeagueService {
   }
 
   /**
-   * מקבל את כל הליגות עם הקבוצות שלהן
+   * קבלת כל הליגות (עם או בלי קבוצות)
    */
-  static async getAllLeaguesWithTeams(): ServiceResult<League[]> {
+  static async getAllLeagues(
+    withTeams: boolean = false
+  ): Promise<ServiceResult<League[]>> {
     try {
-      const response = await apiClient.get(
-        `${API_ENDPOINTS.LEAGUES}?withTeams=true`
+      const leagues = await apiClient.get<League[]>(
+        `${API_ENDPOINTS.LEAGUES}`,
+        { withTeams }
       );
-
-      // וידוא שהתגובה היא מערך ליגות
-      const leagues = Array.isArray(response) ? response : response?.data || [];
 
       return {
         data: leagues,
@@ -50,13 +51,20 @@ export class LeagueService {
         success: true,
       };
     } catch (error: any) {
-      console.error("שגיאה בטעינת ליגות עם קבוצות:", error);
+      console.error("❌ שגיאה בטעינת ליגות:", error);
       return {
         data: null,
         error: `שגיאה בטעינת הליגות: ${error.message || "שגיאה לא ידועה"}`,
         success: false,
       };
     }
+  }
+
+  /**
+   * קבלת כל הליגות עם הקבוצות שלהן (קיצור נוח)
+   */
+  static async getAllLeaguesWithTeams(): Promise<ServiceResult<League[]>> {
+    return this.getAllLeagues(true);
   }
 }
 

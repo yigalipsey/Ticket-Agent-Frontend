@@ -1,136 +1,38 @@
+// services/FixtureService.ts
 import { apiClient } from "@/lib/api";
 import { API_ENDPOINTS } from "@/lib/constants";
-import { Fixture, FixtureQuery, PaginatedResponse } from "@/types";
+import { Fixture } from "@/types/fixture";
+
+export interface ServiceResult<T> {
+  data: T | null;
+  error: string | null;
+  success: boolean;
+}
 
 export class FixtureService {
-  static async getFixtures(
-    query?: FixtureQuery
-  ): Promise<PaginatedResponse<Fixture>> {
-    return apiClient.getPaginated<Fixture>(
-      API_ENDPOINTS.FIXTURES,
-      query as Record<string, unknown>
-    );
-  }
-
-  static async getFixture(idOrSlug: string): Promise<Fixture> {
-    // בדיקה אם זה ObjectID או slug
-    const isObjectId = /^[0-9a-fA-F]{24}$/.test(idOrSlug);
-
-    if (!isObjectId) {
-      // אם זה לא ObjectID, נזרוק שגיאה כי אין endpoint ל-slug
-      throw new Error(
-        `Invalid fixture ID format: ${idOrSlug}. Expected MongoDB ObjectId.`
-      );
-    }
-
-    const endpoint = `${API_ENDPOINTS.FOOTBALL_EVENTS}/${idOrSlug}`;
-    return apiClient.get<Fixture>(endpoint);
-  }
-
-  static async getFixturesByLeague(
-    leagueIdOrSlug: string,
-    query?: FixtureQuery,
-    locale: string = "he"
-  ): Promise<PaginatedResponse<Fixture>> {
-    // בדיקה אם זה ObjectID או slug
-    const isObjectId = /^[0-9a-fA-F]{24}$/.test(leagueIdOrSlug);
-    const endpoint = isObjectId
-      ? `${API_ENDPOINTS.FOOTBALL_EVENTS}/league/${leagueIdOrSlug}`
-      : `${API_ENDPOINTS.LEAGUES}/${leagueIdOrSlug}/fixtures`;
-
-    console.log("🔍 FixtureService.getFixturesByLeague called with:", {
-      leagueIdOrSlug,
-      query,
-      locale,
-      endpoint,
-      isObjectId,
-    });
-
+  /**
+   * קבלת משחקים חמים
+   */
+  static async getHotFixtures(limit: number = 5): Promise<ServiceResult<Fixture[]>> {
     try {
-      const result = await apiClient.getPaginated<Fixture>(endpoint, {
-        ...query,
-        locale,
-      } as Record<string, unknown>);
+      const fixtures = await apiClient.get<Fixture[]>(
+        `${API_ENDPOINTS.FIXTURES}/hot`,
+        { limit }
+      );
 
-      console.log("✅ FixtureService.getFixturesByLeague result:", result);
-      return result;
-    } catch (error) {
-      console.error("❌ FixtureService.getFixturesByLeague error:", error);
-      throw error;
+      return {
+        data: fixtures,
+        error: null,
+        success: true,
+      };
+    } catch (error: any) {
+      console.error("❌ שגיאה בטעינת משחקים חמים:", error);
+      return {
+        data: null,
+        error: `שגיאה בטעינת המשחקים החמים: ${error.message || "שגיאה לא ידועה"}`,
+        success: false,
+      };
     }
-  }
-
-  static async getFixturesByTeam(
-    teamIdOrSlug: string,
-    query?: FixtureQuery
-  ): Promise<PaginatedResponse<Fixture>> {
-    // בדיקה אם זה ObjectID או slug
-    const isObjectId = /^[0-9a-fA-F]{24}$/.test(teamIdOrSlug);
-    const endpoint = isObjectId
-      ? `${API_ENDPOINTS.TEAMS}/id/${teamIdOrSlug}/fixtures`
-      : `${API_ENDPOINTS.TEAMS}/${teamIdOrSlug}/fixtures`;
-
-    console.log("🔍 FixtureService.getFixturesByTeam called with:", {
-      teamIdOrSlug,
-      query,
-      endpoint,
-      isObjectId,
-    });
-
-    return apiClient.getPaginated<Fixture>(
-      endpoint,
-      query as Record<string, unknown>
-    );
-  }
-
-  static async getFixturesByVenue(
-    venueIdOrSlug: string,
-    query?: FixtureQuery
-  ): Promise<PaginatedResponse<Fixture>> {
-    // בדיקה אם זה ObjectID או slug
-    const isObjectId = /^[0-9a-fA-F]{24}$/.test(venueIdOrSlug);
-    const endpoint = isObjectId
-      ? `${API_ENDPOINTS.VENUES}/id/${venueIdOrSlug}/fixtures`
-      : `${API_ENDPOINTS.VENUES}/${venueIdOrSlug}/fixtures`;
-
-    return apiClient.getPaginated<Fixture>(
-      endpoint,
-      query as Record<string, unknown>
-    );
-  }
-
-  static async getUpcomingFixtures(
-    limit: number = 10,
-    locale: string = "he"
-  ): Promise<Fixture[]> {
-    const response = await apiClient.getPaginated<Fixture>(
-      API_ENDPOINTS.FIXTURES,
-      {
-        limit,
-        sortBy: "date",
-        sortOrder: "asc",
-        filters: {
-          status: "scheduled",
-        },
-        locale,
-      }
-    );
-    return response.data;
-  }
-
-  static async searchFixtures(
-    query: string,
-    filters?: FixtureQuery["filters"]
-  ): Promise<Fixture[]> {
-    const response = await apiClient.getPaginated<Fixture>(
-      API_ENDPOINTS.SEARCH,
-      {
-        q: query,
-        type: "fixtures",
-        ...filters,
-      }
-    );
-    return response.data;
   }
 }
 

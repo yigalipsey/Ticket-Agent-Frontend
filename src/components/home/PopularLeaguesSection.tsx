@@ -4,15 +4,9 @@ import React from "react";
 import Link from "next/link";
 import { LeagueList } from "@/components";
 import { useAllLeagues } from "@/hooks";
-import { Spinner } from "@/components/ui";
 
 export default function PopularLeaguesSection() {
-  // Fetch all leagues and filter popular ones
-  const {
-    leagues: allLeagues,
-    isLoading: leaguesLoading,
-    error,
-  } = useAllLeagues();
+  const { leagues: allLeagues, isLoading, error } = useAllLeagues();
 
   // Filter popular leagues in frontend
   const popularLeagues = allLeagues?.filter((league) => league.isPopular) || [];
@@ -29,9 +23,9 @@ export default function PopularLeaguesSection() {
         </Link>
       </div>
 
-      {leaguesLoading ? (
+      {isLoading ? (
         <div className="flex justify-center py-12">
-          <Spinner size="lg" />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
       ) : error ? (
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
@@ -50,9 +44,6 @@ export default function PopularLeaguesSection() {
           <p className="text-yellow-500 text-sm mt-1">
             לא נמצאו ליגות פופולריות להצגה
           </p>
-          <div className="mt-4 text-xs text-gray-500">
-            Debug: leagues count = {popularLeagues?.length || 0}
-          </div>
         </div>
       )}
     </section>

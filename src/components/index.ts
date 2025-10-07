@@ -11,7 +11,6 @@ export { default as OffersSection } from "./fixture/OffersSection";
 export { default as OfferList } from "./fixture/OfferList";
 
 export { default as LeagueList } from "./league/LeagueList";
-export { InfiniteFixturesList } from "./league/InfiniteFixturesList";
 export { LeagueTeamsSection } from "./league/LeagueTeamsSection";
 export {
   LeagueHeader,
@@ -19,6 +18,7 @@ export {
   LeagueHeaderError,
 } from "./league/LeagueHeader";
 export { LeagueFixturesSection } from "./league/LeagueFixturesSection";
+export { LeagueFilters } from "./league/LeagueFilters";
 
 export { default as TeamCard } from "./team/TeamCard";
 export { default as TeamName } from "./team/TeamName";

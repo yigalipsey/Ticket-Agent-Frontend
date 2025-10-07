@@ -2,39 +2,7 @@
 
 import React from "react";
 import { FixtureCard } from "@/components";
-
-interface Fixture {
-  _id?: string;
-  id?: string;
-  slug?: string;
-  homeTeam: {
-    _id?: string;
-    id?: string;
-    name: string;
-    logo?: string;
-    logoUrl?: string;
-  };
-  awayTeam: {
-    _id?: string;
-    id?: string;
-    name: string;
-    logo?: string;
-    logoUrl?: string;
-  };
-  league?: {
-    name: string;
-    logoUrl?: string;
-  };
-  venue?: {
-    name: string;
-  };
-  date?: string;
-  time?: string;
-  status?: string;
-  totalOffers?: number;
-  lowestPrice?: number;
-  round?: number;
-}
+import { Fixture } from "@/types/fixture";
 
 interface LeagueFixturesSectionProps {
   fixtures: Fixture[];
@@ -80,15 +48,7 @@ export function LeagueFixturesSection({
       <h2 className="text-2xl font-bold text-gray-900 mb-4">משחקים</h2>
       <div className="space-y-4">
         {fixtures.map((fixture) => (
-          <FixtureCard
-            key={
-              fixture._id ||
-              fixture.id ||
-              fixture.slug ||
-              `fixture-${Math.random()}`
-            }
-            fixture={fixture}
-          />
+          <FixtureCard key={fixture._id} fixture={fixture} />
         ))}
       </div>
     </div>
@@ -98,7 +58,7 @@ export function LeagueFixturesSection({
 // Skeleton component for loading state
 function LeagueFixturesSkeleton({ count }: { count: number }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" role="status" aria-label="טוען משחקים...">
       <div className="h-8 bg-gray-200 rounded w-32 animate-pulse"></div>
       <div className="space-y-4">
         {Array.from({ length: count }).map((_, i) => (

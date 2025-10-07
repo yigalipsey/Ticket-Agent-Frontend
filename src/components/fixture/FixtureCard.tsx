@@ -136,11 +136,14 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                 </span>
               </div>
 
-              {fixture.lowestPrice && (
+              {fixture.minPrice?.amount && (
                 <div className="text-left">
-                  <div className="text-sm text-gray-500">מהמחיר</div>
+                  <div className="text-sm text-gray-500">החל מ</div>
                   <div className="text-lg font-bold text-primary-dark">
-                    {formatCurrency(fixture.lowestPrice)}
+                    {formatCurrency(
+                      fixture.minPrice.amount,
+                      fixture.minPrice.currency
+                    )}
                   </div>
                 </div>
               )}

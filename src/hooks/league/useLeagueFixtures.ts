@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FixtureService } from "@/services";
 import { FixtureQuery, LoadingState } from "@/types";
-import FixtureSlugMapper from "@/lib/fixtureSlugMapper";
 
 /**
  * Hook לשליפת משחקים של ליגה ספציפית
@@ -61,11 +60,6 @@ export function useLeagueFixtures(
       isLoading: isLoading || isFetching,
       error: error?.message,
     });
-
-    // שמירת מפת slug->id כשמביאים משחקים
-    if (data?.data && data.data.length > 0) {
-      FixtureSlugMapper.saveSlugMapping(data.data);
-    }
   }, [isLoading, isFetching, error, data]);
 
   const refresh = useCallback(() => {

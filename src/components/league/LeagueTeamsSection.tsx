@@ -99,20 +99,20 @@ export function LeagueTeamsSection({ teams }: LeagueTeamsSectionProps) {
           <div key={team._id || team.slug} className="keen-slider__slide">
             <Link
               href={`/teams/${team.slug}`}
-              className="group p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 block h-full"
+              className="group p-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 block h-fit"
             >
-              <div className="flex flex-col items-center text-center h-full">
+              <div className="flex flex-col items-center text-center space-y-2">
                 {team.logoUrl ? (
                   <Image
                     src={team.logoUrl}
                     alt={`לוגו ${team.name}`}
-                    width={48}
-                    height={48}
-                    className="mb-3 object-contain"
+                    width={32}
+                    height={32}
+                    className="object-contain"
                     style={{ width: "auto", height: "auto" }}
                   />
                 ) : (
-                  <div className="w-12 h-12 bg-gray-100 rounded-full mb-3 flex items-center justify-center">
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
                     <span className="text-gray-400 text-xs">
                       {team.name.charAt(0)}
                     </span>

@@ -1,6 +1,5 @@
-"use client";
-
 import React from "react";
+import Image from "next/image";
 
 interface League {
   name: string;
@@ -17,10 +16,12 @@ export function LeagueHeader({ league }: LeagueHeaderProps) {
     <div className="mb-8">
       <div className="flex items-center space-x-4 space-x-reverse">
         {league.logoUrl && (
-          <img
+          <Image
             src={league.logoUrl}
             alt={`לוגו ${league.name}`}
-            className="w-16 h-16 object-contain"
+            width={64}
+            height={64}
+            className="object-contain"
           />
         )}
         <div>

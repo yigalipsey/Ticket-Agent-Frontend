@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Heebo, Rubik } from "next/font/google";
-import { Providers } from "./providers";
+import { ReactQueryProvider } from "@/providers";
 import { Navbar, Footer } from "@/components/ui";
 import "./globals.css";
 
@@ -109,7 +109,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className={`min-h-screen bg-gray-50 text-gray-900 font-rubik`}>
-        <Providers>
+        <ReactQueryProvider>
           <div className="flex flex-col min-h-screen">
             {/* Header */}
             <Navbar />
@@ -120,7 +120,7 @@ export default function RootLayout({
             {/* Footer */}
             <Footer />
           </div>
-        </Providers>
+        </ReactQueryProvider>
       </body>
     </html>
   );

@@ -17,7 +17,7 @@ export function TeamHero({ team }: TeamHeroProps) {
   }
 
   return (
-    <div className="relative h-96 bg-gray-900 overflow-hidden">
+    <div className="relative h-32 sm:h-48 lg:h-64 bg-gray-900 overflow-hidden">
       {/* Stadium Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"

@@ -3,7 +3,6 @@
 import { useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useOffersByFixture, useFixture } from "@/hooks";
-import FixtureSlugMapper from "@/lib/fixtureSlugMapper";
 
 export function useFixtureWithOffers(idOrSlug: string) {
   const queryClient = useQueryClient();
@@ -11,22 +10,16 @@ export function useFixtureWithOffers(idOrSlug: string) {
   // בדיקה אם זה ObjectID או slug
   const isObjectId = /^[0-9a-fA-F]{24}$/.test(idOrSlug);
 
-  // שליפת ID לפי slug מהמפה השמורה (רק אם זה לא ObjectID)
+  // שליפת ID לפי slug (רק אם זה לא ObjectID)
   const fixtureId = useMemo(() => {
     if (isObjectId) {
       console.log("🔍 useFixtureWithOffers: Using direct ID:", idOrSlug);
       return idOrSlug;
     }
 
-    const id = FixtureSlugMapper.getIdBySlug(idOrSlug);
-    console.log("🔍 useFixtureWithOffers:", { slug: idOrSlug, fixtureId: id });
-
-    // הדפסת המפה הנוכחית לדיבוג
-    if (!id) {
-      FixtureSlugMapper.debugMapping();
-    }
-
-    return id;
+    // אם זה slug, נשתמש בו ישירות
+    console.log("🔍 useFixtureWithOffers: Using slug:", idOrSlug);
+    return idOrSlug;
   }, [idOrSlug, isObjectId]);
 
   // חיפוש המשחק ב-cache של TanStack Query
