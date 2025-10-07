@@ -22,7 +22,7 @@ export function TeamHero({ team }: TeamHeroProps) {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url("/images/people-soccer-stadium.jpg")`,
+          backgroundImage: `url("/images/people-soccer-stadium.avif")`,
           filter: "blur(2px) brightness(0.4)",
         }}
       />
