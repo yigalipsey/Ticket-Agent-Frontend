@@ -39,7 +39,7 @@ export function LeagueFilter({
   return (
     <div className="flex flex-col sm:flex-row gap-4 mb-6">
       {/* פילטר חודש */}
-      <div className="relative">
+      <div className="relative sm:w-48">
         <button
           onClick={() => {
             setIsMonthOpen(!isMonthOpen);
@@ -98,7 +98,7 @@ export function LeagueFilter({
       </div>
 
       {/* פילטר אצטדיון */}
-      <div className="relative">
+      <div className="relative sm:w-80">
         <button
           onClick={() => {
             setIsVenueOpen(!isVenueOpen);
@@ -106,18 +106,18 @@ export function LeagueFilter({
           }}
           className="flex items-center justify-between w-full px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
-          <span className="text-sm font-medium text-gray-700">
+          <span className="text-sm font-medium text-gray-700 truncate">
             {selectedVenueLabel}
           </span>
           <ChevronDown
-            className={`h-4 w-4 text-gray-500 transition-transform ${
+            className={`h-4 w-4 text-gray-500 transition-transform flex-shrink-0 mr-2 ${
               isVenueOpen ? "rotate-180" : ""
             }`}
           />
         </button>
 
         {isVenueOpen && (
-          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10 max-h-64 overflow-y-auto">
             <div className="py-1">
               <button
                 onClick={() => {
@@ -139,7 +139,7 @@ export function LeagueFilter({
                     onVenueChange(venue._id);
                     setIsVenueOpen(false);
                   }}
-                  className={`w-full px-4 py-2 text-right text-sm hover:bg-gray-50 ${
+                  className={`w-full px-4 py-2 text-right text-sm hover:bg-gray-50 whitespace-nowrap ${
                     selectedVenue === venue._id
                       ? "bg-blue-50 text-blue-600"
                       : "text-gray-700"

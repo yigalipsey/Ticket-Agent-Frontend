@@ -58,7 +58,7 @@ export default function LeagueFixtures({
         venues.set(fixture.venue._id, {
           _id: fixture.venue._id,
           name: fixture.venue.name,
-          nameHe: fixture.venue.nameHe,
+          nameHe: fixture.venue.nameHe || fixture.venue.name_he,
         });
       }
     });
