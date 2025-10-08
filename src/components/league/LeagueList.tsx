@@ -47,7 +47,7 @@ const LeagueList: React.FC<LeagueListProps> = ({
                         alt={league.nameHe}
                         width={48}
                         height={48}
-                        className="rounded-lg object-contain"
+                        className=" object-contain"
                         style={{ width: "auto", height: "auto" }}
                       />
                     ) : (
@@ -57,12 +57,9 @@ const LeagueList: React.FC<LeagueListProps> = ({
                     )}
                   </div>
                   <div className="flex-1">
-                    <CardTitle className="text-lg group-hover:text-primary-dark transition-colors">
+                    <CardTitle className="text-lg mr-4 group-hover:text-primary-dark transition-colors">
                       {league.nameHe}
                     </CardTitle>
-                    <p className="text-sm text-gray-600 mt-1">
-                      {league.countryHe}
-                    </p>
                   </div>
                 </div>
               </div>

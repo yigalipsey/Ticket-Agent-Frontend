@@ -12,11 +12,14 @@ export default function HotFixturesSection({
 }: HotFixturesSectionProps) {
   return (
     <section className="mb-16">
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-3xl font-bold text-gray-900">🔥 משחקים חמים</h2>
+      {/* כותרת וכפתור - באותה שורה בדסקטופ, אחד על השני במובייל */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 md:mb-8">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-right mb-4 md:mb-0">
+          🔥 משחקים חמים
+        </h2>
         <Link
           href="/fixtures"
-          className="text-blue-600 hover:text-blue-700 transition-colors font-medium"
+          className="text-blue-600 hover:text-blue-700 transition-colors font-medium text-sm md:text-base text-right"
         >
           צפה בכל המשחקים →
         </Link>
@@ -31,7 +34,7 @@ export default function HotFixturesSection({
             >
               {/* תאריך */}
               <div className="text-center mb-4">
-                <div className="text-2xl font-bold text-gray-900">
+                <div className="text-lg md:text-2xl font-bold text-gray-900">
                   {new Date(fixture.date).toLocaleDateString("he-IL", {
                     month: "short",
                     day: "numeric",
@@ -69,7 +72,7 @@ export default function HotFixturesSection({
                       </div>
                     )}
                   </div>
-                  <span className="text-sm font-medium text-gray-900 block">
+                  <span className="text-xs md:text-sm font-medium text-gray-900 block">
                     {fixture.homeTeam?.nameHe ||
                       fixture.homeTeam?.name ||
                       "TBD"}

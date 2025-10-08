@@ -5,8 +5,18 @@ class ApiClient {
   private client: AxiosInstance;
 
   constructor() {
+    const baseURL = process.env.NEXT_PUBLIC_API_URL;
+    console.log(
+      "%c🔧 [ApiClient] Initializing",
+      "color: #10b981; font-weight: bold; font-size: 14px"
+    );
+    console.log(
+      "%c📍 Base URL: " + baseURL,
+      "color: #10b981; font-weight: bold; font-size: 12px"
+    );
+
     this.client = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api",
+      baseURL,
       timeout: 10000,
       headers: {
         "Content-Type": "application/json",
@@ -16,6 +26,28 @@ class ApiClient {
     // Request interceptor
     this.client.interceptors.request.use(
       (config) => {
+        const fullURL = `${config.baseURL}${config.url}`;
+
+        console.log(
+          "%c📤 API Request",
+          "color: #10b981; font-weight: bold; font-size: 12px"
+        );
+        console.log(
+          "%c🌐 Full URL: " + fullURL,
+          "color: #10b981; font-weight: bold; font-size: 12px; background: #d1fae5; padding: 4px 8px; border-radius: 4px"
+        );
+        console.log(
+          "%c🔹 Method: " + (config.method?.toUpperCase() || "GET"),
+          "color: #059669; font-size: 11px"
+        );
+        if (config.params && Object.keys(config.params).length > 0) {
+          console.log(
+            "%c🔹 Params:",
+            "color: #059669; font-size: 11px",
+            config.params
+          );
+        }
+
         // Add auth token if available
         const token =
           typeof window !== "undefined"
@@ -34,9 +66,46 @@ class ApiClient {
     // Response interceptor
     this.client.interceptors.response.use(
       (response: AxiosResponse) => {
+        console.log(
+          "%c✅ API Response",
+          "color: #10b981; font-weight: bold; font-size: 12px"
+        );
+        console.log(
+          "%c🔹 Status: " + response.status,
+          "color: #059669; font-size: 11px"
+        );
+        console.log(
+          "%c🔹 URL: " + response.config.url,
+          "color: #059669; font-size: 11px"
+        );
         return response;
       },
       (error) => {
+        console.log(
+          "%c❌ API Error",
+          "color: #ef4444; font-weight: bold; font-size: 12px"
+        );
+        if (error.response) {
+          console.log(
+            "%c🔹 Status: " + error.response.status,
+            "color: #dc2626; font-size: 11px"
+          );
+          console.log(
+            "%c🔹 URL: " + error.config?.url,
+            "color: #dc2626; font-size: 11px"
+          );
+        } else if (error.request) {
+          console.log(
+            "%c🔹 No response received",
+            "color: #dc2626; font-size: 11px"
+          );
+        } else {
+          console.log(
+            "%c🔹 Error: " + error.message,
+            "color: #dc2626; font-size: 11px"
+          );
+        }
+
         // Handle common errors
         if (error.response?.status === 401) {
           // Unauthorized - redirect to login

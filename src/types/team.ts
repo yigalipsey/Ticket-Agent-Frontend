@@ -24,6 +24,7 @@ export interface Team {
   description?: string;
   code?: string;
   venueId?: any;
+  isHot?: boolean;
 }
 
 export interface TeamFilters {

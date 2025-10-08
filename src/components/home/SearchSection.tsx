@@ -13,15 +13,16 @@ export default function SearchSection() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto animate-slide-up">
-      <SearchBar
-        placeholder="חפש משחקים, קבוצות או ליגות..."
-        onSearch={handleSearch}
-        onFilterClick={handleFilterClick}
-        showFilters={true}
-        size="lg"
-        className="bg-white/90 backdrop-blur-sm"
-      />
-    </div>
+    <section className="max-w-3xl mx-auto mt-12 px-4">
+      <div className="bg-white  rounded-lg shadow-sm">
+        <SearchBar
+          placeholder="חפש משחקים, קבוצות או ליגות..."
+          onSearch={handleSearch}
+          onFilterClick={handleFilterClick}
+          showFilters={true}
+          size="lg"
+        />
+      </div>
+    </section>
   );
 }

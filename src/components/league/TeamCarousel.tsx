@@ -11,10 +11,11 @@ interface LeagueTeamsSectionProps {
 }
 
 /**
- * קרוסלה מקצועית של קבוצות הליגה באמצעות keen-slider
+ * Team Carousel - קרוסלת קבוצות באמצעות keen-slider
  */
-export function LeagueTeamsSection({ teams }: LeagueTeamsSectionProps) {
+export function TeamCarousel({ teams }: LeagueTeamsSectionProps) {
   const [sliderRef, instanceRef] = useKeenSlider({
+    rtl: true, // תמיכה בעברית - כיוון מימין לשמאל
     slides: {
       perView: 6,
       spacing: 16,
@@ -48,35 +49,17 @@ export function LeagueTeamsSection({ teams }: LeagueTeamsSectionProps) {
     <div className="relative">
       {/* כותרת וקונטרולים */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-gray-900">קבוצות הליגה</h2>
+        <h2 className="text-xl font-bold text-gray-900">קבוצות</h2>
 
         {/* כפתורי דפדף */}
         {teams.length > 6 && (
           <div className="flex gap-2">
             <button
               onClick={prevSlide}
-              className="p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+              className="p-2 rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
             >
               <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </button>
-            <button
-              onClick={nextSlide}
-              className="p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-            >
-              <svg
-                className="w-5 h-5"
+                className="w-4 h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -86,6 +69,24 @@ export function LeagueTeamsSection({ teams }: LeagueTeamsSectionProps) {
                   strokeLinejoin="round"
                   strokeWidth={2}
                   d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+            <button
+              onClick={nextSlide}
+              className="p-2 rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
                 />
               </svg>
             </button>
@@ -99,26 +100,25 @@ export function LeagueTeamsSection({ teams }: LeagueTeamsSectionProps) {
           <div key={team._id || team.slug} className="keen-slider__slide">
             <Link
               href={`/teams/${team.slug}`}
-              className="group p-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 block h-fit"
+              className="group p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 block h-20 flex items-center justify-center"
             >
-              <div className="flex flex-col items-center text-center space-y-2">
+              <div className="flex flex-col items-center text-center space-y-1 w-full">
                 {team.logoUrl ? (
                   <Image
                     src={team.logoUrl}
                     alt={`לוגו ${team.name}`}
-                    width={32}
-                    height={32}
+                    width={24}
+                    height={24}
                     className="object-contain"
-                    style={{ width: "auto", height: "auto" }}
                   />
                 ) : (
-                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                  <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center">
                     <span className="text-gray-400 text-xs">
                       {team.name.charAt(0)}
                     </span>
                   </div>
                 )}
-                <h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors text-sm leading-tight">
+                <h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors text-xs leading-tight truncate w-full">
                   {team.name}
                 </h3>
               </div>

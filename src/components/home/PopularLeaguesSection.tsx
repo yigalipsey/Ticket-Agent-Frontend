@@ -15,11 +15,14 @@ export default function PopularLeaguesSection({
 
   return (
     <section className="mb-16">
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-3xl font-bold text-gray-900">ליגות פופולריות</h2>
+      {/* כותרת וכפתור - באותה שורה בדסקטופ, אחד על השני במובייל */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 md:mb-8">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-right mb-4 md:mb-0">
+          ליגות פופולריות
+        </h2>
         <Link
           href="/leagues"
-          className="text-blue-600 hover:text-blue-700 transition-colors font-medium"
+          className="text-blue-600 hover:text-blue-700 transition-colors font-medium text-sm md:text-base text-right"
         >
           צפה בכל הליגות →
         </Link>

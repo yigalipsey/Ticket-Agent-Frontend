@@ -25,6 +25,7 @@ export interface Team {
   country: string;
   country_he: string;
   country_en: string;
+  isPopular?: boolean;
 }
 
 export interface LeagueFilters {

@@ -3,6 +3,7 @@ import Image from "next/image";
 
 interface League {
   name: string;
+  nameHe?: string;
   country: string;
   logoUrl?: string;
 }
@@ -14,22 +15,19 @@ interface LeagueHeaderProps {
 export function LeagueHeader({ league }: LeagueHeaderProps) {
   return (
     <div className="mb-8">
-      <div className="flex items-center space-x-4 space-x-reverse">
+      <div className="flex items-center justify-center space-x-4 space-x-reverse">
         {league.logoUrl && (
           <Image
             src={league.logoUrl}
-            alt={`לוגו ${league.name}`}
-            width={64}
-            height={64}
+            alt={`לוגו ${league.nameHe || league.name}`}
+            width={48}
+            height={48}
             className="object-contain"
           />
         )}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {league.name}
-          </h1>
-          <p className="text-gray-600">{league.country}</p>
-        </div>
+        <h1 className="text-3xl font-bold text-gray-900">
+          {league.nameHe || league.name}
+        </h1>
       </div>
     </div>
   );
@@ -39,12 +37,9 @@ export function LeagueHeader({ league }: LeagueHeaderProps) {
 export function LeagueHeaderLoading() {
   return (
     <div className="mb-8">
-      <div className="flex items-center space-x-4 space-x-reverse">
-        <div className="w-16 h-16 bg-gray-200 rounded-lg animate-pulse"></div>
-        <div>
-          <div className="h-8 bg-gray-200 rounded w-48 mb-2 animate-pulse"></div>
-          <div className="h-6 bg-gray-200 rounded w-32 animate-pulse"></div>
-        </div>
+      <div className="flex items-center justify-center space-x-4 space-x-reverse">
+        <div className="w-12 h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+        <div className="h-8 bg-gray-200 rounded w-48 animate-pulse"></div>
       </div>
     </div>
   );

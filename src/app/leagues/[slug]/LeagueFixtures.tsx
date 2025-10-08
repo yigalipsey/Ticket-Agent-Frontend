@@ -1,19 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import FixtureCard from "@/components/fixture/FixtureCard";
 import FixtureService from "@/services/fixtureService";
 import { Fixture } from "@/types/fixture";
+import LeagueFilter from "@/components/league/LeagueFilter";
 
 interface LeagueFixturesProps {
   leagueId: string | null;
   initialFixtures: Fixture[];
+  showFilter?: boolean;
 }
 
 interface FilterOptions {
   month?: string;
-  city?: string;
+  venueId?: string;
   limit: number;
 }
 
@@ -29,11 +31,43 @@ interface FilterOptions {
 export default function LeagueFixtures({
   leagueId,
   initialFixtures,
+  showFilter = true,
 }: LeagueFixturesProps) {
   const queryClient = useQueryClient();
   const [filters, setFilters] = useState<FilterOptions>({
     limit: 20,
   });
+
+  // חישוב חודשים ואצטדיונים זמינים מהנתונים הראשוניים
+  const { availableMonths, availableVenues } = useMemo(() => {
+    const months = new Set<string>();
+    const venues = new Map<
+      string,
+      { _id: string; name: string; nameHe?: string }
+    >();
+
+    initialFixtures.forEach((fixture) => {
+      // הוספת חודש
+      if (fixture.date) {
+        const month = new Date(fixture.date).toISOString().slice(0, 7); // YYYY-MM
+        months.add(month);
+      }
+
+      // הוספת אצטדיון
+      if (fixture.venue?._id && fixture.venue?.name) {
+        venues.set(fixture.venue._id, {
+          _id: fixture.venue._id,
+          name: fixture.venue.name,
+          nameHe: fixture.venue.nameHe,
+        });
+      }
+    });
+
+    return {
+      availableMonths: Array.from(months).sort(),
+      availableVenues: Array.from(venues.values()),
+    };
+  }, [initialFixtures]);
 
   // הזרקת נתוני SSR ל-cache (פעם אחת בלבד)
   useEffect(() => {
@@ -61,81 +95,74 @@ export default function LeagueFixtures({
     staleTime: 5 * 60 * 1000, // 5 דקות
   });
 
-  // פילטר משחקים לפי חודש (client-side)
-  const filteredFixtures = filters.month
-    ? fixtures.filter((f) => {
+  // פילטר משחקים (client-side)
+  const filteredFixtures = useMemo(() => {
+    let filtered = fixtures;
+
+    // פילטר לפי חודש
+    if (filters.month) {
+      filtered = filtered.filter((f) => {
         const fixtureDate = new Date(f.date);
         const fixtureMonth = `${fixtureDate.getFullYear()}-${String(
           fixtureDate.getMonth() + 1
         ).padStart(2, "0")}`;
         return fixtureMonth === filters.month;
-      })
-    : fixtures;
+      });
+    }
+
+    // פילטר לפי אצטדיון
+    if (filters.venueId) {
+      filtered = filtered.filter((f) => f.venue?._id === filters.venueId);
+    }
+
+    return filtered;
+  }, [fixtures, filters.month, filters.venueId]);
+
+  // פונקציות לטיפול בשינוי פילטרים
+  const handleMonthChange = (month: string | null) => {
+    setFilters({ ...filters, month: month || undefined });
+  };
+
+  const handleVenueChange = (venueId: string | null) => {
+    setFilters({ ...filters, venueId: venueId || undefined });
+  };
 
   if (!leagueId || filteredFixtures.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-gray-500">אין משחקים להצגה</p>
+      <div className="mb-8">
+        {showFilter && (
+          <LeagueFilter
+            selectedMonth={filters.month || null}
+            selectedVenue={filters.venueId || null}
+            availableMonths={availableMonths}
+            availableVenues={availableVenues}
+            onMonthChange={handleMonthChange}
+            onVenueChange={handleVenueChange}
+          />
+        )}
+        <div className="text-center py-12">
+          <p className="text-gray-500">אין משחקים להצגה</p>
+        </div>
       </div>
     );
   }
 
-  // יצירת רשימת חודשים זמינים
-  const availableMonths = Array.from(
-    new Set(
-      fixtures.map((f) => {
-        const date = new Date(f.date);
-        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-          2,
-          "0"
-        )}`;
-      })
-    )
-  ).sort();
-
   return (
     <div className="mb-8">
-      {/* כותרת + פילטרים */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <h2 className="text-2xl font-bold text-gray-900">
-          משחקים קרובים ({filteredFixtures.length})
-        </h2>
+      {/* כותרת */}
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">משחקים</h2>
 
-        {/* פילטר חודש */}
-        {availableMonths.length > 1 && (
-          <select
-            value={filters.month || ""}
-            onChange={(e) =>
-              setFilters({ ...filters, month: e.target.value || undefined })
-            }
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option value="">כל החודשים</option>
-            {availableMonths.map((month) => {
-              const [year, monthNum] = month.split("-");
-              const monthNames = [
-                "ינואר",
-                "פברואר",
-                "מרץ",
-                "אפריל",
-                "מאי",
-                "יוני",
-                "יולי",
-                "אוגוסט",
-                "ספטמבר",
-                "אוקטובר",
-                "נובמבר",
-                "דצמבר",
-              ];
-              return (
-                <option key={month} value={month}>
-                  {monthNames[parseInt(monthNum) - 1]} {year}
-                </option>
-              );
-            })}
-          </select>
-        )}
-      </div>
+      {/* פילטרים */}
+      {showFilter && (
+        <LeagueFilter
+          selectedMonth={filters.month || null}
+          selectedVenue={filters.venueId || null}
+          availableMonths={availableMonths}
+          availableVenues={availableVenues}
+          onMonthChange={handleMonthChange}
+          onVenueChange={handleVenueChange}
+        />
+      )}
 
       {/* רשת משחקים */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

@@ -1,8 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { LeagueHeader } from "@/components/league/LeagueHeader";
-import { LeagueTeamsSection } from "@/components/league/LeagueTeamsSection";
+import { TeamCarousel } from "@/components/league/TeamCarousel";
 import { useLeagueData } from "@/hooks/league";
 
 interface LeaguePageClientProps {
@@ -27,15 +28,25 @@ export default function LeaguePageClient({
   // שליפת פרטי ליגה: cache (לפי slug) → API (לפי ID)
   const { league, teams, isLoading, error } = useLeagueData(slug, leagueId);
 
-  // Loading state
-  if (isLoading) {
+  // מונע hydration mismatch - מוודא שהקומפוננטה מתחילה באותו מצב בשרת ובלקוח
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Loading state - זהה למבנה של התוכן האמיתי
+  if (!isClient || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">טוען נתוני ליגה...</p>
+      <>
+        {/* כותרת הליגה - loading state */}
+        <div className="mb-8">
+          <div className="flex items-center justify-center space-x-4 space-x-reverse">
+            <div className="w-12 h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+            <div className="h-8 bg-gray-200 rounded w-48 animate-pulse"></div>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -87,7 +98,7 @@ export default function LeaguePageClient({
       {/* קרוסלת קבוצות - מ-cache או CSR */}
       {teams && teams.length > 0 && (
         <div className="mb-8">
-          <LeagueTeamsSection teams={teams} />
+          <TeamCarousel teams={teams} />
         </div>
       )}
     </>
