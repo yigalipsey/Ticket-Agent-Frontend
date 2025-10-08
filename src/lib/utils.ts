@@ -98,9 +98,7 @@ export function sortBy<T>(
   });
 }
 
-// Local storage constants - מפתחות נפרדים לכל סוג מידע
-export const LEAGUES_STORAGE_KEY = "all-leagues-with-teams"; // 👈 כל הליגות עם הקבוצות
-export const FIXTURES_STORAGE_KEY = "hot-fixtures"; // 👈 המשחקים החמים
+// Local storage cache duration
 const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24h
 
 interface CachedData<T> {
@@ -150,8 +148,22 @@ export function saveToLocalStorage<T>(data: T[], storageKey: string): void {
       timestamp: Date.now(),
     };
     localStorage.setItem(storageKey, JSON.stringify(cachedData));
-  } catch (error) {
-    console.warn("Failed to save to localStorage:", error);
+  } catch (error: any) {
+    console.error(
+      `❌ [localStorage] Failed to save "${storageKey}":`,
+      error.name
+    );
+
+    // אם זו שגיאת quota - ננסה לנקות cache ישן
+    if (error.name === "QuotaExceededError") {
+      console.warn("⚠️ localStorage quota exceeded! Clearing old cache...");
+      try {
+        localStorage.removeItem(storageKey);
+        localStorage.setItem(storageKey, JSON.stringify(cachedData));
+      } catch (retryError) {
+        console.error("❌ Retry failed - localStorage full");
+      }
+    }
   }
 }
 
@@ -163,7 +175,7 @@ export function loadFromLocalStorage<T>(storageKey: string): T[] | null {
     if (!item) return null;
 
     const cachedData: CachedData<T> = JSON.parse(item);
-    
+
     // Check if cache is expired
     if (Date.now() - cachedData.timestamp > CACHE_DURATION) {
       localStorage.removeItem(storageKey);

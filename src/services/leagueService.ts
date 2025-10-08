@@ -11,12 +11,16 @@ export interface ServiceResult<T> {
 
 export class LeagueService {
   /**
-   * קבלת ליגה ספציפית לפי מזהה
+   * קבלת ליגה ספציפית לפי מזהה (עם או בלי קבוצות)
    */
-  static async getLeague(id: string): Promise<ServiceResult<League>> {
+  static async getLeague(
+    id: string,
+    withTeams: boolean = false
+  ): Promise<ServiceResult<League>> {
     try {
       const league = await apiClient.get<League>(
-        `${API_ENDPOINTS.LEAGUES}/${id}`
+        `${API_ENDPOINTS.LEAGUES}/${id}`,
+        { withTeams }
       );
       return {
         data: league,
@@ -25,32 +29,6 @@ export class LeagueService {
       };
     } catch (error: any) {
       console.error("❌ שגיאה בטעינת ליגה:", error);
-      return {
-        data: null,
-        error: `שגיאה בטעינת הליגה: ${error.message || "שגיאה לא ידועה"}`,
-        success: false,
-      };
-    }
-  }
-
-  /**
-   * קבלת ליגה לפי slug
-   */
-  static async getLeagueBySlug(
-    slug: string,
-    withTeams: boolean = false
-  ): Promise<ServiceResult<League>> {
-    try {
-      const league = await apiClient.get<League>(
-        `${API_ENDPOINTS.LEAGUES}/slug/${slug}?withTeams=${withTeams}`
-      );
-      return {
-        data: league,
-        error: null,
-        success: true,
-      };
-    } catch (error: any) {
-      console.error("❌ שגיאה בטעינת ליגה לפי slug:", error);
       return {
         data: null,
         error: `שגיאה בטעינת הליגה: ${error.message || "שגיאה לא ידועה"}`,
@@ -91,6 +69,33 @@ export class LeagueService {
    */
   static async getAllLeaguesWithTeams(): Promise<ServiceResult<League[]>> {
     return this.getAllLeagues(true);
+  }
+
+  /**
+   * קבלת רק ID של ליגה לפי slug (אולטרה מהיר!)
+   * מחזיר רק את ה-ID וה-slug, ללא מידע נוסף
+   */
+  static async getLeagueIdBySlug(
+    slug: string
+  ): Promise<ServiceResult<{ _id: string; slug: string }>> {
+    try {
+      const data = await apiClient.get<{ _id: string; slug: string }>(
+        `${API_ENDPOINTS.LEAGUES}/slug/${slug}/id`
+      );
+
+      return {
+        data,
+        error: null,
+        success: true,
+      };
+    } catch (error: any) {
+      console.error("❌ שגיאה בטעינת ID ליגה:", error);
+      return {
+        data: null,
+        error: `שגיאה בטעינת ID הליגה: ${error.message || "שגיאה לא ידועה"}`,
+        success: false,
+      };
+    }
   }
 }
 

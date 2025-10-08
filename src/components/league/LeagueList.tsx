@@ -69,7 +69,7 @@ const LeagueList: React.FC<LeagueListProps> = ({
             </CardContent>
 
             <div className="px-6 pb-6">
-              <Link href={`/leagues/${league.slug}`}>
+              <Link href={`/leagues/${league.slug}?id=${league._id}`}>
                 <Button
                   variant="outline"
                   size="sm"

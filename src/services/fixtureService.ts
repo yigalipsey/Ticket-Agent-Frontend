@@ -38,6 +38,34 @@ export class FixtureService {
       };
     }
   }
+
+  /**
+   * קבלת משחקי ליגה לפי leagueId
+   */
+  static async getLeagueFixtures(
+    leagueId: string,
+    limit: number = 20
+  ): Promise<ServiceResult<Fixture[]>> {
+    try {
+      const fixtures = await apiClient.get<Fixture[]>(
+        `${API_ENDPOINTS.FIXTURES}/by-league`,
+        { leagueId, limit }
+      );
+
+      return {
+        data: fixtures,
+        error: null,
+        success: true,
+      };
+    } catch (error: any) {
+      console.error("❌ שגיאה בטעינת משחקי ליגה:", error);
+      return {
+        data: null,
+        error: `שגיאה בטעינת משחקי הליגה: ${error.message || "שגיאה לא ידועה"}`,
+        success: false,
+      };
+    }
+  }
 }
 
 export default FixtureService;

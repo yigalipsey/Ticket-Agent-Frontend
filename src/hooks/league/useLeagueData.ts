@@ -1,4 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMemo } from "react";
 import LeagueService from "@/services/leagueService";
 import { League } from "@/types/league";
 
@@ -11,41 +12,65 @@ interface LeagueDataResult {
 }
 
 /**
- * Hook פשוט ונקי לניהול נתוני הליגה
- * עובד ישירות עם React Query ללא תלות ב-navigationService
+ * Hook לשליפת ליגה בודדת
+ *
+ * זרימה חכמה (תומכת בשני מצבים):
+ * 1. ניווט פנימי (מהדף הראשי):
+ *    - בודק cache של "all-leagues-with-teams" לפי slug
+ *    - מוצא → מחזיר מיד ללא API call ⚡
+ *
+ * 2. נחיתה ישירה (לינק חיצוני):
+ *    - אין cache → משתמש ב-leagueId לקריאת API (GET /leagues/:id?withTeams=true)
  */
-export function useLeagueData(leagueSlug: string): LeagueDataResult {
-  // טעינת כל הליגות עם הקבוצות שלהן
+export function useLeagueData(
+  leagueSlug: string,
+  leagueId: string | null
+): LeagueDataResult {
+  const queryClient = useQueryClient();
+
+  // ניסיון #1: חיפוש ב-cache של כל הליגות (מהדף הראשי) לפי slug
+  const leagueFromAllLeaguesCache = useMemo(() => {
+    const allLeagues = queryClient.getQueryData<League[]>([
+      "all-leagues-with-teams",
+    ]);
+    return allLeagues?.find((l) => l.slug === leagueSlug);
+  }, [queryClient, leagueSlug]);
+
+  // רק נעשה fetch אם:
+  // 1. אין cache מהדף הראשי
+  // 2. יש leagueId זמין (מה-SSR)
+  const shouldFetch = !leagueFromAllLeaguesCache && !!leagueId;
+
   const {
-    data: result,
+    data: league,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["all-leagues-with-teams"],
+    queryKey: ["league", leagueId, { withTeams: true }],
     queryFn: async () => {
-      const serviceResult = await LeagueService.getAllLeaguesWithTeams();
-      if (!serviceResult.success) {
-        throw new Error(serviceResult.error || "שגיאה בטעינת הליגות");
+      if (!leagueId) {
+        throw new Error("League ID is required");
       }
-      return serviceResult.data;
+      const result = await LeagueService.getLeague(leagueId, true);
+      if (!result.success || !result.data) {
+        throw new Error(result.error || "שגיאה בטעינת הליגה");
+      }
+      return result.data;
     },
-    staleTime: 10 * 60 * 1000, // 10 דקות
+    enabled: shouldFetch, // 👈 רק אם אין cache וגם יש ID!
+    staleTime: 10 * 60 * 1000,
     retry: 2,
-    initialData: undefined, // ינסה לטעון מה-cache קודם
   });
 
-  const allLeagues = result || [];
-
-  // מציאת הליגה והנתונים הנדרשים
-  const league = allLeagues?.find((l) => l.slug === leagueSlug) || null;
-  const leagueId = league?._id || league?.id || null;
-  const teams = league?.teams || [];
+  const finalLeague = leagueFromAllLeaguesCache || league;
+  const finalLeagueId = finalLeague?._id || finalLeague?.id || leagueId || null;
+  const teams = finalLeague?.teams || [];
 
   return {
-    league,
-    leagueId,
+    league: finalLeague || null,
+    leagueId: finalLeagueId,
     teams,
-    isLoading,
+    isLoading: shouldFetch ? isLoading : false,
     error,
   };
 }
