@@ -1,13 +1,15 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useHotFixtures } from "@/hooks/fixture/useHotFixtures";
+import { Fixture } from "@/types";
 
-export default function HotFixturesSection() {
-  const { fixtures, isLoading, error } = useHotFixtures();
+interface HotFixturesSectionProps {
+  fixtures: Fixture[];
+}
 
+export default function HotFixturesSection({
+  fixtures,
+}: HotFixturesSectionProps) {
   return (
     <section className="mb-16">
       <div className="flex items-center justify-between mb-8">
@@ -20,16 +22,7 @@ export default function HotFixturesSection() {
         </Link>
       </div>
 
-      {isLoading ? (
-        <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        </div>
-      ) : error ? (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-          <p className="text-red-600 font-medium">שגיאה בטעינת המשחקים החמים</p>
-          <p className="text-red-500 text-sm mt-1">{error}</p>
-        </div>
-      ) : fixtures && fixtures.length > 0 ? (
+      {fixtures && fixtures.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {fixtures.map((fixture) => (
             <div
@@ -62,7 +55,9 @@ export default function HotFixturesSection() {
                       <Image
                         src={fixture.homeTeam.logoUrl}
                         alt={
-                          fixture.homeTeam.name_he || fixture.homeTeam.name_en
+                          fixture.homeTeam?.nameHe ||
+                          fixture.homeTeam?.name ||
+                          "קבוצה ביתית"
                         }
                         width={48}
                         height={48}
@@ -75,8 +70,8 @@ export default function HotFixturesSection() {
                     )}
                   </div>
                   <span className="text-sm font-medium text-gray-900 block">
-                    {fixture.homeTeam?.name_he ||
-                      fixture.homeTeam?.name_en ||
+                    {fixture.homeTeam?.nameHe ||
+                      fixture.homeTeam?.name ||
                       "TBD"}
                   </span>
                 </div>
@@ -91,7 +86,9 @@ export default function HotFixturesSection() {
                       <Image
                         src={fixture.awayTeam.logoUrl}
                         alt={
-                          fixture.awayTeam.name_he || fixture.awayTeam.name_en
+                          fixture.awayTeam?.nameHe ||
+                          fixture.awayTeam?.name ||
+                          "קבוצה אורחת"
                         }
                         width={48}
                         height={48}
@@ -104,8 +101,8 @@ export default function HotFixturesSection() {
                     )}
                   </div>
                   <span className="text-sm font-medium text-gray-900 block">
-                    {fixture.awayTeam?.name_he ||
-                      fixture.awayTeam?.name_en ||
+                    {fixture.awayTeam?.nameHe ||
+                      fixture.awayTeam?.name ||
                       "TBD"}
                   </span>
                 </div>

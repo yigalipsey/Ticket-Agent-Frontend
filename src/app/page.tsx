@@ -17,6 +17,8 @@ export default async function HomePage() {
   const leagues = leaguesRes.success ? leaguesRes.data || [] : [];
   const hotFixtures = fixturesRes.success ? fixturesRes.data || [] : [];
 
+  const popularLeagues = leagues.filter((league) => league.isPopular);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hydration של SSR data ל-React Query cache */}
@@ -30,11 +32,11 @@ export default async function HomePage() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
-        {/* Popular Leagues - קורא מ-cache */}
-        <PopularLeaguesSection />
+        {/* Popular Leagues - מקבל רק את הפופולריות */}
+        <PopularLeaguesSection leagues={popularLeagues} />
 
-        {/* Hot Fixtures - קורא מ-cache */}
-        <HotFixturesSection />
+        {/* Hot Fixtures - מקבל ישירות את המשחקים החמים */}
+        <HotFixturesSection fixtures={hotFixtures} />
       </main>
     </div>
   );

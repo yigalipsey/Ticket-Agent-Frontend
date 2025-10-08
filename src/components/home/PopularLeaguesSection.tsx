@@ -1,15 +1,17 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import { LeagueList } from "@/components";
-import { useAllLeagues } from "@/hooks";
+import { League } from "@/types";
 
-export default function PopularLeaguesSection() {
-  const { leagues: allLeagues, isLoading, error } = useAllLeagues();
+interface PopularLeaguesSectionProps {
+  leagues: League[];
+}
 
+export default function PopularLeaguesSection({
+  leagues,
+}: PopularLeaguesSectionProps) {
   // Filter popular leagues in frontend
-  const popularLeagues = allLeagues?.filter((league) => league.isPopular) || [];
+  const popularLeagues = leagues?.filter((league) => league.isPopular) || [];
 
   return (
     <section className="mb-16">
@@ -23,16 +25,7 @@ export default function PopularLeaguesSection() {
         </Link>
       </div>
 
-      {isLoading ? (
-        <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        </div>
-      ) : error ? (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-          <p className="text-red-600 font-medium">שגיאה בטעינת הליגות</p>
-          <p className="text-red-500 text-sm mt-1">{error}</p>
-        </div>
-      ) : popularLeagues && popularLeagues.length > 0 ? (
+      {popularLeagues && popularLeagues.length > 0 ? (
         <LeagueList
           leagues={popularLeagues}
           showDescription={true}
