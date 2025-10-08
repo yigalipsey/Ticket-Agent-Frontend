@@ -13,20 +13,18 @@ interface LeagueFixturesProps {
   showFilter?: boolean;
 }
 
-interface FilterOptions {
-  month?: string;
-  venueId?: string;
-  limit: number;
+interface FilterState {
+  month: string | null;
+  venueId: string | null;
 }
 
 /**
  * Client Component להצגת משחקי הליגה + פילטור דינמי
  *
- * זרימה:
- * 1. מתחיל עם נתוני SSR (initialFixtures)
- * 2. מזריק אותם ל-React Query cache
- * 3. מאפשר פילטור דינמי (חודש, עיר וכו')
- * 4. כל שינוי בפילטר → קריאה חדשה ל-API
+ * לוגיקת פילטור:
+ * 1. חודש נבחר: שולף נתוני חודש פעם אחת, פילטור venue ב-client
+ * 2. venue נבחר (ללא חודש): שולף מהשרת עם venueId (cache של league+venue)
+ * 3. ללא פילטרים: שולף את כל המשחקים של הליגה
  */
 export default function LeagueFixtures({
   leagueId,
@@ -34,8 +32,9 @@ export default function LeagueFixtures({
   showFilter = true,
 }: LeagueFixturesProps) {
   const queryClient = useQueryClient();
-  const [filters, setFilters] = useState<FilterOptions>({
-    limit: 20,
+  const [filters, setFilters] = useState<FilterState>({
+    month: null,
+    venueId: null,
   });
 
   // חישוב חודשים ואצטדיונים זמינים מהנתונים הראשוניים
@@ -80,28 +79,37 @@ export default function LeagueFixtures({
   }, [leagueId, initialFixtures, queryClient]);
 
   // שליפת משחקים עם React Query (מ-cache או API)
-  const { data: fixtures = [] } = useQuery({
+  const { data: fixtures = [], isLoading } = useQuery({
     queryKey: ["league-fixtures", leagueId, filters],
     queryFn: async () => {
       if (!leagueId) return [];
-      const result = await FixtureService.getLeagueFixtures(
-        leagueId,
-        filters.limit
-      );
+
+      // לוגיקת פילטור חכמה:
+      // - אם יש חודש: שולף חודש, venue יסונן ב-client
+      // - אם יש venue בלי חודש: שולף venue מהשרת
+      // - אחרת: שולף הכל
+      const result = await FixtureService.getLeagueFixtures(leagueId, {
+        limit: 100,
+        page: 1,
+        month: filters.month,
+        venueId: filters.month ? null : filters.venueId, // venue רק אם אין חודש
+      });
+
       return result.success && result.data ? result.data : [];
     },
     initialData: initialFixtures,
     enabled: !!leagueId,
     staleTime: 5 * 60 * 1000, // 5 דקות
+    placeholderData: (previousData) => previousData, // שומר נתונים קודמים בזמן טעינה
   });
 
   // פילטר משחקים (client-side)
-  const filteredFixtures = useMemo(() => {
+  const visibleFixtures = useMemo(() => {
     let filtered = fixtures;
 
     // פילטר לפי חודש
     if (filters.month) {
-      filtered = filtered.filter((f) => {
+      filtered = filtered.filter((f: Fixture) => {
         const fixtureDate = new Date(f.date);
         const fixtureMonth = `${fixtureDate.getFullYear()}-${String(
           fixtureDate.getMonth() + 1
@@ -112,7 +120,9 @@ export default function LeagueFixtures({
 
     // פילטר לפי אצטדיון
     if (filters.venueId) {
-      filtered = filtered.filter((f) => f.venue?._id === filters.venueId);
+      filtered = filtered.filter(
+        (f: Fixture) => f.venue?._id === filters.venueId
+      );
     }
 
     return filtered;
@@ -120,14 +130,14 @@ export default function LeagueFixtures({
 
   // פונקציות לטיפול בשינוי פילטרים
   const handleMonthChange = (month: string | null) => {
-    setFilters({ ...filters, month: month || undefined });
+    setFilters({ ...filters, month });
   };
 
   const handleVenueChange = (venueId: string | null) => {
-    setFilters({ ...filters, venueId: venueId || undefined });
+    setFilters({ ...filters, venueId });
   };
 
-  if (!leagueId || filteredFixtures.length === 0) {
+  if (!leagueId || visibleFixtures.length === 0) {
     return (
       <div className="mb-8">
         {showFilter && (
@@ -164,18 +174,27 @@ export default function LeagueFixtures({
         />
       )}
 
+      {/* טוען */}
+      {isLoading && (
+        <div className="text-center py-12">
+          <p className="text-gray-500">טוען משחקים...</p>
+        </div>
+      )}
+
       {/* רשת משחקים */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredFixtures.map((fixture) => (
-          <FixtureCard
-            key={fixture.id || fixture._id}
-            fixture={fixture}
-            showOffers={true}
-            showVenue={true}
-            showLeague={false}
-          />
-        ))}
-      </div>
+      {!isLoading && (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {visibleFixtures.map((fixture: Fixture) => (
+            <FixtureCard
+              key={fixture.id || fixture._id}
+              fixture={fixture}
+              showOffers={true}
+              showVenue={true}
+              showLeague={false}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

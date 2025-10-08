@@ -27,29 +27,45 @@ export class FixtureService {
         error: null,
         success: true,
       };
-    } catch (error: any) {
-      console.error("❌ שגיאה בטעינת משחקים חמים:", error);
+    } catch (error) {
+      const err = error as Error;
+      console.error("❌ שגיאה בטעינת משחקים חמים:", err);
       return {
         data: null,
-        error: `שגיאה בטעינת המשחקים החמים: ${
-          error.message || "שגיאה לא ידועה"
-        }`,
+        error: `שגיאה בטעינת המשחקים החמים: ${err.message || "שגיאה לא ידועה"}`,
         success: false,
       };
     }
   }
 
   /**
-   * קבלת משחקי ליגה לפי leagueId
+   * קבלת משחקי ליגה לפי leagueId עם פילטרים דינמיים
    */
   static async getLeagueFixtures(
     leagueId: string,
-    limit: number = 20
+    options: {
+      limit?: number;
+      page?: number;
+      month?: string | null;
+      venueId?: string | null;
+    } = {}
   ): Promise<ServiceResult<Fixture[]>> {
     try {
+      const { limit = 20, page = 1, month = null, venueId = null } = options;
+
+      const params: Record<string, string | number> = { leagueId, limit, page };
+      if (month) params.month = month;
+      if (venueId) params.venueId = venueId;
+
+      console.log(
+        "%c🎯 [FixtureService] getLeagueFixtures",
+        "color: #8b5cf6; font-weight: bold",
+        { leagueId, params }
+      );
+
       const fixtures = await apiClient.get<Fixture[]>(
         `${API_ENDPOINTS.FIXTURES}/by-league`,
-        { leagueId, limit }
+        params
       );
 
       return {
@@ -57,11 +73,12 @@ export class FixtureService {
         error: null,
         success: true,
       };
-    } catch (error: any) {
-      console.error("❌ שגיאה בטעינת משחקי ליגה:", error);
+    } catch (error) {
+      const err = error as Error;
+      console.error("❌ שגיאה בטעינת משחקי ליגה:", err);
       return {
         data: null,
-        error: `שגיאה בטעינת משחקי הליגה: ${error.message || "שגיאה לא ידועה"}`,
+        error: `שגיאה בטעינת משחקי הליגה: ${err.message || "שגיאה לא ידועה"}`,
         success: false,
       };
     }

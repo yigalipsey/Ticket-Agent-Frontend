@@ -38,7 +38,10 @@ export default async function LeaguePage({
   // SSR: משיכת 20 משחקים (זה מה שחשוב ל-SEO)
   let fixtures: Fixture[] = [];
   if (leagueId) {
-    const fixturesResult = await FixtureService.getLeagueFixtures(leagueId, 20);
+    const fixturesResult = await FixtureService.getLeagueFixtures(leagueId, {
+      limit: 30,
+      page: 1,
+    });
     fixtures =
       fixturesResult.success && fixturesResult.data ? fixturesResult.data : [];
   }
