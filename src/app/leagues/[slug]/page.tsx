@@ -35,15 +35,15 @@ export default async function LeaguePage({
     leagueId = leagueIdRes.success ? leagueIdRes.data?._id || null : null;
   }
 
-  // SSR: משיכת 20 משחקים (זה מה שחשוב ל-SEO)
   let fixtures: Fixture[] = [];
   if (leagueId) {
     const fixturesResult = await FixtureService.getLeagueFixtures(leagueId, {
       limit: 30,
       page: 1,
     });
-    fixtures =
-      fixturesResult.success && fixturesResult.data ? fixturesResult.data : [];
+    if (fixturesResult.success && fixturesResult.data) {
+      fixtures = fixturesResult.data.fixtures || [];
+    }
   }
 
   return (
@@ -53,7 +53,11 @@ export default async function LeaguePage({
         <LeaguePageClient slug={leagueSlug} leagueId={leagueId} />
 
         {/* Client: משחקים עם נתוני SSR + פילטור דינמי */}
-        <LeagueFixtures leagueId={leagueId} initialFixtures={fixtures} />
+        <LeagueFixtures
+          leagueId={leagueId}
+          leagueSlug={leagueSlug}
+          initialFixtures={fixtures}
+        />
       </div>
     </div>
   );

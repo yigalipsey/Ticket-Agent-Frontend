@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState, useMemo } from "react";
 import FixtureCard from "@/components/fixture/FixtureCard";
-import FixtureService from "@/services/fixtureService";
 import { Fixture } from "@/types/fixture";
-import LeagueFilter from "@/components/league/LeagueFilter";
+import LeagueFixturesFilter from "@/components/league/LeagueFixturesFilter";
+import { useLeagueFixtures } from "@/hooks/fixture";
+import { useLeagueData } from "@/hooks/league";
 
 interface LeagueFixturesProps {
   leagueId: string | null;
+  leagueSlug: string;
   initialFixtures: Fixture[];
   showFilter?: boolean;
 }
@@ -21,38 +22,48 @@ interface FilterState {
 /**
  * Client Component להצגת משחקי הליגה + פילטור דינמי
  *
- * לוגיקת פילטור:
- * 1. חודש נבחר: שולף נתוני חודש פעם אחת, פילטור venue ב-client
- * 2. venue נבחר (ללא חודש): שולף מהשרת עם venueId (cache של league+venue)
- * 3. ללא פילטרים: שולף את כל המשחקים של הליגה
+ * לוגיקת Cache חכמה:
+ * 1. נחיתה בדף (ללא פילטרים):
+ *    - משתמש ב-initialData מ-SSR
+ *    - Cache: ["initial-league-fixtures", "league:{id}:all"]
+ *
+ * 2. אצטדיון בלבד:
+ *    - בודק אם יש ב-cache: "league:{id}:venue:{venueId}"
+ *    - אם אין - פונה לבקאנד עם venueId
+ *    - Cache: ["initial-league-fixtures", "league:{id}:venue:{venueId}"]
+ *
+ * 3. חודש בלבד או חודש+אצטדיון:
+ *    - בודק אם יש ב-cache: "league:{id}:month:{month}"
+ *    - אם אין - פונה לבקאנד עם month
+ *    - אם יש גם venue - פילטור venue ב-client
+ *    - Cache: ["initial-league-fixtures", "league:{id}:month:{month}"]
  */
 export default function LeagueFixtures({
   leagueId,
+  leagueSlug,
   initialFixtures,
   showFilter = true,
 }: LeagueFixturesProps) {
-  const queryClient = useQueryClient();
   const [filters, setFilters] = useState<FilterState>({
     month: null,
     venueId: null,
   });
 
-  // חישוב חודשים ואצטדיונים זמינים מהנתונים הראשוניים
+  // שליפת פרטי הליגה (כולל החודשים)
+  const { league } = useLeagueData(leagueSlug, leagueId);
+
+  // חישוב חודשים ואצטדיונים זמינים
   const { availableMonths, availableVenues } = useMemo(() => {
-    const months = new Set<string>();
     const venues = new Map<
       string,
       { _id: string; name: string; nameHe?: string }
     >();
 
-    initialFixtures.forEach((fixture) => {
-      // הוספת חודש
-      if (fixture.date) {
-        const month = new Date(fixture.date).toISOString().slice(0, 7); // YYYY-MM
-        months.add(month);
-      }
+    // חודשים מגיעים מהליגה עצמה
+    const months = league?.months || [];
 
-      // הוספת אצטדיון
+    // אצטדיונים מחושבים מהמשחקים
+    initialFixtures.forEach((fixture) => {
       if (fixture.venue?._id && fixture.venue?.name) {
         venues.set(fixture.venue._id, {
           _id: fixture.venue._id,
@@ -63,65 +74,44 @@ export default function LeagueFixtures({
     });
 
     return {
-      availableMonths: Array.from(months).sort(),
+      availableMonths: months,
       availableVenues: Array.from(venues.values()),
     };
-  }, [initialFixtures]);
+  }, [league, initialFixtures]);
 
-  // הזרקת נתוני SSR ל-cache (פעם אחת בלבד)
-  useEffect(() => {
-    if (leagueId && initialFixtures.length > 0) {
-      queryClient.setQueryData(
-        ["league-fixtures", leagueId, { limit: 20 }],
-        initialFixtures
-      );
-    }
-  }, [leagueId, initialFixtures, queryClient]);
-
-  // שליפת משחקים עם React Query (מ-cache או API)
-  const { data: fixtures = [], isLoading } = useQuery({
-    queryKey: ["league-fixtures", leagueId, filters],
-    queryFn: async () => {
-      if (!leagueId) return [];
-
-      // לוגיקת פילטור חכמה:
-      // - אם יש חודש: שולף חודש, venue יסונן ב-client
-      // - אם יש venue בלי חודש: שולף venue מהשרת
-      // - אחרת: שולף הכל
-      const result = await FixtureService.getLeagueFixtures(leagueId, {
-        limit: 100,
-        page: 1,
-        month: filters.month,
-        venueId: filters.month ? null : filters.venueId, // venue רק אם אין חודש
-      });
-
-      return result.success && result.data ? result.data : [];
+  // שליפת משחקים עם Hook מותאם אישית
+  const { fixtures, isLoading } = useLeagueFixtures(
+    leagueId,
+    {
+      limit: 100,
+      page: 1,
+      month: filters.month,
+      venueId: filters.venueId,
     },
-    initialData: initialFixtures,
-    enabled: !!leagueId,
-    staleTime: 5 * 60 * 1000, // 5 דקות
-    placeholderData: (previousData) => previousData, // שומר נתונים קודמים בזמן טעינה
-  });
+    initialFixtures
+  );
 
   // פילטר משחקים (client-side)
+  // רק כאשר יש חודש+אצטדיון - נסנן את האצטדיון ב-client
+  // כי ה-hook מביא את כל משחקי החודש והפילטור של venue נעשה כאן
   const visibleFixtures = useMemo(() => {
     let filtered = fixtures;
 
-    // פילטר לפי חודש
-    if (filters.month) {
-      filtered = filtered.filter((f: Fixture) => {
-        const fixtureDate = new Date(f.date);
-        const fixtureMonth = `${fixtureDate.getFullYear()}-${String(
-          fixtureDate.getMonth() + 1
-        ).padStart(2, "0")}`;
-        return fixtureMonth === filters.month;
-      });
-    }
-
-    // פילטר לפי אצטדיון
-    if (filters.venueId) {
+    // פילטר לפי אצטדיון - רק אם יש גם חודש
+    // (אם יש רק venue - ה-hook כבר הביא את המשחקים הנכונים)
+    if (filters.month && filters.venueId) {
       filtered = filtered.filter(
         (f: Fixture) => f.venue?._id === filters.venueId
+      );
+      console.log(
+        "%c🔍 [LeagueFixtures] Client-side venue filter applied",
+        "color: #f59e0b; font-weight: bold",
+        {
+          month: filters.month,
+          venueId: filters.venueId,
+          beforeFilter: fixtures.length,
+          afterFilter: filtered.length,
+        }
       );
     }
 
@@ -141,7 +131,7 @@ export default function LeagueFixtures({
     return (
       <div className="mb-8">
         {showFilter && (
-          <LeagueFilter
+          <LeagueFixturesFilter
             selectedMonth={filters.month || null}
             selectedVenue={filters.venueId || null}
             availableMonths={availableMonths}
@@ -164,7 +154,7 @@ export default function LeagueFixtures({
 
       {/* פילטרים */}
       {showFilter && (
-        <LeagueFilter
+        <LeagueFixturesFilter
           selectedMonth={filters.month || null}
           selectedVenue={filters.venueId || null}
           availableMonths={availableMonths}

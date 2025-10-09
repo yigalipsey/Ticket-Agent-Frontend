@@ -49,7 +49,9 @@ export class FixtureService {
       month?: string | null;
       venueId?: string | null;
     } = {}
-  ): Promise<ServiceResult<Fixture[]>> {
+  ): Promise<
+    ServiceResult<{ fixtures: Fixture[]; availableMonths?: string[] }>
+  > {
     try {
       const { limit = 20, page = 1, month = null, venueId = null } = options;
 
@@ -63,13 +65,16 @@ export class FixtureService {
         { leagueId, params }
       );
 
-      const fixtures = await apiClient.get<Fixture[]>(
-        `${API_ENDPOINTS.FIXTURES}/by-league`,
-        params
-      );
+      const response = await apiClient.get<{
+        data: Fixture[];
+        availableMonths?: string[];
+      }>(`${API_ENDPOINTS.FIXTURES}/by-league`, params);
 
       return {
-        data: fixtures,
+        data: {
+          fixtures: response.data || response,
+          availableMonths: response.availableMonths || [],
+        },
         error: null,
         success: true,
       };

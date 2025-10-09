@@ -10,6 +10,7 @@ export interface League {
   logoUrl: string;
   type: string;
   isPopular: boolean;
+  months?: string[]; // Available months in YYYY-MM format
   teams?: Team[]; // Optional teams array
 }
 

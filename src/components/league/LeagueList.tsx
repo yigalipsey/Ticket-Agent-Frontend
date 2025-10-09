@@ -31,53 +31,41 @@ const LeagueList: React.FC<LeagueListProps> = ({
     <div className={className}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {leagues.map((league) => (
-          <Card
+          <Link
             key={league._id}
-            className="group hover:shadow-medium transition-all duration-200 cursor-pointer"
+            href={`/leagues/${league.slug}?id=${league._id}`}
             onClick={() => handleLeagueClick(league)}
           >
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3 space-x-reverse">
-                  {/* דגל המדינה */}
+            <Card className="group hover:shadow-medium transition-all duration-200 cursor-pointer h-full">
+              <CardContent className="p-3 md:p-6">
+                <div className="flex flex-col items-center text-center space-y-2 md:space-y-4">
+                  {/* לוגו הליגה */}
                   <div className="flex-shrink-0">
                     {league.logoUrl ? (
                       <Image
                         src={league.logoUrl}
                         alt={league.nameHe}
-                        width={48}
-                        height={48}
-                        className=" object-contain"
+                        width={80}
+                        height={80}
+                        className="object-contain w-12 h-12 md:w-20 md:h-20"
                         style={{ width: "auto", height: "auto" }}
                       />
                     ) : (
-                      <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                        <Trophy className="w-6 h-6 text-gray-400" />
+                      <div className="w-12 h-12 md:w-20 md:h-20 bg-gray-200 rounded-lg flex items-center justify-center">
+                        <Trophy className="w-6 h-6 md:w-10 md:h-10 text-gray-400" />
                       </div>
                     )}
                   </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-lg mr-4 group-hover:text-primary-dark transition-colors">
+                  {/* שם הליגה */}
+                  <div className="w-full">
+                    <CardTitle className="text-sm md:text-lg group-hover:text-primary-dark transition-colors">
                       {league.nameHe}
                     </CardTitle>
                   </div>
                 </div>
-              </div>
-            </CardContent>
-
-            <div className="px-6 pb-6">
-              <Link href={`/leagues/${league.slug}?id=${league._id}`}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  fullWidth
-                  className="group-hover:bg-primary-dark group-hover:text-white group-hover:border-primary-dark"
-                >
-                  צפה בהצעות
-                </Button>
-              </Link>
-            </div>
-          </Card>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
 

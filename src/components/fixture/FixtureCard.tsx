@@ -49,7 +49,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                       (fixture.homeTeam.logo ||
                         fixture.homeTeam.logoUrl) as string
                     }
-                    alt={fixture.homeTeam.name}
+                    alt={fixture.homeTeam.name || "Home Team"}
                     width={48}
                     height={48}
                     className="w-full h-full object-contain"
@@ -97,7 +97,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                       (fixture.awayTeam.logo ||
                         fixture.awayTeam.logoUrl) as string
                     }
-                    alt={fixture.awayTeam.name}
+                    alt={fixture.awayTeam.name || "Away Team"}
                     width={48}
                     height={48}
                     className="w-full h-full object-contain"

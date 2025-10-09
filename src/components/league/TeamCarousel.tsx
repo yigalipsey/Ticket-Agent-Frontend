@@ -34,8 +34,9 @@ export function TeamCarousel({ teams }: LeagueTeamsSectionProps) {
     loop: false,
   });
 
-  const prevSlide = () => instanceRef.current?.prev();
-  const nextSlide = () => instanceRef.current?.next();
+  // בעברית: כפתור ימני = הזזה שמאלה (next), כפתור שמאלי = הזזה ימינה (prev)
+  const prevSlide = () => instanceRef.current?.next();
+  const nextSlide = () => instanceRef.current?.prev();
 
   if (!teams || teams.length === 0) {
     return (
