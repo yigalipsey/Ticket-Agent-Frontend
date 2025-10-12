@@ -53,16 +53,66 @@ class ApiClient {
   }
 
   async get<T>(url: string, params?: Record<string, unknown>): Promise<T> {
+    console.log(
+      "%c🌐 [API CLIENT REQUEST] 🌐",
+      "color: orange; font-size: 16px; font-weight: bold; background: black; padding: 10px;"
+    );
+    console.log(
+      "%cBase URL:",
+      "color: orange; font-size: 14px; font-weight: bold;"
+    );
+    console.log(this.client.defaults.baseURL);
+    console.log(
+      "%cRequest URL:",
+      "color: orange; font-size: 14px; font-weight: bold;"
+    );
+    console.log(url);
+    console.log(
+      "%cFull URL:",
+      "color: orange; font-size: 14px; font-weight: bold;"
+    );
+    console.log(`${this.client.defaults.baseURL}${url}`);
+    console.log(
+      "%cParams:",
+      "color: orange; font-size: 14px; font-weight: bold;"
+    );
+    console.log(params);
+
     const response = await this.client.get(url, { params });
+
+    console.log(
+      "%c🌐 [API CLIENT RESPONSE] 🌐",
+      "color: purple; font-size: 16px; font-weight: bold; background: black; padding: 10px;"
+    );
+    console.log(
+      "%cStatus:",
+      "color: purple; font-size: 14px; font-weight: bold;"
+    );
+    console.log(response.status);
+    console.log(
+      "%cRaw response data:",
+      "color: purple; font-size: 14px; font-weight: bold;"
+    );
+    console.log(response.data);
 
     const responseData = response.data;
 
     // If response has success property (backend format), extract data from it
     if (responseData && responseData.success && responseData.data) {
+      console.log(
+        "%cExtracted data:",
+        "color: purple; font-size: 14px; font-weight: bold;"
+      );
+      console.log(responseData.data);
       return responseData.data;
     }
 
     // Otherwise, return the response directly
+    console.log(
+      "%cReturning raw response:",
+      "color: purple; font-size: 14px; font-weight: bold;"
+    );
+    console.log(responseData);
     return responseData;
   }
 
