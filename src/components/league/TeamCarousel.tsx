@@ -34,9 +34,9 @@ export function TeamCarousel({ teams }: LeagueTeamsSectionProps) {
     loop: false,
   });
 
-  // בעברית: כפתור ימני = הזזה שמאלה (next), כפתור שמאלי = הזזה ימינה (prev)
-  const prevSlide = () => instanceRef.current?.next();
-  const nextSlide = () => instanceRef.current?.prev();
+  // בעברית RTL: כפתור ראשון (ימין) = prev, כפתור שני (שמאל) = next
+  const slideRight = () => instanceRef.current?.prev(); // גלילה ימינה
+  const slideLeft = () => instanceRef.current?.next(); // גלילה שמאלה
 
   if (!teams || teams.length === 0) {
     return (
@@ -52,12 +52,14 @@ export function TeamCarousel({ teams }: LeagueTeamsSectionProps) {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-gray-900">קבוצות</h2>
 
-        {/* כפתורי דפדף */}
+        {/* כפתורי דפדף - RTL: כפתור ימני ← גלילה ימינה, כפתור שמאלי ← גלילה שמאלה */}
         {teams.length > 6 && (
           <div className="flex gap-2">
+            {/* כפתור ימני - גלילה ימינה (אחורה) */}
             <button
-              onClick={prevSlide}
+              onClick={slideRight}
               className="p-2 rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
+              aria-label="גלול ימינה"
             >
               <svg
                 className="w-4 h-4"
@@ -73,9 +75,11 @@ export function TeamCarousel({ teams }: LeagueTeamsSectionProps) {
                 />
               </svg>
             </button>
+            {/* כפתור שמאלי - גלילה שמאלה (קדימה) */}
             <button
-              onClick={nextSlide}
+              onClick={slideLeft}
               className="p-2 rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
+              aria-label="גלול שמאלה"
             >
               <svg
                 className="w-4 h-4"
@@ -100,8 +104,8 @@ export function TeamCarousel({ teams }: LeagueTeamsSectionProps) {
         {teams.map((team) => (
           <div key={team._id || team.slug} className="keen-slider__slide">
             <Link
-              href={`/teams/${team.slug}`}
-              className="group p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 block h-20 flex items-center justify-center"
+              href={`/teams/${team.slug}?id=${team._id || team.id}`}
+              className="group p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 flex items-center justify-center h-20"
             >
               <div className="flex flex-col items-center text-center space-y-1 w-full">
                 {team.logoUrl ? (

@@ -197,11 +197,11 @@ export default function Footer() {
         </div>
 
         {/* לוגו ומדיה חברתית */}
-        <div className="mt-16 pt-8 border-t border-blue-800">
+        <div className="mt-16 pt-8 border-t border-white">
           <div className="flex flex-col md:flex-row justify-between items-center">
             {/* לוגו */}
             <div className="flex items-center mb-6 md:mb-0">
-              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mr-4">
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mr-6">
                 <span className="text-2xl font-bold text-purple-900">T</span>
               </div>
               <div>
@@ -284,7 +284,7 @@ export default function Footer() {
         </div>
 
         {/* שורה תחתונה */}
-        <div className="mt-8 pt-8 border-t border-blue-800">
+        <div className="mt-8 pt-8 border-t border-white">
           <div className="flex flex-col md:flex-row justify-between items-center text-sm text-blue-200">
             <div className="flex flex-wrap gap-6 mb-4 md:mb-0">
               <Link

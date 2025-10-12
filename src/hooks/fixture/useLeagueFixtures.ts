@@ -89,28 +89,11 @@ export function useLeagueFixtures(
   // האם זה המפתח הראשוני (ללא פילטרים)?
   const isInitialKey = !month && !venueId;
 
-  console.log(
-    "%c📦 [useLeagueFixtures] Cache key info",
-    "color: #6366f1; font-weight: bold",
-    {
-      cacheKey,
-      isInitialKey,
-      hasInitialData: !!initialFixtures,
-      shouldUseInitialData: isInitialKey && !!initialFixtures,
-    }
-  );
-
   const { data, isLoading, error, refetch } = useQuery({
     // מפתח cache זהה למבנה של הבקאנד
     queryKey: ["initial-league-fixtures", cacheKey],
     queryFn: async () => {
       if (!leagueId) return { fixtures: [], availableMonths: [] };
-
-      console.log(
-        "%c🔍 [useLeagueFixtures] Fetching from backend",
-        "color: #10b981; font-weight: bold",
-        { leagueId, cacheKey, options: { limit, page, month, venueId } }
-      );
 
       // לוגיקת פילטור חכמה:
       // - אם יש חודש: שולף חודש, venue יסונן ב-client
@@ -126,16 +109,6 @@ export function useLeagueFixtures(
       if (!result.success) {
         throw new Error(result.error || "שגיאה בטעינת משחקי הליגה");
       }
-
-      console.log(
-        "%c✅ [useLeagueFixtures] Fixtures loaded from backend",
-        "color: #10b981; font-weight: bold",
-        {
-          cacheKey,
-          count: result.data?.fixtures?.length || 0,
-          availableMonths: result.data?.availableMonths?.length || 0,
-        }
-      );
 
       return result.data || { fixtures: [], availableMonths: [] };
     },

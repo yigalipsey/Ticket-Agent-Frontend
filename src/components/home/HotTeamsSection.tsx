@@ -11,16 +11,6 @@ export default function HotTeamsSection({ teams }: HotTeamsSectionProps) {
   // Filter popular teams in frontend - using isPopular field
   const hotTeams = teams?.filter((team) => team.isPopular) || [];
 
-  console.log("🔥 [HotTeamsSection] Debug:", {
-    receivedTeams: teams?.length || 0,
-    hotTeamsCount: hotTeams.length,
-    hotTeamsList: hotTeams.map((t) => ({
-      name: t.name_he || t.name_en,
-      isPopular: t.isPopular,
-      _id: t._id,
-    })),
-  });
-
   return (
     <section className="mb-16">
       {/* כותרת וכפתור - באותה שורה בדסקטופ, אחד על השני במובייל */}
@@ -41,7 +31,7 @@ export default function HotTeamsSection({ teams }: HotTeamsSectionProps) {
           {hotTeams.slice(0, 10).map((team) => (
             <Link
               key={team._id || team.id}
-              href={`/teams/${team.slug}`}
+              href={`/teams/${team.slug}?id=${team._id || team.id}`}
               className="group flex flex-col items-center text-center hover:scale-105 transition-transform duration-200"
             >
               <div className="w-16 h-16 mb-3 flex items-center justify-center">

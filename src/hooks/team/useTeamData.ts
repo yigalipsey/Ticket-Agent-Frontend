@@ -2,41 +2,21 @@ import { useEffect, useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { LeagueService } from "@/services";
 import { navigationService } from "@/services/navigationService";
-import { useTeamFixtures } from "@/hooks/team/useTeamFixtures";
-import { Fixture } from "@/types";
-
-interface TeamFilters {
-  limit?: number;
-  upcoming?: string;
-}
 
 interface TeamDataResult {
   teamId: string | null;
-  fixtures: Fixture[];
   isLoading: boolean;
   error: Error | null;
-  availableRounds: string[];
 }
 
-export function useTeamData(
-  teamSlug: string,
-  filters: TeamFilters
-): TeamDataResult {
+export function useTeamData(teamSlug: string): TeamDataResult {
   const [teamId, setTeamId] = useState<string | null>(null);
 
   // בדיקה ראשונה אם NavigationService כבר מאותחל עם נתונים מהלוקאל סטורג
   useEffect(() => {
     if (navigationService.isInitialized()) {
       const foundTeamId = navigationService.getTeamIdBySlug(teamSlug);
-      console.log(
-        "🔍 מזהה קבוצה מהלוקאל סטורג עבור",
-        teamSlug,
-        ":",
-        foundTeamId
-      );
       setTeamId(foundTeamId);
-    } else {
-      console.log("NavigationService לא מאותחל עדיין");
     }
   }, [teamSlug]);
 
@@ -64,31 +44,12 @@ export function useTeamData(
   // אם טעינו נתונים מהשרת, נאתחל את NavigationService
   useEffect(() => {
     if (allLeagues.length > 0 && !navigationService.isInitialized()) {
-      console.log(
-        "🚀 אתחול navigationService עם נתוני שרת כי אין נתונים מקומיים"
-      );
       navigationService.init(allLeagues);
 
       const foundTeamId = navigationService.getTeamIdBySlug(teamSlug);
-      console.log(
-        "🔍 מזהה קבוצה אחר אתחול שרת עבור",
-        teamSlug,
-        ":",
-        foundTeamId
-      );
       setTeamId(foundTeamId);
     }
   }, [allLeagues, teamSlug]);
-
-  // לוג לדיבוג
-  console.log("🔍 [useTeamData] Debug:", {
-    leaguesCount: allLeagues.length,
-    isLoading: leaguesLoading,
-    error: leaguesError,
-    teamSlug,
-    navigationServiceInitialized: navigationService.isInitialized(),
-    teamIdFound: !!teamId,
-  });
 
   // טעינת משחקי הקבוצה באמצעות מזהה המונגו
   const {
@@ -112,17 +73,6 @@ export function useTeamData(
           )
           .map(String)
       : [];
-
-  // לוג לדיבוג
-  console.log("🔍 [useTeamData] Fixtures Debug:", {
-    teamSlug,
-    teamId,
-    fixturesCount: fixtures.length,
-    availableRounds: availableRounds.length,
-    isLoading: fixturesLoading,
-    error: fixturesError,
-    filtersUsed: filters,
-  });
 
   return {
     teamId,

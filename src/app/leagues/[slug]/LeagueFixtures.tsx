@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import FixtureCard from "@/components/fixture/FixtureCard";
 import { Fixture } from "@/types/fixture";
-import LeagueFixturesFilter from "@/components/league/LeagueFixturesFilter";
+import LeagueFixturesFilter from "@/app/leagues/LeagueFixturesFilter";
 import { useLeagueFixtures } from "@/hooks/fixture";
 import { useLeagueData } from "@/hooks/league";
 
@@ -19,25 +19,6 @@ interface FilterState {
   venueId: string | null;
 }
 
-/**
- * Client Component להצגת משחקי הליגה + פילטור דינמי
- *
- * לוגיקת Cache חכמה:
- * 1. נחיתה בדף (ללא פילטרים):
- *    - משתמש ב-initialData מ-SSR
- *    - Cache: ["initial-league-fixtures", "league:{id}:all"]
- *
- * 2. אצטדיון בלבד:
- *    - בודק אם יש ב-cache: "league:{id}:venue:{venueId}"
- *    - אם אין - פונה לבקאנד עם venueId
- *    - Cache: ["initial-league-fixtures", "league:{id}:venue:{venueId}"]
- *
- * 3. חודש בלבד או חודש+אצטדיון:
- *    - בודק אם יש ב-cache: "league:{id}:month:{month}"
- *    - אם אין - פונה לבקאנד עם month
- *    - אם יש גם venue - פילטור venue ב-client
- *    - Cache: ["initial-league-fixtures", "league:{id}:month:{month}"]
- */
 export default function LeagueFixtures({
   leagueId,
   leagueSlug,
@@ -102,16 +83,6 @@ export default function LeagueFixtures({
     if (filters.month && filters.venueId) {
       filtered = filtered.filter(
         (f: Fixture) => f.venue?._id === filters.venueId
-      );
-      console.log(
-        "%c🔍 [LeagueFixtures] Client-side venue filter applied",
-        "color: #f59e0b; font-weight: bold",
-        {
-          month: filters.month,
-          venueId: filters.venueId,
-          beforeFilter: fixtures.length,
-          afterFilter: filtered.length,
-        }
       );
     }
 

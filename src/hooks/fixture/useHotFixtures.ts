@@ -22,7 +22,6 @@ export function useHotFixtures(): HotFixturesResult {
   const { data, isLoading, error } = useQuery({
     queryKey: ["hot-fixtures"],
     queryFn: async () => {
-      console.log("⚠️ [useHotFixtures] Fallback API call (should not happen!)");
       const res = await FixtureService.getHotFixtures(5);
       if (!res.success) throw new Error(res.error || "שגיאה");
       return res.data;

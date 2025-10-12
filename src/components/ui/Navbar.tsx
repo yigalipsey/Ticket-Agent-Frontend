@@ -33,9 +33,9 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex">
-            <div className="ml-10 flex items-baseline space-x-4 space-x-reverse">
+          {/* Desktop Navigation - ממורכז */}
+          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
+            <div className="flex items-baseline space-x-4 space-x-reverse">
               {navigationItems.map((item) => (
                 <Link
                   key={item.href}

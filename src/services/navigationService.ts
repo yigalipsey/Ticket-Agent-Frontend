@@ -36,11 +36,6 @@ class NavigationService {
       const cachedData = this.loadFromTanstackCache();
       if (cachedData) {
         this.data = cachedData;
-        console.log(
-          "🚀 NavigationService טעון מהלוקאל סטורג:",
-          this.data.leagues.length,
-          "ליגות"
-        );
       }
     } catch (error) {
       console.warn("שגיאה בטעינת NavigationService מהלוקאל סטורג:", error);

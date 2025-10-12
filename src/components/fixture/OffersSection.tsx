@@ -18,18 +18,6 @@ export default function OffersSection({
   total,
   fixture,
 }: OffersSectionProps) {
-  // לוג לדיבוג
-  console.log("🔍 [OffersSection] Debug:", {
-    offers,
-    offersLength: offers?.length,
-    offersLoading,
-    offersError,
-    total,
-    hasOffers: offers && offers.length > 0,
-    offersType: typeof offers,
-    offersIsArray: Array.isArray(offers),
-  });
-
   if (offersLoading) {
     return (
       <div className="flex justify-center py-12">

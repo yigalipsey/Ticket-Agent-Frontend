@@ -34,18 +34,6 @@ export default async function HomePage() {
   const uniqueTeams = Array.from(teamsMap.values());
   const hotTeams = uniqueTeams.filter((team) => team.isPopular);
 
-  // Debug logs
-  console.log("🔍 [HomePage] Debug Info:", {
-    totalLeagues: leagues.length,
-    totalTeams: allTeams.length,
-    uniqueTeams: uniqueTeams.length,
-    hotTeams: hotTeams.length,
-    hotTeamsList: hotTeams.map((t) => ({
-      name: t.name_he || t.name_en,
-      isPopular: t.isPopular,
-    })),
-  });
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hydration של SSR data ל-React Query cache */}

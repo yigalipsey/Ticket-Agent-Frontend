@@ -1,118 +1,82 @@
-"use client";
-
-import { useParams } from "next/navigation";
-import { useState } from "react";
 import React from "react";
-import { TeamHero, TeamFixtures, TeamFilters } from "@/components";
-import { Spinner } from "@/components/ui";
-import { useTeamData } from "@/hooks";
-import { navigationService } from "@/services/navigationService";
+import TeamPageClient from "./TeamPageClient";
+import TeamFixturesWrapper from "./TeamFixturesWrapper";
+import FixtureService from "@/services/fixtureService";
+import { Fixture } from "@/types/fixture";
 
-export default function TeamPage() {
-  const { slug: teamSlug } = useParams();
-  const [selectedFilter, setSelectedFilter] = useState<"all" | "home" | "away">(
-    "all"
-  );
-  const [selectedRound, setSelectedRound] = useState<string>("");
+interface TeamPageProps {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ id?: string }>;
+}
 
-  // הוק יחיד שמטפל בכל הלוגיקה של טעינת דאטה
-  const { teamId, fixtures, isLoading, error } = useTeamData(
-    teamSlug as string,
-    {
-      limit: 50,
-      upcoming: "true",
-    }
-  );
+export default async function TeamPage({
+  params,
+  searchParams,
+}: TeamPageProps) {
+  const { slug: teamSlug } = await params;
+  const { id: idFromQuery } = await searchParams;
 
-  // חילוץ פרטי הקבוצה מהנתונים המאוחסנים
-  const teamData = React.useMemo(() => {
-    // קודם ננסה למצוא את פרטי הקבוצה מהנתונים המאוחסנים
-    if (navigationService.isInitialized()) {
-      const teamInfo = navigationService.getTeamBySlug(teamSlug as string);
-      if (teamInfo) {
-        return {
-          id: teamId,
-          name: teamInfo.name,
-          logo: (teamInfo as any).logo, // לקבל את הלוגו מהנתונים המאוחסנים
-        };
-      }
-    }
+  // SSR: שימוש ב-ID מה-query (ניווט פנימי)
+  let teamId: string | null = idFromQuery || null;
 
-    // אם לא מצאנו, נקח מהמשחקים
-    if (fixtures && fixtures.length > 0) {
-      return {
-        id: teamId,
-        name:
-          fixtures[0].homeTeam?.name || fixtures[0].awayTeam?.name || "הקבוצה",
-        logo:
-          fixtures[0].homeTeam?.logo ||
-          fixtures[0].awayTeam?.logo ||
-          fixtures[0].homeTeam?.logoUrl ||
-          fixtures[0].awayTeam?.logoUrl,
-      };
-    }
-
-    return null;
-  }, [teamId, teamSlug, fixtures]);
-
-  const team = teamData;
-
-  // מצב טעינה
-  if (isLoading && !teamId) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex justify-center">
-            <Spinner size="lg" />
-          </div>
-        </div>
-      </div>
-    );
+  // אם אין ID ב-query - נסיון למצוא מ-NavigationService (לא עובד ב-SSR)
+  // במקרה זה נסתמך על ה-Client Component לטעון את הנתונים
+  if (!teamId) {
+    // ⚠️ SSR לא יכול לגשת ל-NavigationService (client-side)
+    // לכן נשאיר teamId = null והClient יטפל בזה
   }
 
-  // מצב שגיאה
-  if (error && (!fixtures || fixtures.length === 0)) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            קבוצה לא נמצאה
-          </h1>
-          <p className="text-gray-600">
-            הקבוצה &quot;{teamSlug}&quot; לא קיימת במערכת או שאין לה משחקים
-          </p>
-          {error && (
-            <p className="text-red-600 text-sm mt-2">{error.message}</p>
-          )}
-        </div>
-      </div>
-    );
+  // SSR: משיכת כל המשחקים של הקבוצה בבת אחת
+  let fixtures: Fixture[] = [];
+  let teamName: string | undefined = undefined;
+  let teamLogo: string | undefined = undefined;
+  
+  if (teamId) {
+    try {
+      const fixturesResult = await FixtureService.getTeamFixtures(teamId, {
+        limit: "1000", // כל המשחקים
+        upcoming: "true",
+      });
+      fixtures = fixturesResult || [];
+      
+      // קבלת שם ולוגו של הקבוצה מהמשחק הראשון
+      if (fixtures.length > 0) {
+        const firstFixture = fixtures[0];
+        const homeTeamId = firstFixture.homeTeam?.id || firstFixture.homeTeam?._id;
+        const awayTeamId = firstFixture.awayTeam?.id || firstFixture.awayTeam?._id;
+        
+        if (homeTeamId === teamId) {
+          teamName = firstFixture.homeTeam?.name;
+          teamLogo = firstFixture.homeTeam?.logo || firstFixture.homeTeam?.logoUrl;
+        } else if (awayTeamId === teamId) {
+          teamName = firstFixture.awayTeam?.name;
+          teamLogo = firstFixture.awayTeam?.logo || firstFixture.awayTeam?.logoUrl;
+        }
+      }
+    } catch (error) {
+      console.error(`[SSR] Error fetching team fixtures:`, error);
+    }
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* כותרת הקבוצה */}
-      <TeamHero team={team as any} />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Client: כותרת הקבוצה (מ-cache או CSR או מהמשחקים) */}
+        <TeamPageClient
+          slug={teamSlug}
+          teamId={teamId}
+          fallbackName={teamName}
+          fallbackLogo={teamLogo}
+        />
 
-      {/* פילטרים */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-5">
-        <TeamFilters
-          fixtures={(fixtures || []) as any}
-          teamId={teamId || ""}
-          selectedFilter={selectedFilter}
-          setSelectedFilter={setSelectedFilter}
-          selectedRound={selectedRound}
-          setSelectedRound={setSelectedRound}
+        {/* Client: משחקים עם נתוני SSR + פילטור דינמי */}
+        <TeamFixturesWrapper
+          teamId={teamId}
+          teamSlug={teamSlug}
+          initialFixtures={fixtures}
+          showFilters={true}
         />
       </div>
-
-      {/* משחקי הקבוצה */}
-      <TeamFixtures
-        fixtures={fixtures as any}
-        isLoading={isLoading}
-        error={error?.message || null}
-        teamName={team?.name || "הקבוצה"}
-      />
     </div>
   );
 }

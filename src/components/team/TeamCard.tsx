@@ -180,7 +180,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
       </CardContent>
 
       <div className="px-6 pb-6">
-        <Link href={`/teams/${team.slug}`}>
+        <Link href={`/teams/${team.slug}?id=${team._id || team.id}`}>
           <Button
             variant="outline"
             size="sm"

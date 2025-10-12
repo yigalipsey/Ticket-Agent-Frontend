@@ -3,6 +3,9 @@
 // UI Components
 export * from "./ui";
 
+// Filter Components
+export * from "./filters";
+
 // Domain Components
 export { default as FixtureCard } from "./fixture/FixtureCard";
 export { default as OfferCard } from "./fixture/OfferCard";
@@ -20,9 +23,12 @@ export {
 
 export { default as TeamCard } from "./team/TeamCard";
 export { default as TeamName } from "./team/TeamName";
-export { TeamHero } from "./team/TeamHero";
+export {
+  TeamHeader,
+  TeamHeaderLoading,
+  TeamHeaderError,
+} from "./team/TeamHeader";
 export { TeamFixtures } from "./team/TeamFixtures";
-export { TeamFilters } from "./team/TeamFilters";
 
 export { default as VenueCard } from "./venue/VenueCard";
 
