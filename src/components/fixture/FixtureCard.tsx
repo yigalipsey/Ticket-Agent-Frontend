@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Users, Calendar, Tag } from "lucide-react";
+import { MapPin, Calendar, Tag } from "lucide-react";
 import { Fixture } from "@/types";
 import { formatDate, formatTime, formatCurrency } from "@/lib/utils";
 import Card, { CardContent, CardFooter } from "@/components/ui/Card";
@@ -106,33 +106,18 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
           </div>
         </div>
 
-        {/* Offers */}
-        {showOffers && (
-          <div className="px-6 py-3 border-t border-gray-100">
-            <div className="flex items-center justify-between min-h-[32px]">
-              {fixture.totalOffers && fixture.totalOffers > 0 && (
-                <div className="flex items-center space-x-2 space-x-reverse">
-                  <Users className="h-4 w-4 text-gray-400" />
-                  <span className="text-sm text-gray-600">
-                    {fixture.totalOffers} הצעות
-                  </span>
-                </div>
-              )}
-
-              {fixture.minPrice?.amount && (
-                <div className="flex items-center space-x-2 space-x-reverse">
-                  <Tag className="h-4 w-4 text-primary-dark" />
-                  <div className="flex items-center space-x-1 space-x-reverse">
-                    <span className="text-sm text-gray-500">החל מ</span>
-                    <span className="text-lg font-bold text-primary-dark">
-                      {formatCurrency(
-                        fixture.minPrice.amount,
-                        fixture.minPrice.currency
-                      )}
-                    </span>
-                  </div>
-                </div>
-              )}
+        {/* Price */}
+        {showOffers && fixture.minPrice?.amount && (
+          <div className="px-6 py-2 border-t border-gray-100">
+            <div className="flex items-center space-x-3 space-x-reverse text-sm text-gray-600">
+              <Tag className="h-4 w-4 flex-shrink-0" />
+              <span>
+                החל מ
+                {formatCurrency(
+                  fixture.minPrice.amount,
+                  fixture.minPrice.currency
+                )}
+              </span>
             </div>
           </div>
         )}
@@ -140,7 +125,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
 
       <CardFooter className="p-4 pt-0 mt-auto">
         <Link
-          href={`/fixtures/${fixture._id || fixture.id}/${fixture.slug}`}
+          href={`/fixtures/${fixture.slug}?id=${fixture._id || fixture.id}`}
           className="w-full"
         >
           <Button

@@ -1,0 +1,108 @@
+"use client";
+
+import React from "react";
+import { OfferResponse } from "@/services/offerService";
+import { OfferCard } from "./OfferCard";
+
+interface OffersListProps {
+  offers: OfferResponse[];
+  isLoading?: boolean;
+  error?: string | null;
+}
+
+export function OffersList({ offers, isLoading, error }: OffersListProps) {
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div
+            key={i}
+            className="bg-white rounded-lg border border-gray-200 p-4 animate-pulse"
+          >
+            <div className="flex items-center justify-between">
+              <div className="w-24 h-10 bg-gray-200 rounded"></div>
+              <div className="flex-1 mx-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <div className="h-6 bg-gray-200 rounded w-32 mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-24"></div>
+                  </div>
+                  <div className="text-right">
+                    <div className="h-4 bg-gray-200 rounded w-12 mb-1"></div>
+                    <div className="h-8 bg-gray-200 rounded w-16"></div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+                <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+                <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
+        <div className="text-red-600 mb-2">
+          <svg
+            className="w-12 h-12 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </div>
+        <h3 className="text-lg font-semibold text-red-800 mb-2">שגיאה</h3>
+        <p className="text-red-600">{error}</p>
+      </div>
+    );
+  }
+
+  if (!offers || offers.length === 0) {
+    return (
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center">
+        <div className="text-gray-400 mb-4">
+          <svg
+            className="w-16 h-16 mx-auto"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+            />
+          </svg>
+        </div>
+        <h3 className="text-lg font-semibold text-gray-700 mb-2">
+          אין הצעות זמינות
+        </h3>
+        <p className="text-gray-500">
+          כרגע אין הצעות זמינות למשחק זה. נסה שוב מאוחר יותר.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {offers.map((offer) => (
+        <OfferCard key={offer._id} offer={offer} />
+      ))}
+    </div>
+  );
+}
+
