@@ -28,42 +28,8 @@ export interface OfferResponse {
   updatedAt: string;
 }
 
-export interface FixtureDetails {
-  _id: string;
-  date: string;
-  slug: string;
-  homeTeam: {
-    _id: string;
-    name: string;
-    slug: string;
-    logo?: string;
-    logoUrl?: string;
-  };
-  awayTeam: {
-    _id: string;
-    name: string;
-    slug: string;
-    logo?: string;
-    logoUrl?: string;
-  };
-  venue: {
-    _id: string;
-    name: string;
-    city?: string;
-    country?: string;
-    capacity?: number;
-  };
-  league: {
-    _id: string;
-    name: string;
-    slug: string;
-    country?: string;
-  };
-}
-
 export interface OffersResult {
   offers: OfferResponse[];
-  fixture?: FixtureDetails | null;
   pagination: {
     page: number;
     limit: number;

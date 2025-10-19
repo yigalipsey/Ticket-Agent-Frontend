@@ -15,23 +15,7 @@ class ApiClient {
       },
     });
 
-    // Request interceptor
-    this.client.interceptors.request.use(
-      (config) => {
-        // Add auth token if available
-        const token =
-          typeof window !== "undefined"
-            ? localStorage.getItem("auth_token")
-            : null;
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-      },
-      (error) => {
-        return Promise.reject(error);
-      }
-    );
+    // No request interceptor - tokens will be added manually only when needed
 
     // Response interceptor
     this.client.interceptors.response.use(
@@ -41,10 +25,12 @@ class ApiClient {
       (error) => {
         // Handle common errors
         if (error.response?.status === 401) {
-          // Unauthorized - redirect to login
+          // Unauthorized - clear tokens but don't redirect
           if (typeof window !== "undefined") {
             localStorage.removeItem("auth_token");
-            window.location.href = "/login";
+            localStorage.removeItem("agent_auth_token");
+            localStorage.removeItem("auth_user");
+            localStorage.removeItem("agent_auth_user");
           }
         }
         return Promise.reject(error);
@@ -52,73 +38,74 @@ class ApiClient {
     );
   }
 
+  // Helper to get auth headers
+  private getAuthHeaders(
+    tokenType: "user" | "agent" | "auto" = "auto"
+  ): Record<string, string> {
+    if (typeof window === "undefined") return {};
+
+    let token: string | null = null;
+
+    if (tokenType === "user") {
+      token = localStorage.getItem("auth_token");
+    } else if (tokenType === "agent") {
+      token = localStorage.getItem("agent_auth_token");
+    } else {
+      // Auto-detect: try agent first, then user
+      token =
+        localStorage.getItem("agent_auth_token") ||
+        localStorage.getItem("auth_token");
+    }
+
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  }
+
+  // Public methods (no auth)
   async get<T>(url: string, params?: Record<string, unknown>): Promise<T> {
-    console.log(
-      "%c🌐 [API CLIENT REQUEST] 🌐",
-      "color: orange; font-size: 16px; font-weight: bold; background: black; padding: 10px;"
-    );
-    console.log(
-      "%cBase URL:",
-      "color: orange; font-size: 14px; font-weight: bold;"
-    );
-    console.log(this.client.defaults.baseURL);
-    console.log(
-      "%cRequest URL:",
-      "color: orange; font-size: 14px; font-weight: bold;"
-    );
-    console.log(url);
-    console.log(
-      "%cFull URL:",
-      "color: orange; font-size: 14px; font-weight: bold;"
-    );
-    console.log(`${this.client.defaults.baseURL}${url}`);
-    console.log(
-      "%cParams:",
-      "color: orange; font-size: 14px; font-weight: bold;"
-    );
-    console.log(params);
-
     const response = await this.client.get(url, { params });
-
-    console.log(
-      "%c🌐 [API CLIENT RESPONSE] 🌐",
-      "color: purple; font-size: 16px; font-weight: bold; background: black; padding: 10px;"
-    );
-    console.log(
-      "%cStatus:",
-      "color: purple; font-size: 14px; font-weight: bold;"
-    );
-    console.log(response.status);
-    console.log(
-      "%cRaw response data:",
-      "color: purple; font-size: 14px; font-weight: bold;"
-    );
-    console.log(response.data);
-
     const responseData = response.data;
 
     // If response has success property (backend format), extract data from it
     if (responseData && responseData.success && responseData.data) {
-      console.log(
-        "%cExtracted data:",
-        "color: purple; font-size: 14px; font-weight: bold;"
-      );
-      console.log(responseData.data);
       return responseData.data;
     }
 
     // Otherwise, return the response directly
-    console.log(
-      "%cReturning raw response:",
-      "color: purple; font-size: 14px; font-weight: bold;"
-    );
-    console.log(responseData);
     return responseData;
   }
 
   async post<T>(url: string, data?: unknown): Promise<T> {
     const response = await this.client.post<ApiResponse<T>>(url, data);
-    return response.data.data;
+    return response.data as T;
+  }
+
+  // Authenticated methods
+  async getAuth<T>(
+    url: string,
+    params?: Record<string, unknown>,
+    tokenType: "user" | "agent" | "auto" = "auto"
+  ): Promise<T> {
+    const headers = this.getAuthHeaders(tokenType);
+    const response = await this.client.get(url, { params, headers });
+    const responseData = response.data;
+
+    if (responseData && responseData.success && responseData.data) {
+      return responseData.data;
+    }
+
+    return responseData;
+  }
+
+  async postAuth<T>(
+    url: string,
+    data?: unknown,
+    tokenType: "user" | "agent" | "auto" = "auto"
+  ): Promise<T> {
+    const headers = this.getAuthHeaders(tokenType);
+    const response = await this.client.post<ApiResponse<T>>(url, data, {
+      headers,
+    });
+    return response.data as T;
   }
 
   async put<T>(url: string, data?: unknown): Promise<T> {
@@ -157,7 +144,6 @@ class ApiClient {
       // Otherwise, return the response directly (expected format)
       return responseData;
     } catch (error) {
-      console.error("❌ apiClient.getPaginated error:", error);
       throw error;
     }
   }

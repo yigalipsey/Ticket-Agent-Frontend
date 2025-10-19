@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["localhost", "example.com", "media.api-sports.io"],
+    domains: [
+      "localhost",
+      "example.com",
+      "media.api-sports.io",
+      "res.cloudinary.com",
+      "images.unsplash.com",
+    ],
   },
   experimental: {
     optimizePackageImports: ["lucide-react"],

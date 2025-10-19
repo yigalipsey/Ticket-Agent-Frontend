@@ -3,20 +3,37 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAgentAuth } from "@/hooks";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { agent, isAuthenticated, logout } = useAgentAuth();
 
-  const navigationItems = [
-    { href: "/", label: "בית" },
-    { href: "/leagues", label: "ליגות" },
-    { href: "/teams", label: "קבוצות" },
-    { href: "/fixtures", label: "משחקים" },
-    { href: "/venues", label: "אצטדיונים" },
-  ];
+  // הסתר ניווט רגיל אם המשתמש הוא סוכן
+  const navigationItems =
+    isAuthenticated && agent
+      ? [] // סוכן - אין ניווט רגיל
+      : [
+          { href: "/", label: "בית" },
+          { href: "/leagues", label: "ליגות" },
+          { href: "/teams", label: "קבוצות" },
+          { href: "/fixtures", label: "משחקים" },
+          { href: "/venues", label: "אצטדיונים" },
+        ];
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const closeUserMenu = () => setIsUserMenuOpen(false);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      closeUserMenu();
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
 
   return (
     <nav className="bg-white shadow-soft border-b border-gray-200 sticky top-0 z-50">
@@ -31,6 +48,71 @@ export default function Navbar() {
             >
               TicketAgent
             </Link>
+          </div>
+
+          {/* User Menu - Desktop */}
+          <div className="hidden md:flex items-center">
+            {isAuthenticated ? (
+              <div className="relative">
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center">
+                    <span className="text-white text-sm font-medium">
+                      {agent?.email?.slice(-2) || "?"}
+                    </span>
+                  </div>
+                  <span className="mr-2 text-gray-700">
+                    {agent?.agentType === "agency" ? "סוכנות" : "סוכן עצמאי"}
+                  </span>
+                  <svg
+                    className="h-4 w-4 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                {/* Dropdown Menu */}
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                    <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                      {agent?.email}
+                    </div>
+                    {agent && (
+                      <Link
+                        href="/agent/dashboard"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={closeUserMenu}
+                      >
+                        דשבורד סוכן
+                      </Link>
+                    )}
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      התנתק
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                href="/agent/login"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                כניסת סוכנים
+              </Link>
+            )}
           </div>
 
           {/* Desktop Navigation - ממורכז */}
@@ -113,6 +195,44 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
+
+            {/* Mobile User Menu */}
+            <div className="border-t border-gray-200 pt-2 mt-2">
+              {isAuthenticated ? (
+                <div className="space-y-1">
+                  <div className="px-3 py-2 text-sm text-gray-500">
+                    {agent?.email} -{" "}
+                    {agent?.agentType === "agency" ? "סוכנות" : "סוכן עצמאי"}
+                  </div>
+                  {agent && (
+                    <Link
+                      href="/agent/dashboard"
+                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                      onClick={closeMobileMenu}
+                    >
+                      דשבורד סוכן
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      closeMobileMenu();
+                    }}
+                    className="block w-full text-right px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-100"
+                  >
+                    התנתק
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/agent/login"
+                  className="block px-3 py-2 rounded-md text-base font-medium bg-blue-600 text-white hover:bg-blue-700"
+                  onClick={closeMobileMenu}
+                >
+                  כניסת סוכנים
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -13,6 +13,8 @@ export interface FixtureCardProps {
   showVenue?: boolean;
   showLeague?: boolean;
   className?: string;
+  mode?: "user" | "agent";
+  onAddOffer?: () => void;
 }
 
 const FixtureCard: React.FC<FixtureCardProps> = ({
@@ -20,6 +22,8 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
   showOffers = true,
   showVenue = true,
   className,
+  mode = "user",
+  onAddOffer,
 }) => {
   return (
     <Card
@@ -124,19 +128,31 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
       </CardContent>
 
       <CardFooter className="p-4 pt-0 mt-auto">
-        <Link
-          href={`/fixtures/${fixture.slug}?id=${fixture._id || fixture.id}`}
-          className="w-full"
-        >
+        {mode === "agent" ? (
           <Button
             variant="outline"
             size="sm"
             fullWidth
+            onClick={onAddOffer}
             className="group-hover:bg-primary-dark group-hover:text-white group-hover:border-primary-dark"
           >
-            צפה בהצעות
+            הוסף הצעה
           </Button>
-        </Link>
+        ) : (
+          <Link
+            href={`/fixtures/${fixture.slug}?id=${fixture._id || fixture.id}`}
+            className="w-full"
+          >
+            <Button
+              variant="outline"
+              size="sm"
+              fullWidth
+              className="group-hover:bg-primary-dark group-hover:text-white group-hover:border-primary-dark"
+            >
+              צפה בהצעות
+            </Button>
+          </Link>
+        )}
       </CardFooter>
     </Card>
   );
