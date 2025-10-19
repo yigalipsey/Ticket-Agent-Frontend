@@ -44,20 +44,27 @@ class ApiClient {
   ): Record<string, string> {
     if (typeof window === "undefined") return {};
 
+    console.log("🔑 Getting auth headers for token type:", tokenType);
+
     let token: string | null = null;
 
     if (tokenType === "user") {
       token = localStorage.getItem("auth_token");
+      console.log("🔑 User token exists:", !!token);
     } else if (tokenType === "agent") {
       token = localStorage.getItem("agent_auth_token");
+      console.log("🔑 Agent token exists:", !!token);
     } else {
       // Auto-detect: try agent first, then user
       token =
         localStorage.getItem("agent_auth_token") ||
         localStorage.getItem("auth_token");
+      console.log("🔑 Auto-detected token exists:", !!token);
     }
 
-    return token ? { Authorization: `Bearer ${token}` } : {};
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    console.log("🔑 Final headers:", headers);
+    return headers;
   }
 
   // Public methods (no auth)
@@ -102,9 +109,18 @@ class ApiClient {
     tokenType: "user" | "agent" | "auto" = "auto"
   ): Promise<T> {
     const headers = this.getAuthHeaders(tokenType);
+
+    console.log("🔐 API Client: Making authenticated POST request");
+    console.log("🔐 URL:", url);
+    console.log("🔐 Data:", data);
+    console.log("🔐 Token type:", tokenType);
+    console.log("🔐 Headers:", headers);
+
     const response = await this.client.post<ApiResponse<T>>(url, data, {
       headers,
     });
+
+    console.log("📡 API Client: Response received:", response.data);
     return response.data as T;
   }
 

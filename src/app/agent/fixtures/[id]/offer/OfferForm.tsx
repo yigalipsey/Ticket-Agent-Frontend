@@ -53,10 +53,40 @@ export default function OfferForm({
         },
       };
 
-      await apiClient.postAuth("/offers", offerData, "agent");
+      console.log("🚀 OfferForm: Submitting offer data:", offerData);
+
+      const response = await apiClient.postAuth("/offers", offerData, "agent");
+
+      console.log("✅ OfferForm: Success response:", response);
       onSuccess();
-    } catch (err: unknown) {
-      setError("שגיאה בהוספת ההצעה. נסה שוב.");
+    } catch (err: any) {
+      console.error("❌ OfferForm: Error details:", err);
+
+      let errorMessage = "שגיאה בהוספת ההצעה. נסה שוב.";
+
+      if (err.response) {
+        // Server responded with error status
+        console.error("📡 Server response error:", err.response.data);
+        console.error("📡 Status code:", err.response.status);
+
+        if (err.response.data?.error) {
+          errorMessage = `שגיאת שרת: ${
+            err.response.data.error.message || err.response.data.error
+          }`;
+        } else if (err.response.data?.message) {
+          errorMessage = `שגיאה: ${err.response.data.message}`;
+        }
+      } else if (err.request) {
+        // Request was made but no response received
+        console.error("🌐 Network error - no response:", err.request);
+        errorMessage = "שגיאת רשת. בדוק את החיבור לאינטרנט.";
+      } else {
+        // Something else happened
+        console.error("⚠️ Other error:", err.message);
+        errorMessage = `שגיאה: ${err.message}`;
+      }
+
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
