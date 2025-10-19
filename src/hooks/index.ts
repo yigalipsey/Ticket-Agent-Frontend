@@ -10,3 +10,4 @@ export * from "./fixture";
 export * from "./agents/useAgentAuth";
 
 // Custom hooks
+export * from "./useRouteValidation";

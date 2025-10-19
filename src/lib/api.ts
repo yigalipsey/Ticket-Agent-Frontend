@@ -69,8 +69,16 @@ class ApiClient {
 
   // Public methods (no auth)
   async get<T>(url: string, params?: Record<string, unknown>): Promise<T> {
+    const fullUrl = `${this.client.defaults.baseURL}${url}`;
+    console.log("🌐 [API GET REQUEST] 🌐");
+    console.log("Full URL:", fullUrl);
+    console.log("Params:", params);
+
     const response = await this.client.get(url, { params });
     const responseData = response.data;
+
+    console.log("🌐 [API GET RESPONSE] 🌐");
+    console.log("Response data:", responseData);
 
     // If response has success property (backend format), extract data from it
     if (responseData && responseData.success && responseData.data) {

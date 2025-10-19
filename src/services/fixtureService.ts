@@ -17,10 +17,18 @@ export class FixtureService {
     limit: number = 5
   ): Promise<ServiceResult<Fixture[]>> {
     try {
+      const fullUrl = `${API_ENDPOINTS.FIXTURES}/hot`;
+      console.log("🔥 [HOT FIXTURES API REQUEST] 🔥");
+      console.log("Full URL:", fullUrl);
+      console.log("Params:", { limit });
+
       const rawFixtures = await apiClient.get<any[]>(
         `${API_ENDPOINTS.FIXTURES}/hot`,
         { limit }
       );
+
+      console.log("🔥 [HOT FIXTURES API RESPONSE] 🔥");
+      console.log("Raw response:", rawFixtures);
 
       // Normalize the data to match FixtureCard expectations
       const fixtures: Fixture[] = rawFixtures.map((fixture: any) => ({

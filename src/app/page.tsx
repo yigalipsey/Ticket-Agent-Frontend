@@ -12,21 +12,29 @@ import FixtureService from "@/services/fixtureService";
 import AgentService from "@/services/agentService";
 
 export default async function HomePage() {
+  console.log("🚀 HomePage: Starting data fetching...");
+  console.log("🌐 HomePage: API Base URL:", process.env.NEXT_PUBLIC_API_URL);
+
   const [leaguesRes, fixturesRes, agentsRes] = await Promise.all([
     LeagueService.getAllLeaguesWithTeams(),
     FixtureService.getHotFixtures(5),
     AgentService.getAllAgents(),
   ]);
 
+  console.log("📊 HomePage: All API calls completed");
+  console.log("📊 HomePage: Leagues result:", leaguesRes);
+  console.log("📊 HomePage: Fixtures result:", fixturesRes);
+  console.log("📊 HomePage: Agents result:", agentsRes);
+
   const leagues = leaguesRes.success ? leaguesRes.data || [] : [];
   const hotFixtures = fixturesRes.success ? fixturesRes.data || [] : [];
   const agents = agentsRes.success ? agentsRes.data || [] : [];
 
-  // Debug logging
-  console.log("🏠 HomePage: Leagues result:", leaguesRes);
-  console.log("🏠 HomePage: Fixtures result:", fixturesRes);
-  console.log("🏠 HomePage: Agents result:", agentsRes);
-  console.log("🏠 HomePage: Processed agents:", agents);
+  console.log("✅ HomePage: Processed data:");
+  console.log("✅ HomePage: Leagues count:", leagues.length);
+  console.log("✅ HomePage: Hot fixtures count:", hotFixtures.length);
+  console.log("✅ HomePage: Agents count:", agents.length);
+  console.log("✅ HomePage: Processed agents:", agents);
 
   const popularLeagues = leagues.filter((league) => league.isPopular);
 

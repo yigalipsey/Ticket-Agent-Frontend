@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAgentAuth } from "@/hooks";
+import { useRouteValidation, routeValidators } from "@/hooks";
 import OfferForm from "./OfferForm";
 
 interface AddOfferPageProps {
@@ -13,6 +14,16 @@ export default function AddOfferPage({ params }: AddOfferPageProps) {
   const router = useRouter();
   const { agent, isAuthenticated, isLoading: authLoading } = useAgentAuth();
   const [fixtureId, setFixtureId] = useState("");
+
+  // Validate the route exists
+  const {
+    isValid,
+    isLoading: validationLoading,
+    error,
+  } = useRouteValidation({
+    validateFunction: routeValidators.agentFixture,
+    timeout: 5000,
+  });
 
   useEffect(() => {
     params.then((p) => setFixtureId(p.id));
@@ -25,7 +36,7 @@ export default function AddOfferPage({ params }: AddOfferPageProps) {
     }
   }, [authLoading, isAuthenticated, router]);
 
-  if (authLoading) {
+  if (authLoading || validationLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -38,6 +49,29 @@ export default function AddOfferPage({ params }: AddOfferPageProps) {
 
   if (!isAuthenticated || !fixtureId) {
     return null;
+  }
+
+  // Show error if route validation failed
+  if (!isValid) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            משחק לא נמצא
+          </h2>
+          <p className="text-gray-600 mb-4">
+            {error || "המשחק שחיפשת לא קיים או הועבר למיקום אחר"}
+          </p>
+          <button
+            onClick={() => router.back()}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            חזור אחורה
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
