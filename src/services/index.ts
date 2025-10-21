@@ -4,3 +4,4 @@ export { default as LeagueService } from "./leagueService";
 export { default as TeamService } from "./teamService";
 export { default as OfferService } from "./offerService";
 export { default as AgentService } from "./agentService";
+export { default as SearchService } from "./searchService";

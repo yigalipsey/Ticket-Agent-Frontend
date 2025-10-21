@@ -10,6 +10,7 @@ export {
 } from "./Card";
 export { default as Spinner } from "./Spinner";
 export { default as SearchBar } from "./SearchBar";
+export { default as TeamSearchBar } from "./TeamSearchBar";
 export { default as AccessibleMenu } from "./AccessibleMenu";
 export { default as Navbar } from "./Navbar";
 export { default as Footer } from "./Footer";

@@ -4,6 +4,7 @@
 export * from "./league";
 export * from "./team";
 export * from "./fixture";
+export * from "./search";
 
 // Agent hooks
 export * from "./agents/useOfferForm";
