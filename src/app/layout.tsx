@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, Heebo, Rubik } from "next/font/google";
-import { ReactQueryProvider } from "@/providers";
+import { Inter, Heebo, Rubik, Open_Sans } from "next/font/google";
+import { ReactQueryProvider, AgentAuthProvider } from "@/providers";
 import { Navbar, Footer } from "@/components/ui";
+import { UpdatesBanner } from "@/components";
 import "./globals.css";
 
 const inter = Inter({
@@ -17,6 +18,11 @@ const heebo = Heebo({
 const rubik = Rubik({
   subsets: ["latin", "hebrew"],
   variable: "--font-rubik",
+});
+
+const openSans = Open_Sans({
+  subsets: ["latin", "hebrew"],
+  variable: "--font-open-sans",
 });
 
 export const metadata: Metadata = {
@@ -83,7 +89,7 @@ export default function RootLayout({
     <html
       lang="he"
       dir="rtl"
-      className={`${inter.variable} ${heebo.variable} ${rubik.variable}`}
+      className={`${inter.variable} ${heebo.variable} ${rubik.variable} ${openSans.variable}`}
     >
       <head>
         <link rel="icon" href="/favicon.ico" />
@@ -108,18 +114,23 @@ export default function RootLayout({
         <meta name="theme-color" content="#0A1F44" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body className={`min-h-screen bg-gray-50 text-gray-900 font-rubik`}>
+      <body className={`min-h-screen bg-gray-50 text-gray-900 font-open-sans`}>
         <ReactQueryProvider>
-          <div className="flex flex-col min-h-screen">
-            {/* Header */}
-            <Navbar />
+          <AgentAuthProvider>
+            <div className="flex flex-col min-h-screen">
+              {/* Header */}
+              <Navbar />
 
-            {/* Main Content */}
-            <main className="flex-1">{children}</main>
+              {/* Main Content */}
+              <main className="flex-1">{children}</main>
 
-            {/* Footer */}
-            <Footer />
-          </div>
+              {/* Updates banner above footer */}
+              <UpdatesBanner />
+
+              {/* Footer */}
+              <Footer />
+            </div>
+          </AgentAuthProvider>
         </ReactQueryProvider>
       </body>
     </html>

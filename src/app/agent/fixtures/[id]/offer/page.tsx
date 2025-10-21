@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAgentAuth } from "@/hooks";
+import { useAgentAuth } from "@/providers";
 import { useRouteValidation, routeValidators } from "@/hooks";
 import OfferForm from "./OfferForm";
 
@@ -26,7 +26,9 @@ export default function AddOfferPage({ params }: AddOfferPageProps) {
   });
 
   useEffect(() => {
-    params.then((p) => setFixtureId(p.id));
+    params.then((p) => {
+      setFixtureId(p.id);
+    });
   }, [params]);
 
   // Redirect if not authenticated
@@ -107,7 +109,6 @@ export default function AddOfferPage({ params }: AddOfferPageProps) {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <OfferForm
             fixtureId={fixtureId}
-            agentId={agent?._id || ""}
             onSuccess={() => {
               alert("ההצעה נוספה בהצלחה!");
               router.back();

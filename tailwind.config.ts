@@ -7,6 +7,7 @@ const config: Config = {
       colors: {
         // צבעים מותאמים אישית בהשראת SeatPick
         primary: {
+          DEFAULT: "#092274",
           dark: "#0A1F44",
           medium: "#1B3A6F",
           light: "#2F4B7C",
@@ -26,7 +27,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-rubik)", "system-ui", "sans-serif"],
+        sans: ["var(--font-open-sans)", "system-ui", "sans-serif"],
+        "open-sans": ["var(--font-open-sans)", "system-ui", "sans-serif"],
         rubik: ["var(--font-rubik)", "system-ui", "sans-serif"],
         hebrew: ["var(--font-hebrew)", "system-ui", "sans-serif"],
         inter: ["var(--font-inter)", "system-ui", "sans-serif"],

@@ -84,3 +84,27 @@ export interface ThemeConfig {
   fontFamily: string;
   direction: "ltr" | "rtl";
 }
+
+// Agent Authentication Types
+export interface AgentLoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface AgentLoginResponse {
+  token: string;
+  agent: Agent;
+}
+
+export interface Agent {
+  _id: string;
+  name: string;
+  email: string;
+  whatsapp?: string;
+  isActive: boolean;
+  agentType: "individual" | "agency";
+  companyName?: string;
+  imageUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+}

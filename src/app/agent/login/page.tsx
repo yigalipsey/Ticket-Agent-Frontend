@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAgentAuth } from "@/hooks";
+import { useAgentAuth } from "@/providers";
 
 export default function AgentLoginPage() {
   const [email, setEmail] = useState("");

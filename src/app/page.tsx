@@ -21,20 +21,9 @@ export default async function HomePage() {
     AgentService.getAllAgents(),
   ]);
 
-  console.log("📊 HomePage: All API calls completed");
-  console.log("📊 HomePage: Leagues result:", leaguesRes);
-  console.log("📊 HomePage: Fixtures result:", fixturesRes);
-  console.log("📊 HomePage: Agents result:", agentsRes);
-
   const leagues = leaguesRes.success ? leaguesRes.data || [] : [];
   const hotFixtures = fixturesRes.success ? fixturesRes.data || [] : [];
   const agents = agentsRes.success ? agentsRes.data || [] : [];
-
-  console.log("✅ HomePage: Processed data:");
-  console.log("✅ HomePage: Leagues count:", leagues.length);
-  console.log("✅ HomePage: Hot fixtures count:", hotFixtures.length);
-  console.log("✅ HomePage: Agents count:", agents.length);
-  console.log("✅ HomePage: Processed agents:", agents);
 
   const popularLeagues = leagues.filter((league) => league.isPopular);
 
@@ -64,15 +53,15 @@ export default async function HomePage() {
       <HeroSection />
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+      <main className="py-12 space-y-12">
+        {/* Hot Fixtures - מקבל ישירות את המשחקים החמים */}
+        <HotFixturesSection fixtures={hotFixtures} />
+
         {/* Popular Leagues - מקבל רק את הפופולריות */}
         <PopularLeaguesSection leagues={popularLeagues} />
 
         {/* Hot Teams - מקבל את הקבוצות החמות מהליגות */}
         <HotTeamsSection teams={hotTeams} />
-
-        {/* Hot Fixtures - מקבל ישירות את המשחקים החמים */}
-        <HotFixturesSection fixtures={hotFixtures} />
 
         {/* Top Agents - מציג את הסוכנים המובילים */}
         <TopAgentsSection agents={agents} />

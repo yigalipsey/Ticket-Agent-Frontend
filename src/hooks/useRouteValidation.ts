@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 interface RouteValidationResult {
   isValid: boolean;
@@ -14,7 +14,9 @@ interface RouteValidationOptions {
   timeout?: number;
 }
 
-export function useRouteValidation(options: RouteValidationOptions = {}): RouteValidationResult {
+export function useRouteValidation(
+  options: RouteValidationOptions = {}
+): RouteValidationResult {
   const [isValid, setIsValid] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,21 +34,21 @@ export function useRouteValidation(options: RouteValidationOptions = {}): RouteV
 
       try {
         const timeout = options.timeout || 5000;
-        
+
         const validationPromise = options.validateFunction(pathname);
         const timeoutPromise = new Promise<boolean>((_, reject) => {
-          setTimeout(() => reject(new Error('Validation timeout')), timeout);
+          setTimeout(() => reject(new Error("Validation timeout")), timeout);
         });
 
         const result = await Promise.race([validationPromise, timeoutPromise]);
         setIsValid(result);
-        
+
         if (!result) {
-          setError('Route not found or invalid');
+          setError("Route not found or invalid");
         }
       } catch (err) {
         setIsValid(false);
-        setError(err instanceof Error ? err.message : 'Validation failed');
+        setError(err instanceof Error ? err.message : "Validation failed");
       } finally {
         setIsLoading(false);
       }
@@ -55,15 +57,19 @@ export function useRouteValidation(options: RouteValidationOptions = {}): RouteV
     validateRoute();
   }, [pathname, options.validateFunction, options.timeout]);
 
-  return { isValid, isLoading, error };
+  return {
+    isValid,
+    isLoading,
+    error,
+  };
 }
 
-// Specific validation functions for different route types
+// Pre-defined validators for common route patterns
 export const routeValidators = {
   league: async (pathname: string): Promise<boolean> => {
-    const slug = pathname.split('/leagues/')[1]?.split('/')[0];
+    const slug = pathname.split("/leagues/")[1]?.split("/")[0];
     if (!slug) return false;
-    
+
     try {
       // Make API call to validate league exists
       const response = await fetch(`/api/leagues/${slug}`);
@@ -74,9 +80,9 @@ export const routeValidators = {
   },
 
   team: async (pathname: string): Promise<boolean> => {
-    const slug = pathname.split('/teams/')[1]?.split('/')[0];
+    const slug = pathname.split("/teams/")[1]?.split("/")[0];
     if (!slug) return false;
-    
+
     try {
       // Make API call to validate team exists
       const response = await fetch(`/api/teams/${slug}`);
@@ -87,9 +93,9 @@ export const routeValidators = {
   },
 
   fixture: async (pathname: string): Promise<boolean> => {
-    const slug = pathname.split('/fixtures/')[1]?.split('/')[0];
+    const slug = pathname.split("/fixtures/")[1]?.split("/")[0];
     if (!slug) return false;
-    
+
     try {
       // Make API call to validate fixture exists
       const response = await fetch(`/api/fixtures/${slug}`);
@@ -100,15 +106,20 @@ export const routeValidators = {
   },
 
   agentFixture: async (pathname: string): Promise<boolean> => {
-    const id = pathname.split('/agent/fixtures/')[1]?.split('/')[0];
+    const id = pathname.split("/agent/fixtures/")[1]?.split("/")[0];
     if (!id) return false;
-    
+
     try {
-      // Make API call to validate fixture exists
-      const response = await fetch(`/api/fixtures/${id}`);
-      return response.ok;
+      // Check if it's a valid MongoDB ObjectId format
+      if (!/^[0-9a-fA-F]{24}$/.test(id)) {
+        return false;
+      }
+
+      // For now, just validate the format - we don't need to check if fixture exists
+      // because the offer form will handle that
+      return true;
     } catch {
       return false;
     }
-  }
+  },
 };

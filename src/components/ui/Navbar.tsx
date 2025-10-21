@@ -1,15 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAgentAuth } from "@/hooks";
+import { useAgentAuth } from "@/providers";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const { agent, isAuthenticated, logout } = useAgentAuth();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // הסתר ניווט רגיל אם המשתמש הוא סוכן
   const navigationItems =
@@ -36,14 +46,24 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white shadow-soft border-b border-gray-200 sticky top-0 z-50">
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-white/90 backdrop-blur-md shadow-soft border-b border-gray-200/50"
+          : "bg-transparent"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Brand */}
           <div className="flex items-center">
             <Link
               href="/"
-              className="text-xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
+              className={`text-xl font-bold transition-colors ${
+                isScrolled
+                  ? "text-blue-600 hover:text-blue-700"
+                  : "text-white hover:text-white/80"
+              }`}
               onClick={closeMobileMenu}
             >
               TicketAgent
@@ -63,11 +83,17 @@ export default function Navbar() {
                       {agent?.email?.slice(-2) || "?"}
                     </span>
                   </div>
-                  <span className="mr-2 text-gray-700">
+                  <span
+                    className={`mr-2 transition-colors ${
+                      isScrolled ? "text-gray-700" : "text-white"
+                    }`}
+                  >
                     {agent?.agentType === "agency" ? "סוכנות" : "סוכן עצמאי"}
                   </span>
                   <svg
-                    className="h-4 w-4 text-gray-400"
+                    className={`h-4 w-4 transition-colors ${
+                      isScrolled ? "text-gray-400" : "text-white"
+                    }`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -108,7 +134,11 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/agent/login"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isScrolled
+                    ? "bg-blue-600 hover:bg-blue-700 text-white"
+                    : "bg-white/20 hover:bg-white/30 text-white border border-white/30"
+                }`}
               >
                 כניסת סוכנים
               </Link>
@@ -124,8 +154,12 @@ export default function Navbar() {
                   href={item.href}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     pathname === item.href
-                      ? "bg-blue-100 text-blue-700"
-                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                      ? isScrolled
+                        ? "bg-blue-100 text-blue-700"
+                        : "bg-white/20 text-white"
+                      : isScrolled
+                      ? "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                      : "text-white hover:text-white/80 hover:bg-white/10"
                   }`}
                 >
                   {item.label}

@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAgentAuth } from "@/hooks";
+import { useAgentAuth } from "@/providers";
 import { Fixture } from "@/types/fixture";
 import LeaguePageClient from "@/app/leagues/[slug]/LeaguePageClient";
 import AgentLeagueFixtures from "./AgentLeagueFixtures";

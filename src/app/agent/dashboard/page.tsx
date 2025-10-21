@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAgentAuth } from "@/hooks";
+import { useAgentAuth } from "@/providers";
 import { LeagueService } from "@/services";
 import { League } from "@/types/league";
 import DashboardHeader from "./DashboardHeader";

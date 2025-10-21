@@ -32,9 +32,7 @@ export interface AgentsResponse {
 class AgentService {
   async getAllAgents(): Promise<AgentsResponse> {
     try {
-      console.log("🔍 AgentService: Fetching agents from /api/agents");
       const response = await apiClient.get<Agent[]>("/agents");
-      console.log("📦 AgentService: Raw response received:", response);
 
       // The backend returns agents directly as an array, not wrapped in success/data
       const wrappedResponse: AgentsResponse = {
@@ -43,17 +41,17 @@ class AgentService {
         message: "Agents retrieved successfully",
       };
 
-      console.log("📦 AgentService: Wrapped response:", wrappedResponse);
       return wrappedResponse;
-    } catch (error: any) {
-      console.error("❌ AgentService: Error fetching agents:", error);
+    } catch (error: unknown) {
       return {
         success: false,
         data: [],
-        error: error.message || "Failed to fetch agents",
+        error:
+          error instanceof Error ? error.message : "Failed to fetch agents",
       };
     }
   }
 }
 
-export default new AgentService();
+const agentService = new AgentService();
+export default agentService;

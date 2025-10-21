@@ -8,6 +8,7 @@ export * from "./filters";
 
 // Domain Components
 export { default as FixtureCard } from "./fixture/FixtureCard";
+export { default as HotFixtureCard } from "./fixture/HotFixtureCard";
 export { default as FixtureHeader } from "./fixture/FixtureHeader";
 
 // Offer Components
@@ -34,3 +35,4 @@ export { default as VenueCard } from "./venue/VenueCard";
 
 // Home Components
 export { default as PopularLeaguesSection } from "./home/PopularLeaguesSection";
+export { UpdatesBanner } from "./home";

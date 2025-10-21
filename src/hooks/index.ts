@@ -5,9 +5,10 @@ export * from "./league";
 export * from "./team";
 export * from "./fixture";
 
-// Authentication hooks
+// Agent hooks
+export * from "./agents/useOfferForm";
 
-export * from "./agents/useAgentAuth";
+// Authentication hooks
 
 // Custom hooks
 export * from "./useRouteValidation";
