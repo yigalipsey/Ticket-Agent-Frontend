@@ -25,14 +25,13 @@ export default function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 flex items-center justify-center h-full">
-        <div className="text-center  text-bold text-white px-4 max-w-4xl mx-auto">
-          <p className="text-2xl md:text-[56px] mb-6 md:mb-8 text-gray-200 animate-slide-up leading-none font-extrabold text-center">
+        <div className="flex flex-col items-center gap-4 md:gap-8 px-4 w-full md:max-w-4xl mx-auto">
+          <p className="text-3xl md:text-[56px] text-gray-200 animate-slide-up leading-tight font-extrabold text-center">
             השוואת מחירי כרטיסים
             <br />
             למשחקי כדורגל
           </p>
 
-          {/* Search Bar */}
           <SearchSection />
         </div>
       </div>

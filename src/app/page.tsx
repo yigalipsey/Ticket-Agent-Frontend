@@ -53,7 +53,7 @@ export default async function HomePage() {
       <HeroSection />
 
       {/* Main Content */}
-      <main className="py-12 space-y-12">
+      <main className="">
         {/* Hot Fixtures - מקבל ישירות את המשחקים החמים */}
         <HotFixturesSection fixtures={hotFixtures} />
 

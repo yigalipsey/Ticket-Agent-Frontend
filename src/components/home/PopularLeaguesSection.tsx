@@ -41,9 +41,10 @@ export default function PopularLeaguesSection({
             {/* Carousel container */}
             <div className="flex gap-[13px] overflow-x-auto pb-4 scrollbar-hide">
               {popularLeagues.map((league) => (
-                <div
+                <Link
                   key={league._id || league.id}
-                  className="flex-shrink-0 w-[281px] h-[296px] bg-white rounded-lg p-4 flex flex-col items-center justify-center text-center"
+                  href={`/leagues/${league.slug}?id=${league._id || league.id}`}
+                  className="flex-shrink-0 w-[281px] h-[296px] bg-white rounded-lg p-4 flex flex-col items-center justify-center text-center hover:shadow-lg transition-shadow duration-200 cursor-pointer"
                 >
                   {/* League Logo */}
                   <div className="w-16 h-16 mb-4 flex items-center justify-center">
@@ -71,7 +72,7 @@ export default function PopularLeaguesSection({
                   <p className="text-sm text-gray-600">
                     המשחק הבא: 23 באוקטובר
                   </p>
-                </div>
+                </Link>
               ))}
             </div>
 

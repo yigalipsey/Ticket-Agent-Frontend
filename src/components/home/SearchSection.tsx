@@ -13,10 +13,10 @@ export default function SearchSection() {
   };
 
   return (
-    <section className="max-w-3xl mx-auto mt-12 px-4">
-      <div className="bg-white  rounded-lg shadow-sm">
+    <section className="w-[90%] md:max-w-[500px] mx-auto">
+      <div className="bg-white/20 backdrop-blur-sm rounded-lg shadow-lg">
         <SearchBar
-          placeholder="חפש משחקים, קבוצות או ליגות..."
+          placeholder="הזן טקסט לחיפוש..."
           onSearch={handleSearch}
           onFilterClick={handleFilterClick}
           showFilters={true}

@@ -44,7 +44,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   const sizes = {
     sm: "h-8 px-3 text-sm",
-    md: "h-10 px-4 text-base",
+    md: "h-10 md:h-14 px-4 text-base",
     lg: "h-12 px-6 text-lg",
   };
 
@@ -181,8 +181,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
     <div className={cn("relative w-full", className)}>
       <form onSubmit={handleSubmit} className="relative">
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 text-gray-400" aria-hidden="true" />
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
+            <button
+              type="submit"
+              className="bg-primary hover:bg-primary/90 text-white rounded-lg px-4 py-2 transition-colors"
+              aria-label="חיפוש"
+            >
+              <Search className="h-4 w-4" aria-hidden="true" />
+            </button>
           </div>
 
           <input
@@ -192,13 +198,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onFocus={() => setShowSuggestions(suggestions.length > 0)}
-            placeholder={placeholder}
+            placeholder="הזן טקסט לחיפוש..."
             disabled={disabled}
             className={cn(
-              "block w-full pl-10 pr-20 border border-gray-300 rounded-lg",
-              "focus:ring-2 focus:ring-blue-600 focus:border-blue-600",
-              "disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed",
-              "placeholder-gray-400",
+              "block w-full pl-16 pr-4 bg-transparent border-none rounded-lg",
+              "focus:ring-0 focus:outline-none",
+              "disabled:text-gray-500 disabled:cursor-not-allowed",
+              "placeholder-gray-400 text-white",
               sizes[size],
               className
             )}
@@ -208,36 +214,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
             role="combobox"
             aria-controls="search-suggestions"
           />
-
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2">
-            {isLoading && (
-              <div className="mr-2">
-                <div className="animate-spin h-4 w-4 border-2 border-primary-dark border-t-transparent rounded-full" />
-              </div>
-            )}
-
-            {inputValue && !isLoading && (
-              <button
-                type="button"
-                onClick={handleClear}
-                className="mr-2 p-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:text-gray-600"
-                aria-label="נקה חיפוש"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-
-            {showFilters && (
-              <button
-                type="button"
-                onClick={onFilterClick}
-                className="p-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:text-gray-600"
-                aria-label="פילטרים"
-              >
-                <Filter className="h-4 w-4" />
-              </button>
-            )}
-          </div>
         </div>
       </form>
 

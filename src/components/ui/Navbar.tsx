@@ -55,8 +55,8 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Brand */}
-          <div className="flex items-center">
+          {/* Brand - מובייל: ימין, דסקטופ: שמאל */}
+          <div className="flex items-center order-2 md:order-1">
             <Link
               href="/"
               className={`text-xl font-bold transition-colors ${
@@ -168,8 +168,8 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
+          {/* Mobile menu button - מובייל: שמאל, דסקטופ: נסתר */}
+          <div className="md:hidden order-1 md:order-2">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 active:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors"
