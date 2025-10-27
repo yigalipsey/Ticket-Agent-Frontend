@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Team } from "@/types";
+import SectionHeader from "./SectionHeader";
 
 interface HotTeamsSectionProps {
   teams: Team[];
@@ -13,18 +14,15 @@ export default function HotTeamsSection({ teams }: HotTeamsSectionProps) {
 
   return (
     <section className="mb-16">
-      {/* כותרת וכפתור - באותה שורה בדסקטופ, אחד על השני במובייל */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 md:mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-right mb-4 md:mb-0">
-          הקבוצות החמות
-        </h2>
-        <Link
-          href="/teams"
-          className="text-blue-600 hover:text-blue-700 transition-colors font-medium text-sm md:text-base text-right"
-        >
-          צפה בכל הקבוצות →
-        </Link>
-      </div>
+      <SectionHeader
+        title={{
+          mobile: "הקבוצות החמות",
+          desktop: "הקבוצות החמות",
+        }}
+        subtitle="קבוצות נבחרות עם המשחקים הכי חמים"
+        buttonText="כל הקבוצות"
+        href="/teams"
+      />
 
       {hotTeams && hotTeams.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-6">

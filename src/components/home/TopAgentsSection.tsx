@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Star } from "lucide-react";
+import SectionHeader from "./SectionHeader";
 
 interface Agent {
   _id: string;
@@ -80,11 +81,15 @@ const TopAgentsSection = ({ agents }: TopAgentsSectionProps) => {
   return (
     <section className="py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-right mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-            סוכנים מובילים
-          </h2>
-        </div>
+        <SectionHeader
+          title={{
+            mobile: "סוכנים מובילים",
+            desktop: "הסוכנים המובילים שלנו",
+          }}
+          subtitle="סוכנים עם דירוג גבוה וביקורות אימות"
+          buttonText="הכל"
+          href="/#"
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {topAgents.map((agent, index) => (

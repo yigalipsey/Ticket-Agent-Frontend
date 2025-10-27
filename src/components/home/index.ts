@@ -4,3 +4,4 @@ export { default as PopularLeaguesSection } from "./PopularLeaguesSection";
 export { default as HotTeamsSection } from "./HotTeamsSection";
 export { default as TopAgentsSection } from "./TopAgentsSection";
 export { default as UpdatesBanner } from "./UpdatesBanner";
+export { default as SectionHeader } from "./SectionHeader";
