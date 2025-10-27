@@ -10,7 +10,7 @@ export default function LeaguesPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-background-light">
+      <div className="min-h-screen bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-red-600 mb-4">
@@ -24,7 +24,7 @@ export default function LeaguesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background-light">
+    <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="bg-white shadow-soft">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

@@ -11,7 +11,7 @@ export default function HotFixturesSection({
   fixtures,
 }: HotFixturesSectionProps) {
   return (
-    <section className="pb-4 md:pb-8" style={{ backgroundColor: "#F8F8F9" }}>
+    <section className="pb-4 md:pb-8 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader
           title={{

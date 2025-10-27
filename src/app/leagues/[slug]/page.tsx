@@ -48,11 +48,11 @@ export default async function LeaguePage({
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Client: כותרת + קבוצות (מ-cache או CSR עם leagueId) */}
-        <LeaguePageClient slug={leagueSlug} leagueId={leagueId} />
+      {/* Hero + קבוצות (full width) */}
+      <LeaguePageClient slug={leagueSlug} leagueId={leagueId} />
 
-        {/* Client: משחקים עם נתוני SSR + פילטור דינמי */}
+      {/* משחקים (with container) */}
+      <div className="max-w-7xl mx-auto   px-4 sm:px-6 ">
         <LeagueFixtures
           leagueId={leagueId}
           leagueSlug={leagueSlug}

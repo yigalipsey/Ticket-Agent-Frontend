@@ -89,7 +89,7 @@ export default function RootLayout({
     <html
       lang="he"
       dir="rtl"
-      className={`${inter.variable} ${heebo.variable} ${rubik.variable} ${openSans.variable}`}
+      className={`bg-white ${inter.variable} ${heebo.variable} ${rubik.variable} ${openSans.variable}`}
     >
       <head>
         <link rel="icon" href="/favicon.ico" />
@@ -114,15 +114,15 @@ export default function RootLayout({
         <meta name="theme-color" content="#0A1F44" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body className={`min-h-screen bg-gray-50 text-gray-900 font-open-sans`}>
+      <body className={`min-h-screen bg-white text-gray-900 font-open-sans`}>
         <ReactQueryProvider>
           <AgentAuthProvider>
-            <div className="flex flex-col min-h-screen">
+            <div className="flex flex-col min-h-screen bg-white">
               {/* Header */}
               <Navbar />
 
               {/* Main Content */}
-              <main className="flex-1">{children}</main>
+              <main className="flex-1 bg-white">{children}</main>
 
               {/* Updates banner above footer */}
               <UpdatesBanner />

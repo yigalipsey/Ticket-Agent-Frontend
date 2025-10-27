@@ -56,7 +56,7 @@ export default async function FixtureOffersPage({
     // אם אין הצעות, נציג מסך ריק
     if (!offersData.offers || offersData.offers.length === 0) {
       return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-white">
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <FixtureOfferHeader
               homeTeam={{
@@ -92,7 +92,7 @@ export default async function FixtureOffersPage({
     }
 
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-white">
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Fixture Info */}
           <FixtureOfferHeader
@@ -131,7 +131,7 @@ export default async function FixtureOffersPage({
   } catch (error) {
     console.error("Error loading fixture offers:", error);
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-white">
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
             <h2 className="text-2xl font-bold text-red-800 mb-4">שגיאה</h2>

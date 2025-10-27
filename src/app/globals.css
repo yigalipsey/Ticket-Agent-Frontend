@@ -14,7 +14,7 @@
   }
 
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-white text-gray-900;
     font-family: var(--font-rubik);
     font-feature-settings: "rlig" 1, "calt" 1;
   }

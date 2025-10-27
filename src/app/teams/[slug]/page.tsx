@@ -30,7 +30,7 @@ export default async function TeamPage({
   let fixtures: Fixture[] = [];
   let teamName: string | undefined = undefined;
   let teamLogo: string | undefined = undefined;
-  
+
   if (teamId) {
     try {
       const fixturesResult = await FixtureService.getTeamFixtures(teamId, {
@@ -38,19 +38,23 @@ export default async function TeamPage({
         upcoming: "true",
       });
       fixtures = fixturesResult || [];
-      
+
       // קבלת שם ולוגו של הקבוצה מהמשחק הראשון
       if (fixtures.length > 0) {
         const firstFixture = fixtures[0];
-        const homeTeamId = firstFixture.homeTeam?.id || firstFixture.homeTeam?._id;
-        const awayTeamId = firstFixture.awayTeam?.id || firstFixture.awayTeam?._id;
-        
+        const homeTeamId =
+          firstFixture.homeTeam?.id || firstFixture.homeTeam?._id;
+        const awayTeamId =
+          firstFixture.awayTeam?.id || firstFixture.awayTeam?._id;
+
         if (homeTeamId === teamId) {
           teamName = firstFixture.homeTeam?.name;
-          teamLogo = firstFixture.homeTeam?.logo || firstFixture.homeTeam?.logoUrl;
+          teamLogo =
+            firstFixture.homeTeam?.logo || firstFixture.homeTeam?.logoUrl;
         } else if (awayTeamId === teamId) {
           teamName = firstFixture.awayTeam?.name;
-          teamLogo = firstFixture.awayTeam?.logo || firstFixture.awayTeam?.logoUrl;
+          teamLogo =
+            firstFixture.awayTeam?.logo || firstFixture.awayTeam?.logoUrl;
         }
       }
     } catch (error) {
@@ -59,7 +63,7 @@ export default async function TeamPage({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Client: כותרת הקבוצה (מ-cache או CSR או מהמשחקים) */}
         <TeamPageClient

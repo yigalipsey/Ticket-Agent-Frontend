@@ -8,6 +8,8 @@ export interface League {
   country: string;
   countryHe: string;
   logoUrl: string;
+  backgroundImage?: string; // Hero background image
+  description?: string; // League description for Hero
   type: string;
   isPopular: boolean;
   months?: string[]; // Available months in YYYY-MM format

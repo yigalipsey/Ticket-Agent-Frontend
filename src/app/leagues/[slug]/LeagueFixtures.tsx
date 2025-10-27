@@ -109,6 +109,7 @@ export default function LeagueFixtures({
             availableVenues={availableVenues}
             onMonthChange={handleMonthChange}
             onVenueChange={handleVenueChange}
+            onReset={() => setFilters({ month: null, venueId: null })}
           />
         )}
         <div className="text-center py-12">
@@ -119,10 +120,7 @@ export default function LeagueFixtures({
   }
 
   return (
-    <div className="mb-8">
-      {/* כותרת */}
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">משחקים</h2>
-
+    <div className="mb-8  bg-white">
       {/* פילטרים */}
       {showFilter && (
         <LeagueFixturesFilter
@@ -132,6 +130,7 @@ export default function LeagueFixtures({
           availableVenues={availableVenues}
           onMonthChange={handleMonthChange}
           onVenueChange={handleVenueChange}
+          onReset={() => setFilters({ month: null, venueId: null })}
         />
       )}
 
@@ -142,9 +141,9 @@ export default function LeagueFixtures({
         </div>
       )}
 
-      {/* רשת משחקים */}
+      {/* רשימת משחקים */}
       {!isLoading && (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-col gap-3">
           {visibleFixtures.map((fixture: Fixture) => (
             <FixtureCard
               key={fixture.id || fixture._id}
@@ -152,6 +151,7 @@ export default function LeagueFixtures({
               showOffers={true}
               showVenue={true}
               showLeague={false}
+              variant="horizontal"
             />
           ))}
         </div>

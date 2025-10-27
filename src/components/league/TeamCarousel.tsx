@@ -22,7 +22,7 @@ export function TeamCarousel({ teams }: LeagueTeamsSectionProps) {
     },
     breakpoints: {
       "(max-width: 640px)": {
-        slides: { perView: 2, spacing: 12 },
+        slides: { perView: 3, spacing: 12 },
       },
       "(min-width: 641px) and (max-width: 1024px)": {
         slides: { perView: 3, spacing: 16 },
@@ -47,89 +47,90 @@ export function TeamCarousel({ teams }: LeagueTeamsSectionProps) {
   }
 
   return (
-    <div className="relative">
-      {/* כותרת וקונטרולים */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-gray-900">קבוצות</h2>
-
-        {/* כפתורי דפדף - RTL: כפתור ימני ← גלילה ימינה, כפתור שמאלי ← גלילה שמאלה */}
-        {teams.length > 6 && (
-          <div className="flex gap-2">
-            {/* כפתור ימני - גלילה ימינה (אחורה) */}
-            <button
-              onClick={slideRight}
-              className="p-2 rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
-              aria-label="גלול ימינה"
+    <div className="relative bg-white">
+      <div className="flex items-center gap-2 md:gap-4">
+        {/* כפתור שמאלי - גלילה שמאלה (קדימה) */}
+        {teams.length > 2 && (
+          <button
+            onClick={slideRight}
+            className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white border border-primary flex items-center justify-center text-primary hover:bg-gray-50 transition-colors flex-shrink-0"
+            aria-label="גלול ימינה"
+          >
+            <svg
+              className="w-4 h-4 md:w-5 md:h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </button>
-            {/* כפתור שמאלי - גלילה שמאלה (קדימה) */}
-            <button
-              onClick={slideLeft}
-              className="p-2 rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
-              aria-label="גלול שמאלה"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </button>
-          </div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
         )}
-      </div>
 
-      {/* קרוסלה */}
-      <div ref={sliderRef} className="keen-slider">
-        {teams.map((team) => (
-          <div key={team._id || team.slug} className="keen-slider__slide">
-            <Link
-              href={`/teams/${team.slug}?id=${team._id || team.id}`}
-              className="group p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 flex items-center justify-center h-20"
-            >
-              <div className="flex flex-col items-center text-center space-y-1 w-full">
+        {/* קרוסלה */}
+        <div ref={sliderRef} className="keen-slider bg-white flex-1">
+          {teams.map((team) => (
+            <div key={team._id || team.slug} className="keen-slider__slide">
+              <Link
+                href={`/teams/${team.slug}?id=${team._id || team.id}`}
+                className="group flex flex-col items-center text-center space-y-2 p-2"
+              >
                 {team.logoUrl ? (
-                  <Image
-                    src={team.logoUrl}
-                    alt={`לוגו ${team.name}`}
-                    width={24}
-                    height={24}
-                    className="object-contain"
-                  />
+                  <div className="rounded-full p-[1px] transition-transform group-hover:scale-105 w-[80px] h-[80px] md:w-[120px] md:h-[120px] bg-gray-900">
+                    <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                      <Image
+                        src={team.logoUrl}
+                        alt={`לוגו ${team.name}`}
+                        width={60}
+                        height={60}
+                        className="object-contain w-10 h-10 md:w-16 md:h-16"
+                      />
+                    </div>
+                  </div>
                 ) : (
-                  <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center">
-                    <span className="text-gray-400 text-xs">
-                      {team.name.charAt(0)}
-                    </span>
+                  <div className="rounded-full p-[1px] w-[80px] h-[80px] md:w-[120px] md:h-[120px] bg-gray-900">
+                    <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                      <span className="text-gray-900 text-xl md:text-2xl font-medium">
+                        {team.name.charAt(0)}
+                      </span>
+                    </div>
                   </div>
                 )}
-                <h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors text-xs leading-tight truncate w-full">
+                <h3 className="font-semibold text-gray-900 group-hover:text-primary transition-colors text-base md:text-lg leading-tight">
                   {team.name}
                 </h3>
-              </div>
-            </Link>
-          </div>
-        ))}
+              </Link>
+            </div>
+          ))}
+        </div>
+
+        {/* כפתור ימני - גלילה ימינה (אחורה) */}
+        {teams.length > 2 && (
+          <button
+            onClick={slideLeft}
+            className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary flex items-center justify-center text-white hover:bg-primary-dark transition-colors flex-shrink-0"
+            aria-label="גלול שמאלה"
+          >
+            <svg
+              className="w-4 h-4 md:w-5 md:h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+        )}
       </div>
     </div>
   );

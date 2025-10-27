@@ -43,7 +43,7 @@ export default function PopularLeaguesSection({
                     href={`/leagues/${league.slug}?id=${
                       league._id || league.id
                     }`}
-                    className="block px-4 py-3 md:py-6"
+                    className="block px-0 py-3 md:px-4 md:py-6"
                   >
                     <div className="flex   items-center justify-between">
                       <div className="flex items-center gap-4">
