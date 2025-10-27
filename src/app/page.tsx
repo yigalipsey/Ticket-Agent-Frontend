@@ -42,7 +42,7 @@ export default async function HomePage() {
   const hotTeams = uniqueTeams.filter((team) => team.isPopular);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen ">
       {/* Hydration של SSR data ל-React Query cache */}
       <ClientHydration
         initialLeagues={leagues}
@@ -53,7 +53,7 @@ export default async function HomePage() {
       <HeroSection />
 
       {/* Main Content */}
-      <main className="">
+      <main>
         {/* Hot Fixtures - מקבל ישירות את המשחקים החמים */}
         <HotFixturesSection fixtures={hotFixtures} />
 

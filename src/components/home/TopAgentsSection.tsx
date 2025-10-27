@@ -79,7 +79,7 @@ const TopAgentsSection = ({ agents }: TopAgentsSectionProps) => {
   }
 
   return (
-    <section className="py-12">
+    <section className="pb-4 md:pb-8 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader
           title={{
