@@ -76,61 +76,62 @@ export function TeamFixturesFilter({
     return Array.from(leagues.values());
   }, [fixtures]);
 
-  const hasActiveFilters =
-    selectedFilter !== "all" || selectedMonth || selectedLeague;
-
-  const handleReset = () => {
-    setSelectedFilter("all");
-    setSelectedMonth(null);
-    setSelectedLeague(null);
-  };
-
   return (
-    <div className="bg-white rounded-lg p-4 mb-6 relative z-50">
-      {/* Mobile: First row - Home/Away only, Second row - League and Month */}
-      {/* Desktop: All in one row */}
-      <div className="flex flex-col md:flex-row gap-3 md:gap-3">
-        {/* First row on mobile, first in row on desktop */}
-        <div className="flex flex-row gap-3 items-center flex-wrap md:mb-0 mb-3">
-          <HomeAwayFilter
-            selectedFilter={selectedFilter as HomeAwayFilterType}
-            onFilterChange={setSelectedFilter}
-            labels={{
-              all: "כל המשחקים",
-              home: "משחקי בית",
-              away: "משחקי חוץ",
-            }}
+    <div className="bg-white rounded-lg p-4 pb-3">
+      {/* Desktop: All filters in one row */}
+      <div className="hidden md:flex md:flex-wrap gap-4">
+        <HomeAwayFilter
+          selectedFilter={selectedFilter as HomeAwayFilterType}
+          onFilterChange={setSelectedFilter}
+          labels={{
+            all: "כל המשחקים",
+            home: "משחקי בית",
+            away: "משחקי חוץ",
+          }}
+        />
+
+        <TeamFixturesLeagueFilter
+          selectedLeague={selectedLeague}
+          availableLeagues={availableLeagues}
+          onLeagueChange={setSelectedLeague}
+          label="כל הליגות"
+        />
+
+        <MonthFilter
+          selectedMonth={selectedMonth}
+          availableMonths={availableMonths}
+          onMonthChange={setSelectedMonth}
+          label="כל החודשים"
+        />
+      </div>
+
+      {/* Mobile: First row - Home/Away, Second row - League and Month together */}
+      <div className="flex md:hidden flex-col gap-4">
+        <HomeAwayFilter
+          selectedFilter={selectedFilter as HomeAwayFilterType}
+          onFilterChange={setSelectedFilter}
+          labels={{
+            all: "כל המשחקים",
+            home: "משחקי בית",
+            away: "משחקי חוץ",
+          }}
+        />
+
+        {/* Second row - League and Month together */}
+        <div className="flex gap-4">
+          <TeamFixturesLeagueFilter
+            selectedLeague={selectedLeague}
+            availableLeagues={availableLeagues}
+            onLeagueChange={setSelectedLeague}
+            label="כל הליגות"
           />
 
-          {hasActiveFilters && (
-            <button
-              onClick={handleReset}
-              className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium text-sm whitespace-nowrap"
-            >
-              איפוס מסננים
-            </button>
-          )}
-        </div>
-
-        {/* Second row on mobile, continues on desktop */}
-        <div className="flex flex-row gap-3 items-center">
-          <div className="flex-1">
-            <TeamFixturesLeagueFilter
-              selectedLeague={selectedLeague}
-              availableLeagues={availableLeagues}
-              onLeagueChange={setSelectedLeague}
-              label="ליגה"
-            />
-          </div>
-
-          <div className="flex-1">
-            <MonthFilter
-              selectedMonth={selectedMonth}
-              availableMonths={availableMonths}
-              onMonthChange={setSelectedMonth}
-              label="חודש"
-            />
-          </div>
+          <MonthFilter
+            selectedMonth={selectedMonth}
+            availableMonths={availableMonths}
+            onMonthChange={setSelectedMonth}
+            label="כל החודשים"
+          />
         </div>
       </div>
     </div>

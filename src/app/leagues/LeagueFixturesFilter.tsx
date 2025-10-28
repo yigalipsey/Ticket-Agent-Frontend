@@ -31,8 +31,8 @@ export function LeagueFilter({
   };
 
   return (
-    <div className="bg-white rounded-lg p-4 mb-6 relative z-50">
-      <div className="flex flex-row gap-3 items-center flex-wrap">
+    <div className="bg-white rounded-lg p-4 relative z-50">
+      <div className="flex flex-row gap-3 items-start flex-wrap">
         <VenueFilter
           selectedVenue={selectedVenue}
           availableVenues={availableVenues}

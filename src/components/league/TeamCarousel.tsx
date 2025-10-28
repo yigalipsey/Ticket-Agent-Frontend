@@ -8,12 +8,16 @@ import "keen-slider/keen-slider.css";
 
 interface LeagueTeamsSectionProps {
   teams: Team[];
+  hrefPrefix?: string; // להוסיף prefix לאי-ר של routes לדף סוכן
 }
 
 /**
  * Team Carousel - קרוסלת קבוצות באמצעות keen-slider
  */
-export function TeamCarousel({ teams }: LeagueTeamsSectionProps) {
+export function TeamCarousel({
+  teams,
+  hrefPrefix = "",
+}: LeagueTeamsSectionProps) {
   const [sliderRef, instanceRef] = useKeenSlider({
     rtl: true, // תמיכה בעברית - כיוון מימין לשמאל
     slides: {
@@ -77,7 +81,9 @@ export function TeamCarousel({ teams }: LeagueTeamsSectionProps) {
           {teams.map((team) => (
             <div key={team._id || team.slug} className="keen-slider__slide">
               <Link
-                href={`/teams/${team.slug}?id=${team._id || team.id}`}
+                href={`${hrefPrefix}/teams/${team.slug}?id=${
+                  team._id || team.id
+                }`}
                 className="group flex flex-col items-center text-center space-y-2 p-2"
               >
                 {team.logoUrl ? (

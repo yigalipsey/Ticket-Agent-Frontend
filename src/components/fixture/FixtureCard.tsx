@@ -200,13 +200,20 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
           </div>
 
           {/* CTA Button */}
-          <div className="absolute left-4 bottom-4 md:relative md:left-auto md:bottom-auto w-10 h-10 md:w-auto md:h-auto md:min-w-[260px] flex-shrink-0 md:self-center">
+          <div
+            className={`${
+              mode === "agent"
+                ? "pb-4 md:static md:pb-0 md:w-auto md:h-auto md:min-w-[180px]"
+                : "absolute left-4 bottom-4 md:relative md:left-auto md:bottom-auto"
+            } w-10 h-10 md:w-auto md:h-auto flex-shrink-0 md:self-center`}
+          >
             {mode === "agent" ? (
               <Button
                 variant="primary"
-                size="lg"
+                size="md"
                 fullWidth
                 onClick={onAddOffer}
+                className="w-full md:w-auto px-12"
               >
                 הוסף הצעה
               </Button>
@@ -218,7 +225,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
               >
                 <Button
                   variant="primary"
-                  size="lg"
+                  size="md"
                   className="md:w-auto w-full h-full"
                 >
                   {/* Desktop: with text */}
@@ -228,7 +235,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                           fixture.minPrice.amount,
                           fixture.minPrice.currency
                         )}`
-                      : "אין הצעות זמינות למשחק זה"}
+                      : "לכרטיסים"}
                   </span>
                   {/* Mobile: icon only */}
                   <ChevronLeft className="w-5 h-5 md:hidden" />
@@ -348,7 +355,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
         {mode === "agent" ? (
           <Button
             variant="outline"
-            size="lg"
+            size="sm"
             fullWidth
             onClick={onAddOffer}
             className="group-hover:bg-primary-dark group-hover:text-white group-hover:border-primary-dark"
@@ -362,7 +369,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
           >
             <Button
               variant="outline"
-              size="lg"
+              size="sm"
               fullWidth
               className="group-hover:bg-primary-dark group-hover:text-white group-hover:border-primary-dark"
             >

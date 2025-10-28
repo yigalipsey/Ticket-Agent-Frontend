@@ -72,7 +72,7 @@ export default function UpdatesBanner() {
                 transition
               "
             >
-              הרשם עכשיו
+              הרשם
             </button>
           </form>
         </div>

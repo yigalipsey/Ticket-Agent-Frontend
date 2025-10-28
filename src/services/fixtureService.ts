@@ -96,16 +96,28 @@ export class FixtureService {
       page?: number;
       month?: string | null;
       venueId?: string | null;
+      hasOffers?: boolean;
     } = {}
   ): Promise<
     ServiceResult<{ fixtures: Fixture[]; availableMonths: string[] }>
   > {
     try {
-      const { limit = 20, page = 1, month = null, venueId = null } = options;
+      const {
+        limit = 20,
+        page = 1,
+        month = null,
+        venueId = null,
+        hasOffers = false,
+      } = options;
 
-      const params: Record<string, string | number> = { leagueId, limit, page };
+      const params: Record<string, string | number | boolean> = {
+        leagueId,
+        limit,
+        page,
+      };
       if (month) params.month = month;
       if (venueId) params.venueId = venueId;
+      if (hasOffers) params.hasOffers = true;
 
       // הבקאנד מחזיר data ישירות דרך apiClient.get
       const response = await apiClient.get<

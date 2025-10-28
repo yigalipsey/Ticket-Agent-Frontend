@@ -7,6 +7,7 @@ interface UseLeagueFixturesOptions {
   page?: number;
   month?: string | null;
   venueId?: string | null;
+  hasOffers?: boolean;
 }
 
 interface LeagueFixturesResult {
@@ -78,7 +79,13 @@ export function useLeagueFixtures(
   options: UseLeagueFixturesOptions = {},
   initialFixtures?: Fixture[]
 ): LeagueFixturesResult {
-  const { limit = 100, page = 1, month = null, venueId = null } = options;
+  const {
+    limit = 100,
+    page = 1,
+    month = null,
+    venueId = null,
+    hasOffers = false,
+  } = options;
 
   // יצירת cache key תואם לבקאנד
   const cacheKey = generateCacheKey(leagueId, {
@@ -104,6 +111,7 @@ export function useLeagueFixtures(
         page,
         month,
         venueId: month ? null : venueId, // venue רק אם אין חודש
+        hasOffers,
       });
 
       if (!result.success) {

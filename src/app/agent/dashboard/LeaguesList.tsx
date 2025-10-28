@@ -2,7 +2,7 @@
 
 import React from "react";
 import { League } from "@/types/league";
-import LeagueCard from "./LeagueCard";
+import { LeagueList } from "@/components";
 
 interface LeaguesListProps {
   leagues: League[];
@@ -50,35 +50,7 @@ export default function LeaguesList({
     );
   }
 
-  if (leagues.length === 0) {
-    return (
-      <div className="bg-white rounded-lg shadow p-8 text-center">
-        <svg
-          className="mx-auto h-12 w-12 text-gray-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-          />
-        </svg>
-        <h3 className="mt-2 text-sm font-medium text-gray-900">
-          אין ליגות זמינות
-        </h3>
-        <p className="mt-1 text-sm text-gray-500">כרגע אין ליגות במערכת.</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {leagues.map((league) => (
-        <LeagueCard key={league._id} league={league} />
-      ))}
-    </div>
+    <LeagueList leagues={leagues} hrefPrefix="/agent" showButton={false} />
   );
 }

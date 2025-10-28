@@ -4,20 +4,24 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAgentAuth } from "@/providers";
 import { Fixture } from "@/types/fixture";
-import LeaguePageClient from "@/app/leagues/[slug]/LeaguePageClient";
-import AgentLeagueFixtures from "./AgentLeagueFixtures";
+import TeamPageClient from "@/app/teams/[slug]/TeamPageClient";
+import AgentTeamFixtures from "./AgentTeamFixtures";
 
-interface AgentLeaguePageClientProps {
+interface AgentTeamPageClientProps {
   slug: string;
-  leagueId: string | null;
+  teamId: string | null;
+  fallbackName?: string;
+  fallbackLogo?: string;
   initialFixtures: Fixture[];
 }
 
-export default function AgentLeaguePageClient({
+export default function AgentTeamPageClient({
   slug,
-  leagueId,
+  teamId,
+  fallbackName,
+  fallbackLogo,
   initialFixtures,
-}: AgentLeaguePageClientProps) {
+}: AgentTeamPageClientProps) {
   const router = useRouter();
   const { isAuthenticated, isLoading: authLoading } = useAgentAuth();
 
@@ -45,15 +49,21 @@ export default function AgentLeaguePageClient({
 
   return (
     <>
-      {/* כותרת הליגה + קבוצות (full width) - משתמש ברכיב הקיים */}
-      <LeaguePageClient slug={slug} leagueId={leagueId} hrefPrefix="/agent" />
+      {/* כותרת הקבוצה - full width */}
+      <TeamPageClient
+        slug={slug}
+        teamId={teamId}
+        fallbackName={fallbackName}
+        fallbackLogo={fallbackLogo}
+        showComparisonText={false}
+      />
 
-      {/* Back button + משחקים (with container) */}
+      {/* Back button + משחקים - with container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* משחקים עם טופס הצעה - רכיב מותאם לסוכן */}
-        <AgentLeagueFixtures
-          leagueId={leagueId}
-          leagueSlug={slug}
+        <AgentTeamFixtures
+          teamId={teamId}
+          teamSlug={slug}
           initialFixtures={initialFixtures}
         />
       </div>

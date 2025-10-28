@@ -68,6 +68,7 @@ export default function LeagueFixtures({
       page: 1,
       month: filters.month,
       venueId: filters.venueId,
+      hasOffers: true, // משיכת רק משחקים עם הצעות
     },
     initialFixtures
   );

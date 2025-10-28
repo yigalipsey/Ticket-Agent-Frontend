@@ -9,6 +9,7 @@ import { useLeagueData } from "@/hooks/league";
 interface LeaguePageClientProps {
   slug: string;
   leagueId: string | null;
+  hrefPrefix?: string; // להוסיף prefix לאי-ר של routes לדף סוכן
 }
 
 /**
@@ -24,7 +25,10 @@ interface LeaguePageClientProps {
 export default function LeaguePageClient({
   slug,
   leagueId,
+  hrefPrefix = "",
 }: LeaguePageClientProps) {
+  // hrefPrefix שמור לעתיד
+  void hrefPrefix;
   // שליפת פרטי ליגה: cache (לפי slug) → API (לפי ID)
   const { league, teams, isLoading, error } = useLeagueData(slug, leagueId);
 
@@ -98,7 +102,7 @@ export default function LeaguePageClient({
       {/* קרוסלת קבוצות - מ-cache או CSR */}
       {teams && teams.length > 0 && (
         <div className="max-w-7xl mx-auto mt-3 md:mt-8 md:p-6 bg-white">
-          <TeamCarousel teams={teams} />
+          <TeamCarousel teams={teams} hrefPrefix={hrefPrefix} />
         </div>
       )}
     </div>

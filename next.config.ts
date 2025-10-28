@@ -4,6 +4,7 @@ const nextConfig = {
     domains: [
       "localhost",
       "example.com",
+      "ticketagent.co.il",
       "media.api-sports.io",
       "res.cloudinary.com",
       "images.unsplash.com",

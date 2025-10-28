@@ -87,12 +87,12 @@ export class SearchService {
         };
       }
 
-      const params: Record<string, string | number | boolean> = {
+      const params: Record<string, string | number> = {
         q: query.trim(),
-        limit,
-        fixturesLimit,
-        includePastFixtures,
-        onlyWithOffers,
+        limit: limit.toString(),
+        fixturesLimit: fixturesLimit.toString(),
+        includePastFixtures: includePastFixtures.toString(),
+        onlyWithOffers: onlyWithOffers.toString(),
       };
 
       if (leagueId) {

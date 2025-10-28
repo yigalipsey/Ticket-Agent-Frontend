@@ -26,23 +26,23 @@ export function MonthFilter({
     : label;
 
   return (
-    <div className="relative w-full sm:w-48">
+    <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full px-4 py-2 bg-white border border-primary rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+        className="flex items-center justify-between px-4 py-2 bg-white border border-primary rounded-lg hover:bg-gray-50 focus:outline-none whitespace-nowrap"
       >
         <span className="text-sm font-medium text-primary">
           {selectedMonthLabel}
         </span>
         <ChevronDown
-          className={`h-4 w-4 text-primary transition-transform ${
+          className={`h-4 w-4 text-primary transition-transform ml-2 ${
             isOpen ? "rotate-180" : ""
           }`}
         />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 sm:right-0 sm:w-auto w-full min-w-full mt-1 bg-white shadow-lg rounded-lg z-[100]">
+        <div className="absolute top-full right-0 mt-1 bg-white border border-primary rounded-lg z-10 min-w-[200px]">
           <div className="py-1">
             <button
               onClick={() => {

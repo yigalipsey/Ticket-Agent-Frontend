@@ -61,6 +61,7 @@ export default function AgentLeagueFixtures({
   }, [league, initialFixtures]);
 
   // שליפת משחקים עם Hook מותאם אישית
+  // הסוכן רואה את כל המשחקים (ללא hasOffers) כדי להוסיף הצעות חדשות
   const { fixtures, isLoading } = useLeagueFixtures(
     leagueId,
     {
@@ -137,9 +138,9 @@ export default function AgentLeagueFixtures({
         </div>
       )}
 
-      {/* רשת משחקים */}
+      {/* רשימת משחקים - תצוגה אופקית ברוחב מלא */}
       {!isLoading && (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-col gap-0 bg-white border border-gray-200 rounded-lg overflow-hidden">
           {visibleFixtures.map((fixture: Fixture) => (
             <FixtureCard
               key={fixture.id || fixture._id}
@@ -152,6 +153,9 @@ export default function AgentLeagueFixtures({
               }
               showOffers={true}
               showVenue={true}
+              showLeague={false}
+              variant="horizontal"
+              className="w-full"
             />
           ))}
         </div>

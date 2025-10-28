@@ -34,11 +34,11 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="absolute top-0 left-0 right-0 z-50 bg-transparent">
+    <nav className="absolute top-0 left-0 right-0 z-[99999] bg-transparent pointer-events-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Brand - מובייל: ימין, דסקטופ: שמאל */}
-          <div className="flex items-center order-2 md:order-1">
+          <div className="flex items-center order-2 md:order-1 pointer-events-auto">
             <Link
               href="/"
               className="text-xl font-bold text-white hover:text-white/80 transition-colors"
@@ -49,7 +49,7 @@ export default function Navbar() {
           </div>
 
           {/* User Menu - Desktop */}
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center pointer-events-auto">
             {isAuthenticated ? (
               <div className="relative">
                 <button
@@ -114,7 +114,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Navigation - ממורכז */}
-          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
+          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 pointer-events-auto">
             <div className="flex items-baseline space-x-4 space-x-reverse">
               {navigationItems.map((item) => (
                 <Link
@@ -129,7 +129,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile menu button - מובייל: שמאל, דסקטופ: נסתר */}
-          <div className="md:hidden order-1 md:order-2">
+          <div className="md:hidden order-1 md:order-2 pointer-events-auto">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 active:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors"
@@ -173,7 +173,11 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Navigation Menu */}
-        <div className={`md:hidden ${isMobileMenuOpen ? "block" : "hidden"}`}>
+        <div
+          className={`md:hidden ${
+            isMobileMenuOpen ? "block" : "hidden"
+          } pointer-events-auto`}
+        >
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
             {navigationItems.map((item) => (
               <Link
