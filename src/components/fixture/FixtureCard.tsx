@@ -200,11 +200,11 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
           </div>
 
           {/* CTA Button */}
-          <div className="absolute left-4 bottom-4 md:relative md:left-auto md:bottom-auto w-10 h-10 md:w-auto md:h-auto md:min-w-[180px] flex-shrink-0 md:self-center">
+          <div className="absolute left-4 bottom-4 md:relative md:left-auto md:bottom-auto w-10 h-10 md:w-auto md:h-auto md:min-w-[260px] flex-shrink-0 md:self-center">
             {mode === "agent" ? (
               <Button
                 variant="primary"
-                size="md"
+                size="lg"
                 fullWidth
                 onClick={onAddOffer}
               >
@@ -218,7 +218,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
               >
                 <Button
                   variant="primary"
-                  size="md"
+                  size="lg"
                   className="md:w-auto w-full h-full"
                 >
                   {/* Desktop: with text */}
@@ -228,7 +228,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                           fixture.minPrice.amount,
                           fixture.minPrice.currency
                         )}`
-                      : "לכרטיסים"}
+                      : "אין הצעות זמינות למשחק זה"}
                   </span>
                   {/* Mobile: icon only */}
                   <ChevronLeft className="w-5 h-5 md:hidden" />
@@ -348,7 +348,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
         {mode === "agent" ? (
           <Button
             variant="outline"
-            size="sm"
+            size="lg"
             fullWidth
             onClick={onAddOffer}
             className="group-hover:bg-primary-dark group-hover:text-white group-hover:border-primary-dark"
@@ -362,7 +362,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
           >
             <Button
               variant="outline"
-              size="sm"
+              size="lg"
               fullWidth
               className="group-hover:bg-primary-dark group-hover:text-white group-hover:border-primary-dark"
             >

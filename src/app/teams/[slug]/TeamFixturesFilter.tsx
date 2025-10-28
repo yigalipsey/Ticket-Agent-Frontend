@@ -76,73 +76,63 @@ export function TeamFixturesFilter({
     return Array.from(leagues.values());
   }, [fixtures]);
 
+  const hasActiveFilters =
+    selectedFilter !== "all" || selectedMonth || selectedLeague;
+
+  const handleReset = () => {
+    setSelectedFilter("all");
+    setSelectedMonth(null);
+    setSelectedLeague(null);
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-sm border p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">סינון משחקים</h3>
+    <div className="bg-white rounded-lg p-4 mb-6 relative z-50">
+      {/* Mobile: First row - Home/Away only, Second row - League and Month */}
+      {/* Desktop: All in one row */}
+      <div className="flex flex-col md:flex-row gap-3 md:gap-3">
+        {/* First row on mobile, first in row on desktop */}
+        <div className="flex flex-row gap-3 items-center flex-wrap md:mb-0 mb-3">
+          <HomeAwayFilter
+            selectedFilter={selectedFilter as HomeAwayFilterType}
+            onFilterChange={setSelectedFilter}
+            labels={{
+              all: "כל המשחקים",
+              home: "משחקי בית",
+              away: "משחקי חוץ",
+            }}
+          />
 
-      <div className="flex flex-wrap gap-4">
-        <HomeAwayFilter
-          selectedFilter={selectedFilter as HomeAwayFilterType}
-          onFilterChange={setSelectedFilter}
-          labels={{
-            all: "כל המשחקים",
-            home: "משחקי בית",
-            away: "משחקי חוץ",
-          }}
-        />
+          {hasActiveFilters && (
+            <button
+              onClick={handleReset}
+              className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium text-sm whitespace-nowrap"
+            >
+              איפוס מסננים
+            </button>
+          )}
+        </div>
 
-        <TeamFixturesLeagueFilter
-          selectedLeague={selectedLeague}
-          availableLeagues={availableLeagues}
-          onLeagueChange={setSelectedLeague}
-          label="כל הליגות"
-        />
+        {/* Second row on mobile, continues on desktop */}
+        <div className="flex flex-row gap-3 items-center">
+          <div className="flex-1">
+            <TeamFixturesLeagueFilter
+              selectedLeague={selectedLeague}
+              availableLeagues={availableLeagues}
+              onLeagueChange={setSelectedLeague}
+              label="ליגה"
+            />
+          </div>
 
-        <MonthFilter
-          selectedMonth={selectedMonth}
-          availableMonths={availableMonths}
-          onMonthChange={setSelectedMonth}
-          label="כל החודשים"
-        />
-      </div>
-
-      {/* Current active filters */}
-      {(selectedFilter !== "all" || selectedMonth || selectedLeague) && (
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <div className="flex flex-wrap gap-2">
-            {selectedFilter !== "all" && (
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                {selectedFilter === "home"
-                  ? "משחקי בית"
-                  : selectedFilter === "away"
-                  ? "משחקי חוץ"
-                  : ""}
-              </span>
-            )}
-            {selectedLeague &&
-              (() => {
-                const league = availableLeagues.find(
-                  (l) => (l._id || l.id) === selectedLeague
-                );
-                const leagueName =
-                  league?.nameHe || league?.name || league?.slug || "ליגה";
-                return (
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                    {leagueName}
-                  </span>
-                );
-              })()}
-            {selectedMonth && (
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                {new Date(selectedMonth).toLocaleDateString("he-IL", {
-                  month: "long",
-                  year: "numeric",
-                })}
-              </span>
-            )}
+          <div className="flex-1">
+            <MonthFilter
+              selectedMonth={selectedMonth}
+              availableMonths={availableMonths}
+              onMonthChange={setSelectedMonth}
+              label="חודש"
+            />
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

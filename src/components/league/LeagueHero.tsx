@@ -20,7 +20,7 @@ export function LeagueHero({ league }: LeagueHeroProps) {
     league.backgroundImage || "/images/people-soccer-stadium.avif";
 
   return (
-    <section className="relative w-full h-[400px] md:h-[400px] overflow-hidden">
+    <section className="relative w-full h-[300px] md:h-[400px] overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -42,39 +42,26 @@ export function LeagueHero({ league }: LeagueHeroProps) {
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col items-center justify-center gap-6 px-4 sm:px-6 lg:px-8 py-8">
         {/* Main Hero Box */}
-        <div
-          className="relative rounded-2xl p-8 md:p-12"
-          style={{
-            maxWidth: "702px",
-            maxHeight: "274px",
-            backdropFilter: "blur(46px)",
-            boxShadow: `
-              0px 0px 11px 0px #F2F2F2 inset,
-              0px 0px 3px 0px #FFFFFF80 inset,
-              -1px -1px 0.5px -1px #FFFFFF inset,
-              1px 1px 0.5px -1px #FFFFFF inset,
-              -1px -1px 0px -0.5px #262626 inset,
-              1px 1px 0px -0.5px #333333 inset
-            `,
-          }}
-        >
-          <div className="flex items-center text-center gap-6">
-            {/* League Logo with Glass Effect */}
+        <div className="relative max-w-4xl mx-auto text-center">
+          <div className="flex flex-col items-center gap-6">
+            {/* League Logo with white background */}
             {league.logoUrl && (
-              <div className="relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm shadow-lg p-4">
-                <div className="relative w-full h-full">
-                  <Image
-                    src={league.logoUrl}
-                    alt={`לוגו ${league.nameHe || league.name}`}
-                    fill
-                    className="object-contain drop-shadow-2xl"
-                  />
+              <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg bg-white">
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="relative w-20 h-20 md:w-24 md:h-24">
+                    <Image
+                      src={league.logoUrl}
+                      alt={`לוגו ${league.nameHe || league.name}`}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
                 </div>
               </div>
             )}
 
             {/* League Title */}
-            <div className="flex-1">
+            <div>
               <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">
                 {league.nameHe || league.name}
               </h1>

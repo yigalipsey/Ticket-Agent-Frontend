@@ -10,6 +10,9 @@ export interface NavigationData {
       id: string;
       slug: string;
       name: string;
+      logo?: string;
+      primaryColor?: string;
+      secondaryColor?: string;
     }>;
   }>;
 }
@@ -67,6 +70,8 @@ class NavigationService {
               slug: team.slug,
               name: team.name,
               logo: team.logoUrl,
+              primaryColor: team.primaryColor,
+              secondaryColor: team.secondaryColor,
             })),
           })),
         };
@@ -92,6 +97,8 @@ class NavigationService {
           slug: team.slug,
           name: team.name,
           logo: team.logoUrl,
+          primaryColor: team.primaryColor,
+          secondaryColor: team.secondaryColor,
         })),
       })),
     };

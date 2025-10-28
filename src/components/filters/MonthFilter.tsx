@@ -42,7 +42,7 @@ export function MonthFilter({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-primary rounded-lg z-10">
+        <div className="absolute top-full right-0 sm:right-0 sm:w-auto w-full min-w-full mt-1 bg-white shadow-lg rounded-lg z-[100]">
           <div className="py-1">
             <button
               onClick={() => {

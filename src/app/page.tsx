@@ -12,9 +12,6 @@ import FixtureService from "@/services/fixtureService";
 import AgentService from "@/services/agentService";
 
 export default async function HomePage() {
-  console.log("🚀 HomePage: Starting data fetching...");
-  console.log("🌐 HomePage: API Base URL:", process.env.NEXT_PUBLIC_API_URL);
-
   const [leaguesRes, fixturesRes, agentsRes] = await Promise.all([
     LeagueService.getAllLeaguesWithTeams(),
     FixtureService.getHotFixtures(5),

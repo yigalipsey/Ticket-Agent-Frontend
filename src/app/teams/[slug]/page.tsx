@@ -17,7 +17,7 @@ export default async function TeamPage({
   const { id: idFromQuery } = await searchParams;
 
   // SSR: שימוש ב-ID מה-query (ניווט פנימי)
-  let teamId: string | null = idFromQuery || null;
+  const teamId: string | null = idFromQuery || null;
 
   // אם אין ID ב-query - נסיון למצוא מ-NavigationService (לא עובד ב-SSR)
   // במקרה זה נסתמך על ה-Client Component לטעון את הנתונים
@@ -64,15 +64,15 @@ export default async function TeamPage({
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Client: כותרת הקבוצה (מ-cache או CSR או מהמשחקים) */}
-        <TeamPageClient
-          slug={teamSlug}
-          teamId={teamId}
-          fallbackName={teamName}
-          fallbackLogo={teamLogo}
-        />
+      {/* Client: כותרת הקבוצה (מ-cache או CSR או מהמשחקים) */}
+      <TeamPageClient
+        slug={teamSlug}
+        teamId={teamId}
+        fallbackName={teamName}
+        fallbackLogo={teamLogo}
+      />
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Client: משחקים עם נתוני SSR + פילטור דינמי */}
         <TeamFixturesWrapper
           teamId={teamId}

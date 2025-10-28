@@ -25,7 +25,7 @@ export function VenueFilter({
     : label;
 
   return (
-    <div className="relative w-full sm:w-80">
+    <div className="relative w-auto sm:w-80">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center justify-between w-full px-4 py-2 bg-white border border-primary rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
@@ -41,7 +41,7 @@ export function VenueFilter({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-primary rounded-lg z-10 max-h-64 overflow-y-auto">
+        <div className="absolute top-full right-0 sm:right-0 sm:w-auto w-auto min-w-full mt-1 bg-white shadow-lg rounded-lg z-[100] max-h-64 overflow-y-auto">
           <div className="py-1">
             <button
               onClick={() => {

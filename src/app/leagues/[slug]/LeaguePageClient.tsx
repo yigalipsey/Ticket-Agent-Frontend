@@ -91,13 +91,13 @@ export default function LeaguePageClient({
   }
 
   return (
-    <div className="bg-white">
+    <div className="">
       {/* Hero הליגה - מ-cache או CSR */}
       <LeagueHero league={league} />
 
       {/* קרוסלת קבוצות - מ-cache או CSR */}
       {teams && teams.length > 0 && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 mt-8 bg-white">
+        <div className="max-w-7xl mx-auto mt-3 md:mt-8 md:p-6 bg-white">
           <TeamCarousel teams={teams} />
         </div>
       )}

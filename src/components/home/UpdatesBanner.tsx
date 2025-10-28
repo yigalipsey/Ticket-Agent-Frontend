@@ -1,12 +1,11 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 
 export default function UpdatesBanner() {
   return (
     <section
-      className="relative mb-10 w-full  bg-black mx-auto max-w-[90%] sm:max-w-3xl md:max-w-4xl lg:max-w-5xl overflow-hidden rounded-2xl"
+      className="relative mb-16 w-full py-6 my-16 bg-black mx-auto max-w-[90%] sm:max-w-3xl md:max-w-4xl lg:max-w-5xl overflow-hidden rounded-2xl"
       aria-label="updates-banner"
       dir="rtl"
     >
@@ -36,7 +35,7 @@ export default function UpdatesBanner() {
         <div className="w-full mt-4 sm:mt-6 flex justify-center">
           <form
             onSubmit={(e) => e.preventDefault()}
-            className="w-full max-w-2xl mx-auto flex items-center justify-center gap-2"
+            className="w-full max-w-2xl mx-auto flex items-center justify-center gap-0"
           >
             <label htmlFor="updates-email" className="sr-only">
               דואר אלקטרוני
@@ -55,9 +54,8 @@ export default function UpdatesBanner() {
                 px-3 sm:px-4 md:px-6
                 bg-white/12 placeholder-white/80 text-white
                 text-right
-                rounded-md
-                md:rounded-l-none
-                focus:outline-none focus:ring-2 focus:ring-yellow-300
+                rounded-r-md rounded-l-none
+                outline-none
                 transition
               "
             />
@@ -69,7 +67,7 @@ export default function UpdatesBanner() {
                 h-10 sm:h-12 md:h-14
                 w-24 sm:w-32 md:w-40
                 bg-yellow-400 text-gray-900 font-semibold
-                rounded-md md:rounded-r-none
+                rounded-l-md rounded-r-none
                 hover:bg-yellow-300
                 transition
               "

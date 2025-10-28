@@ -14,3 +14,5 @@ export { default as TeamSearchBar } from "./TeamSearchBar";
 export { default as AccessibleMenu } from "./AccessibleMenu";
 export { default as Navbar } from "./Navbar";
 export { default as Footer } from "./Footer";
+export { ParchmentBackground } from "./ParchmentBackground";
+export { default as TeamPatternBackground } from "./TeamPatternBackground";

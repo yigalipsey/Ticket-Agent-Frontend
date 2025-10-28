@@ -14,7 +14,7 @@ export default function HotTeamsSection({ teams }: HotTeamsSectionProps) {
   const hotTeams = teams?.filter((team) => team.isPopular) || [];
 
   return (
-    <section className="pb-4 md:pb-8 bg-white">
+    <section className="pb-4 mt-4 md:pb-8 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader
           title={{

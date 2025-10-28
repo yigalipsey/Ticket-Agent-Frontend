@@ -216,6 +216,15 @@
   }
 }
 
+@keyframes patternFloat {
+  0% {
+    background-position: 0 0, 0 0, 0 0, 1em 1em;
+  }
+  100% {
+    background-position: 2em 2em, 2em 2em, 2em 2em, 3em 3em;
+  }
+}
+
 /* Print styles */
 @media print {
   .no-print {

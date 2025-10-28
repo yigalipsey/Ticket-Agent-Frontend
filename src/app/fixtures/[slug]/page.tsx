@@ -47,7 +47,7 @@ export default async function FixtureOffersPage({
     });
 
     // אם אין משחק, נחזיר notFound
-    if (!offersData.fixture) {
+    if (!offersData || !offersData.fixture) {
       notFound();
     }
 
@@ -57,44 +57,6 @@ export default async function FixtureOffersPage({
     if (!offersData.offers || offersData.offers.length === 0) {
       return (
         <div className="min-h-screen bg-white">
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <FixtureOfferHeader
-              homeTeam={{
-                name: fixture.homeTeam?.name || "קבוצה",
-                logo: fixture.homeTeam?.logoUrl || fixture.homeTeam?.logo || "",
-              }}
-              awayTeam={{
-                name: fixture.awayTeam?.name || "קבוצה",
-                logo: fixture.awayTeam?.logoUrl || fixture.awayTeam?.logo || "",
-              }}
-              date={fixture.date}
-              venue={{
-                name: fixture.venue?.name || "אצטדיון",
-                city: fixture.venue?.city,
-              }}
-              league={{
-                name: fixture.league?.name || "ליגה",
-              }}
-              totalOffers={0}
-            />
-
-            <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
-              <h2 className="text-2xl font-bold text-yellow-800 mb-4">
-                אין הצעות זמינות
-              </h2>
-              <p className="text-yellow-600">
-                כרגע אין הצעות זמינות למשחק זה. נסה שוב מאוחר יותר.
-              </p>
-            </div>
-          </main>
-        </div>
-      );
-    }
-
-    return (
-      <div className="min-h-screen bg-white">
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Fixture Info */}
           <FixtureOfferHeader
             homeTeam={{
               name: fixture.homeTeam?.name || "קבוצה",
@@ -112,9 +74,47 @@ export default async function FixtureOffersPage({
             league={{
               name: fixture.league?.name || "ליגה",
             }}
-            totalOffers={offersData.pagination?.total || 0}
+            totalOffers={0}
           />
 
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
+              <h2 className="text-2xl font-bold text-yellow-800 mb-4">
+                אין הצעות זמינות
+              </h2>
+              <p className="text-yellow-600">
+                כרגע אין הצעות זמינות למשחק זה. נסה שוב מאוחר יותר.
+              </p>
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    return (
+      <div className="min-h-screen bg-white">
+        {/* Fixture Info */}
+        <FixtureOfferHeader
+          homeTeam={{
+            name: fixture.homeTeam?.name || "קבוצה",
+            logo: fixture.homeTeam?.logoUrl || fixture.homeTeam?.logo || "",
+          }}
+          awayTeam={{
+            name: fixture.awayTeam?.name || "קבוצה",
+            logo: fixture.awayTeam?.logoUrl || fixture.awayTeam?.logo || "",
+          }}
+          date={fixture.date}
+          venue={{
+            name: fixture.venue?.name || "אצטדיון",
+            city: fixture.venue?.city,
+          }}
+          league={{
+            name: fixture.league?.name || "ליגה",
+          }}
+          totalOffers={offersData.pagination?.total || 0}
+        />
+
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Offers List */}
           <OffersList offers={offersData.offers || []} />
 

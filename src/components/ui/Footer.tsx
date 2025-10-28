@@ -11,50 +11,50 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-b from-gray-900 to-gray-950 text-white">
+    <footer className="bg-[#092274] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Column 1 - Navigation */}
           <div>
             <h4 className="text-lg font-bold mb-4 flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-primary" />
+              <Trophy className="w-5 h-5 text-white" />
               ניווט מהיר
             </h4>
-            <ul className="space-y-2 text-sm text-gray-300">
+            <ul className="space-y-2 text-sm">
               <li>
                 <Link
                   href="/leagues"
-                  className="hover:text-primary transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 hover:opacity-80"
                 >
-                  <span className="text-gray-500">›</span>
+                  <span className="text-white">›</span>
                   ליגות
                 </Link>
               </li>
               <li>
                 <Link
                   href="/teams"
-                  className="hover:text-primary transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 hover:opacity-80"
                 >
-                  <span className="text-gray-500">›</span>
+                  <span className="text-white">›</span>
                   קבוצות
                 </Link>
               </li>
               <li>
                 <Link
                   href="/fixtures"
-                  className="hover:text-primary transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 hover:opacity-80"
                 >
-                  <span className="text-gray-500">›</span>
+                  <span className="text-white">›</span>
                   משחקים
                 </Link>
               </li>
               <li>
                 <Link
                   href="/venues"
-                  className="hover:text-primary transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 hover:opacity-80"
                 >
-                  <span className="text-gray-500">›</span>
+                  <span className="text-white">›</span>
                   אצטדיונים
                 </Link>
               </li>
@@ -64,40 +64,40 @@ export default function Footer() {
           {/* Column 2 - About */}
           <div>
             <h4 className="text-lg font-bold mb-4">אודות</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
+            <ul className="space-y-2 text-sm">
               <li>
                 <Link
                   href="/about"
-                  className="hover:text-primary transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 hover:opacity-80"
                 >
-                  <span className="text-gray-500">›</span>
+                  <span className="text-white">›</span>
                   מי אנחנו
                 </Link>
               </li>
               <li>
                 <Link
                   href="/contact"
-                  className="hover:text-primary transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 hover:opacity-80"
                 >
-                  <span className="text-gray-500">›</span>
+                  <span className="text-white">›</span>
                   צור קשר
                 </Link>
               </li>
               <li>
                 <Link
                   href="/careers"
-                  className="hover:text-primary transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 hover:opacity-80"
                 >
-                  <span className="text-gray-500">›</span>
+                  <span className="text-white">›</span>
                   קריירה
                 </Link>
               </li>
               <li>
                 <Link
                   href="/partnerships"
-                  className="hover:text-primary transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 hover:opacity-80"
                 >
-                  <span className="text-gray-500">›</span>
+                  <span className="text-white">›</span>
                   שותפויות
                 </Link>
               </li>
@@ -107,40 +107,40 @@ export default function Footer() {
           {/* Column 3 - Support */}
           <div>
             <h4 className="text-lg font-bold mb-4">תמיכה</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
+            <ul className="space-y-2 text-sm">
               <li>
                 <Link
                   href="/help"
-                  className="hover:text-primary transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 hover:opacity-80"
                 >
-                  <span className="text-gray-500">›</span>
+                  <span className="text-white">›</span>
                   מרכז עזרה
                 </Link>
               </li>
               <li>
                 <Link
                   href="/faq"
-                  className="hover:text-primary transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 hover:opacity-80"
                 >
-                  <span className="text-gray-500">›</span>
+                  <span className="text-white">›</span>
                   שאלות נפוצות
                 </Link>
               </li>
               <li>
                 <Link
                   href="/privacy"
-                  className="hover:text-primary transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 hover:opacity-80"
                 >
-                  <span className="text-gray-500">›</span>
+                  <span className="text-white">›</span>
                   מדיניות פרטיות
                 </Link>
               </li>
               <li>
                 <Link
                   href="/terms"
-                  className="hover:text-primary transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 hover:opacity-80"
                 >
-                  <span className="text-gray-500">›</span>
+                  <span className="text-white">›</span>
                   תנאי שימוש
                 </Link>
               </li>
@@ -150,22 +150,19 @@ export default function Footer() {
           {/* Column 4 - Contact */}
           <div>
             <h4 className="text-lg font-bold mb-4">צור קשר</h4>
-            <ul className="space-y-3 text-sm text-gray-300">
+            <ul className="space-y-3 text-sm">
               <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-primary" />
+                <Mail className="w-4 h-4 text-white" />
                 <a
                   href="mailto:info@ticketagent.com"
-                  className="hover:text-primary transition-colors"
+                  className="hover:opacity-80"
                 >
                   info@ticketagent.com
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-primary" />
-                <a
-                  href="tel:+972123456789"
-                  className="hover:text-primary transition-colors"
-                >
+                <Phone className="w-4 h-4 text-white" />
+                <a href="tel:+972123456789" className="hover:opacity-80">
                   072-123-4567
                 </a>
               </li>
@@ -177,31 +174,31 @@ export default function Footer() {
               <div className="flex gap-3">
                 <a
                   href="#"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-primary/20 flex items-center justify-center transition-colors"
+                  className="w-9 h-9 rounded-full bg-white/20 hover:opacity-80 flex items-center justify-center transition"
                   aria-label="פייסבוק"
                 >
-                  <Facebook className="w-4 h-4" />
+                  <Facebook className="w-4 h-4 text-white" />
                 </a>
                 <a
                   href="#"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-primary/20 flex items-center justify-center transition-colors"
+                  className="w-9 h-9 rounded-full bg-white/20 hover:opacity-80 flex items-center justify-center transition"
                   aria-label="טוויטר"
                 >
-                  <Twitter className="w-4 h-4" />
+                  <Twitter className="w-4 h-4 text-white" />
                 </a>
                 <a
                   href="#"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-primary/20 flex items-center justify-center transition-colors"
+                  className="w-9 h-9 rounded-full bg-white/20 hover:opacity-80 flex items-center justify-center transition"
                   aria-label="אינסטגרם"
                 >
-                  <Instagram className="w-4 h-4" />
+                  <Instagram className="w-4 h-4 text-white" />
                 </a>
                 <a
                   href="#"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-primary/20 flex items-center justify-center transition-colors"
+                  className="w-9 h-9 rounded-full bg-white/20 hover:opacity-80 flex items-center justify-center transition"
                   aria-label="יוטיוב"
                 >
-                  <Youtube className="w-4 h-4" />
+                  <Youtube className="w-4 h-4 text-white" />
                 </a>
               </div>
             </div>
@@ -209,23 +206,23 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-gray-800">
+        <div className="pt-8 border-t border-white/30">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             {/* Logo */}
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-white/30 rounded-lg flex items-center justify-center">
                 <Trophy className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-bold">TicketAgent</h3>
-                <p className="text-xs text-gray-400">
+                <h3 className="text-lg font-bold text-white">TicketAgent</h3>
+                <p className="text-xs text-white">
                   השוואת כרטיסים למשחקי כדורגל
                 </p>
               </div>
             </div>
 
             {/* Copyright */}
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-white">
               &copy; {new Date().getFullYear()} TicketAgent. כל הזכויות שמורות.
             </p>
           </div>

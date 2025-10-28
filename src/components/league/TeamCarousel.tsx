@@ -81,21 +81,35 @@ export function TeamCarousel({ teams }: LeagueTeamsSectionProps) {
                 className="group flex flex-col items-center text-center space-y-2 p-2"
               >
                 {team.logoUrl ? (
-                  <div className="rounded-full p-[1px] transition-transform group-hover:scale-105 w-[80px] h-[80px] md:w-[120px] md:h-[120px] bg-gray-900">
-                    <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                  <div className="rounded-full p-[1px] transition-transform group-hover:scale-105 w-[80px] h-[80px] md:w-[120px] md:h-[120px] bg-primary">
+                    <div
+                      className="relative w-full h-full rounded-full flex items-center justify-center"
+                      style={{
+                        background: "white",
+                        backgroundImage:
+                          "repeating-linear-gradient(45deg, transparent, transparent 10px, #e0e0e0 10px, #e0e0e0 11px)",
+                      }}
+                    >
                       <Image
                         src={team.logoUrl}
                         alt={`לוגו ${team.name}`}
                         width={60}
                         height={60}
-                        className="object-contain w-10 h-10 md:w-16 md:h-16"
+                        className="object-contain w-12 h-12 md:w-20 md:h-20 relative z-10"
                       />
                     </div>
                   </div>
                 ) : (
-                  <div className="rounded-full p-[1px] w-[80px] h-[80px] md:w-[120px] md:h-[120px] bg-gray-900">
-                    <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
-                      <span className="text-gray-900 text-xl md:text-2xl font-medium">
+                  <div className="rounded-full p-[1px] w-[80px] h-[80px] md:w-[120px] md:h-[120px] bg-primary">
+                    <div
+                      className="relative w-full h-full rounded-full flex items-center justify-center"
+                      style={{
+                        background: "white",
+                        backgroundImage:
+                          "repeating-linear-gradient(45deg, transparent, transparent 10px, #e0e0e0 10px, #e0e0e0 11px)",
+                      }}
+                    >
+                      <span className="text-gray-900 text-xl md:text-2xl font-medium relative z-10">
                         {team.name.charAt(0)}
                       </span>
                     </div>
