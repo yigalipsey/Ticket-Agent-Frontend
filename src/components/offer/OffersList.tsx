@@ -21,12 +21,20 @@ interface OffersListProps {
   offers: Offer[];
   isLoading?: boolean;
   error?: string | null;
+  homeTeam?: { name: string };
+  awayTeam?: { name: string };
 }
 
-export function OffersList({ offers, isLoading, error }: OffersListProps) {
+export function OffersList({
+  offers,
+  isLoading,
+  error,
+  homeTeam,
+  awayTeam,
+}: OffersListProps) {
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center py-12">
+      <div className="flex justify-center items-center py-0">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
@@ -50,6 +58,15 @@ export function OffersList({ offers, isLoading, error }: OffersListProps) {
 
   return (
     <div className="flex flex-col gap-4">
+      {/* Price comparison text - above offers list */}
+      {homeTeam && awayTeam && (
+        <div className="mb-4 mt-0">
+          <h1 className="text-lg md:text-xl font-semibold text-gray-900 text-right">
+            השוואת מחירי כרטיסים ל&apos;{homeTeam.name} נגד {awayTeam.name}
+          </h1>
+        </div>
+      )}
+
       {offers.map((offer) => (
         <OfferCard key={offer._id} offer={offer} />
       ))}

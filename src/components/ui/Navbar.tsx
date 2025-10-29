@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useAgentAuth } from "@/providers";
 import HamburgerButton from "./HamburgerButton";
 
@@ -9,6 +11,11 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { agent, isAuthenticated, logout } = useAgentAuth();
+  const pathname = usePathname();
+
+  // דפים שבהם הלוגו לא יופיע במובייל
+  const hideLogoOnMobile = ["/", "/leagues", "/teams"];
+  const showMobileLogo = !hideLogoOnMobile.includes(pathname);
 
   // הסתר ניווט רגיל אם המשתמש הוא סוכן
   const navigationItems =
@@ -38,6 +45,35 @@ export default function Navbar() {
     <nav className="absolute top-0 left-0 right-0 z-[99999] bg-transparent pointer-events-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
+          {/* Brand Logo - בדסקטופ תמיד, במובייל רק שלא בדפים ראשי/ליגות/קבוצות */}
+          <div
+            className={`${
+              showMobileLogo ? "flex" : "hidden"
+            } md:flex items-center order-2 md:order-1 pointer-events-auto`}
+          >
+            <Link
+              href="/"
+              className="flex items-center hover:opacity-80 transition-opacity overflow-hidden bg-primary rounded-lg shadow-lg"
+              onClick={closeMobileMenu}
+            >
+              <div
+                className="h-10 w-auto md:h-14"
+                style={{
+                  filter: "brightness(0) invert(1)",
+                }}
+              >
+                <Image
+                  src="/logo.svg"
+                  alt="TicketAgent"
+                  width={400}
+                  height={200}
+                  className="h-full w-auto object-contain"
+                  priority
+                />
+              </div>
+            </Link>
+          </div>
+
           {/* User Menu - Desktop */}
           <div className="hidden md:flex items-center pointer-events-auto">
             {isAuthenticated ? (
@@ -118,7 +154,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Mobile menu button - מובייל: שמאל, דסקטופ: נסתר */}
+          {/* Mobile menu button - מובייל: ימין, דסקטופ: נסתר */}
           {/* המבורגר נשאר באותו מקום גם כשהוא פתוח - עם z-index גבוה כדי שיהיה מעל התפריט */}
           <div
             className={`md:hidden order-1 md:order-2 pointer-events-auto relative ${

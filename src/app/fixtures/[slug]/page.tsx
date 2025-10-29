@@ -57,7 +57,7 @@ export default async function FixtureOffersPage({
     if (!offersData.offers || offersData.offers.length === 0) {
       return (
         <div className="min-h-screen bg-white">
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
             <FixtureOfferHeader
               homeTeam={{
                 name: fixture.homeTeam?.name || "קבוצה",
@@ -114,9 +114,17 @@ export default async function FixtureOffersPage({
           totalOffers={offersData.pagination?.total || 0}
         />
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
           {/* Offers List */}
-          <OffersList offers={offersData.offers || []} />
+          <OffersList
+            offers={offersData.offers || []}
+            homeTeam={{
+              name: fixture.homeTeam?.name || "קבוצה",
+            }}
+            awayTeam={{
+              name: fixture.awayTeam?.name || "קבוצה",
+            }}
+          />
 
           {/* Pagination Info */}
           {offersData.pagination && offersData.pagination.total > 0 && (
@@ -132,7 +140,7 @@ export default async function FixtureOffersPage({
     console.error("Error loading fixture offers:", error);
     return (
       <div className="min-h-screen bg-white">
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
           <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
             <h2 className="text-2xl font-bold text-red-800 mb-4">שגיאה</h2>
             <p className="text-red-600">
