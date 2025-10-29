@@ -164,6 +164,7 @@ export class FixtureService {
       limit?: string;
       upcoming?: string;
       locale?: string;
+      hasOffers?: string | boolean;
     } = {}
   ): Promise<Fixture[]> {
     try {

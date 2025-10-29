@@ -82,11 +82,15 @@ class AgentAuthService {
    */
   async getCurrentAgent(): Promise<Agent | null> {
     try {
-      // Get agent info using iron-session
-      const response = await apiClient.get("/api/auth/agent/me");
+      // Get agent info from backend using cookie-based authentication
+      // getAuth already extracts data from { success: true, data: ... } response
+      const agent = (await apiClient.getAuth(
+        "/auth/agent/me",
+        {},
+        "agent"
+      )) as Agent;
 
-      if (response.success) {
-        const agent = response.data;
+      if (agent && agent._id) {
         this.agent = agent;
         return agent;
       }

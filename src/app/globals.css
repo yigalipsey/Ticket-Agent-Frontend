@@ -9,9 +9,10 @@
     --font-rubik: "Rubik", system-ui, sans-serif;
   }
 
-  * {
+  /* Removed global border to prevent unwanted borders */
+  /* * {
     @apply border-gray-200;
-  }
+  } */
 
   body {
     @apply bg-white text-gray-900;
@@ -38,9 +39,13 @@
     scroll-behavior: smooth;
   }
 
-  /* Focus styles */
+  /* Focus styles - removed to prevent unwanted borders/rings */
   *:focus {
-    @apply outline-none ring-2 ring-primary-dark ring-offset-2;
+    @apply outline-none;
+  }
+
+  *:focus-visible {
+    @apply outline-none;
   }
 
   /* Custom scrollbar */

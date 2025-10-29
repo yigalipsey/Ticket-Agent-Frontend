@@ -1,7 +1,8 @@
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://ticketagent.com";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://www.ticketagent.co.il";
 
   // For now, just return static URLs without trying to fetch leagues from API
   // This prevents build errors when backend is not available

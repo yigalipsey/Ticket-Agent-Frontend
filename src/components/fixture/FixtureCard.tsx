@@ -52,7 +52,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
           }`}
         >
           {/* Date Box - Right side (start in RTL), aligned to top */}
-          <div className="flex flex-col items-center justify-start bg-gray-50 px-3 py-2 rounded flex-shrink-0 w-20 mt-1">
+          <div className="flex flex-col items-center justify-start bg-gray-50 px-3 py-2 rounded flex-shrink-0 w-20 h-20 mt-1">
             <span className="text-xs text-gray-500">{dayOfWeek}</span>
             <span className="text-xl font-bold text-gray-900">
               {day}/{month}
@@ -165,16 +165,10 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
 
             {/* Mobile layout - text only */}
             <div className="md:hidden flex flex-col flex-1 w-full min-w-0 gap-1 text-right">
-              <div className="flex items-center gap-2 w-full">
-                <span className="text-base font-medium text-gray-900">
-                  {fixture.homeTeam.name}
-                </span>
-                <span className="text-base font-medium text-gray-400 px-1">
-                  נגד
-                </span>
-                <span className="text-base font-medium text-gray-900">
-                  {fixture.awayTeam.name}
-                </span>
+              <div className="flex items-center flex-wrap w-full text-base font-medium text-gray-900">
+                <span>{fixture.homeTeam.name}</span>
+                <span className="text-gray-400 mx-1">נגד</span>
+                <span>{fixture.awayTeam.name}</span>
               </div>
               {/* Venue on mobile */}
               {showVenue && fixture.venue && (

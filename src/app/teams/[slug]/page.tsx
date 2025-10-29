@@ -36,6 +36,7 @@ export default async function TeamPage({
       const fixturesResult = await FixtureService.getTeamFixtures(teamId, {
         limit: "1000", // כל המשחקים
         upcoming: "true",
+        hasOffers: "true", // ליוזר רגיל - רק משחקים עם הצעות
       });
       fixtures = fixturesResult || [];
 

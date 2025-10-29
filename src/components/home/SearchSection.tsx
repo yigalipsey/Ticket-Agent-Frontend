@@ -22,11 +22,6 @@ export default function SearchSection() {
     router.push(`/fixtures/${fixture.slug}`);
   };
 
-  const handleFilterClick = () => {
-    // TODO: Implement filter functionality
-    console.log("Filter clicked");
-  };
-
   return (
     <section className="w-[90%] md:max-w-[500px] mx-auto relative z-[10000]">
       <div className="bg-white/20 backdrop-blur-sm rounded-lg shadow-lg">
@@ -34,8 +29,6 @@ export default function SearchSection() {
           placeholder="חפש קבוצות..."
           onTeamSelect={handleTeamSelect}
           onFixtureSelect={handleFixtureSelect}
-          onFilterClick={handleFilterClick}
-          showFilters={true}
           size="lg"
           limit={5}
           fixturesLimit={4}

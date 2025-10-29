@@ -21,7 +21,8 @@ export function generateSEOMetadata({
   locale = "he_IL",
   alternateLocales = { en: "/en" },
 }: SEOProps): Metadata {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://ticketagent.com";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://www.ticketagent.co.il";
   const fullUrl = url ? `${baseUrl}${url}` : baseUrl;
   const fullImageUrl = image.startsWith("http") ? image : `${baseUrl}${image}`;
 
@@ -145,7 +146,8 @@ export function generateStructuredData(
   type: string,
   data: Record<string, unknown>
 ) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://ticketagent.com";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://www.ticketagent.co.il";
 
   switch (type) {
     case "organization":
@@ -252,7 +254,8 @@ export function generateStructuredData(
 export function generateBreadcrumbStructuredData(
   items: Array<{ name: string; url: string }>
 ) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://ticketagent.com";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://www.ticketagent.co.il";
 
   return {
     "@context": "https://schema.org",

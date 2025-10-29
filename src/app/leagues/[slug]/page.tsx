@@ -42,8 +42,13 @@ export default async function LeaguePage({
       page: 1,
       hasOffers: true, // משיכת רק משחקים עם הצעות
     });
+
     if (fixturesResult.success && fixturesResult.data) {
       fixtures = fixturesResult.data.fixtures || [];
+      // אם fixturesResult.data הוא מערך ישירות
+      if (Array.isArray(fixturesResult.data)) {
+        fixtures = fixturesResult.data;
+      }
     }
   }
 

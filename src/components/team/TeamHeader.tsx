@@ -22,7 +22,7 @@ export function TeamHeader({
   showComparisonText = false,
 }: TeamHeaderProps) {
   return (
-    <section className="relative w-full h-[400px] md:h-[450px]">
+    <section className="relative w-full h-[300px] md:h-[400px]">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -82,7 +82,7 @@ export function TeamHeader({
 // Loading ו-Error states
 export function TeamHeaderLoading() {
   return (
-    <section className="relative w-full h-[400px] md:h-[450px]">
+    <section className="relative w-full h-[300px] md:h-[400px]">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image

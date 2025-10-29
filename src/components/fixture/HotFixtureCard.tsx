@@ -167,20 +167,16 @@ const HotFixtureCard: React.FC<HotFixtureCardProps> = ({
         {/* Get Tickets Button */}
         <Link
           href={`/fixtures/${fixture.slug}?id=${fixture._id || fixture.id}`}
-          className="w-full"
+          className="w-full mb-3"
         >
-          <Button
-            variant="primary"
-            size={isCompact ? "sm" : "md"}
-            className="w-full mb-3"
-            rightIcon={
-              <Ticket
-                className={`${isCompact ? "w-3 h-3 mr-1" : "w-4 h-4 mr-2"}`}
-              />
-            }
+          <button
+            className={`w-full bg-primary text-white font-medium rounded-lg ${
+              isCompact ? "px-3 py-2 text-sm" : "px-4 py-2 text-base"
+            } flex items-center justify-center gap-2`}
           >
             השווה מחירים
-          </Button>
+            <Ticket className={isCompact ? "w-3 h-3" : "w-4 h-4"} />
+          </button>
         </Link>
 
         {/* Location */}

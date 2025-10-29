@@ -26,6 +26,9 @@ class ApiClient {
         if (error.response?.status === 401) {
           // Unauthorized - cookies are handled automatically by the browser
           // No need to clear localStorage since we use cookies
+          console.warn(
+            "[API] 401 Unauthorized - Token may be missing or invalid"
+          );
         }
         return Promise.reject(error);
       }

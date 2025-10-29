@@ -59,7 +59,7 @@ const TeamSearchBar: React.FC<TeamSearchBarProps> = ({
   const sizes = {
     sm: "h-8 px-3 text-sm",
     md: "h-10 md:h-14 px-4 text-base",
-    lg: "h-12 px-6 text-lg",
+    lg: "h-12 md:h-16 px-6 text-lg",
   };
 
   const handleInputChange = useCallback(
@@ -181,7 +181,7 @@ const TeamSearchBar: React.FC<TeamSearchBarProps> = ({
             <button
               type="submit"
               disabled={disabled || isLoading}
-              className="bg-primary hover:bg-primary/90 text-white rounded-lg px-4 py-2 transition-colors"
+              className="bg-primary hover:bg-primary/90 text-white rounded-lg px-4 py-2 md:py-3 transition-colors"
             >
               <Search className="h-4 w-4" />
             </button>
