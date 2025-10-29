@@ -38,17 +38,6 @@ export default function Navbar() {
     <nav className="absolute top-0 left-0 right-0 z-[99999] bg-transparent pointer-events-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Brand - מובייל: ימין, דסקטופ: שמאל */}
-          <div className="flex items-center order-2 md:order-1 pointer-events-auto">
-            <Link
-              href="/"
-              className="text-xl font-bold text-white hover:text-white/80 transition-colors"
-              onClick={closeMobileMenu}
-            >
-              TicketAgent
-            </Link>
-          </div>
-
           {/* User Menu - Desktop */}
           <div className="hidden md:flex items-center pointer-events-auto">
             {isAuthenticated ? (

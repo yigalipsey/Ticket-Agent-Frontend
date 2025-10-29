@@ -82,6 +82,13 @@ const LeagueList: React.FC<LeagueListProps> = ({
   return (
     <div className={className}>
       <div className="relative bg-white">
+        {/* Title */}
+        <div className="text-right mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+            בחר ליגה
+          </h2>
+        </div>
+
         <div className="flex items-center gap-2 md:gap-4">
           {/* כפתור שמאלי - גלילה שמאלה (קדימה) */}
           {leagues.length > 3 && (

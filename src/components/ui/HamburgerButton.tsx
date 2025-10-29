@@ -23,7 +23,7 @@ export default function HamburgerButton({
       onClick={onClick}
       className={cn(
         "relative flex flex-col items-center justify-center p-2",
-        "bg-[rgb(27,27,27)] rounded-xl",
+        "bg-white/20 backdrop-blur-sm rounded-xl",
         "transition-all duration-[0.4s]",
         "focus:outline-none active:outline-none",
         "touch-manipulation",
@@ -36,7 +36,7 @@ export default function HamburgerButton({
         {/* Bar 1 - Top */}
         <div
           className={cn(
-            "rounded-full bg-white w-8 mb-2.5",
+            "rounded-full bg-primary w-8 mb-2.5",
             "transition-all duration-[0.4s] h-0.5",
             isOpen && "opacity-0 w-5"
           )}
@@ -45,7 +45,7 @@ export default function HamburgerButton({
         {/* Bar 2 - Middle (absolute, rotates on open) */}
         <div
           className={cn(
-            "rounded-full bg-white w-8 h-0.5",
+            "rounded-full bg-primary w-8 h-0.5",
             "absolute transition-all duration-[0.4s]",
             isOpen && "rotate-45"
           )}
@@ -54,7 +54,7 @@ export default function HamburgerButton({
         {/* Bar 3 - Middle (absolute, rotates on open) */}
         <div
           className={cn(
-            "rounded-full bg-white w-8 h-0.5",
+            "rounded-full bg-primary w-8 h-0.5",
             "absolute transition-all duration-[0.4s]",
             isOpen && "-rotate-45"
           )}
@@ -63,7 +63,7 @@ export default function HamburgerButton({
         {/* Bar 4 - Bottom */}
         <div
           className={cn(
-            "rounded-full bg-white w-8 mt-2.5",
+            "rounded-full bg-primary w-8 mt-2.5",
             "transition-all duration-[0.4s] h-0.5",
             isOpen && "opacity-0 w-5"
           )}

@@ -180,7 +180,7 @@ const HotFixtureCard: React.FC<HotFixtureCardProps> = ({
         </Link>
 
         {/* Location */}
-        <div className="flex items-center justify-center space-x-1 space-x-reverse text-gray-600">
+        <div className="flex items-center justify-center space-x-1 space-x-reverse text-gray-600 mt-2">
           <MapPin className="w-3 h-3 text-primary" />
           <span className="text-xs">
             {fixture.venue?.nameHe || fixture.venue?.name || "מיקום לא זמין"}

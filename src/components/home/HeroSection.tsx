@@ -1,9 +1,10 @@
 import React from "react";
+import Image from "next/image";
 import SearchSection from "@/components/home/SearchSection";
 
 export default function HeroSection() {
   return (
-    <section className="relative h-[55vh] md:h-[450px] w-full">
+    <section className="relative h-[55vh]  md:h-[450px] w-full">
       {/* Background Video */}
       <video
         className="absolute inset-0 w-full h-full object-cover"
@@ -26,6 +27,27 @@ export default function HeroSection() {
       {/* Content */}
       <div className="relative z-[99998] flex items-center justify-center h-full">
         <div className="flex flex-col items-center gap-4 md:gap-8 px-4 w-full md:max-w-4xl mx-auto">
+          {/* Logo */}
+          <div className="flex items-center justify-center -mb-1 md:-mb-2">
+            <div className="bg-primary rounded-lg shadow-lg px-3 py-2">
+              <div
+                className="h-12 w-auto md:h-14"
+                style={{
+                  filter: "brightness(0) invert(1)",
+                }}
+              >
+                <Image
+                  src="/logo.svg"
+                  alt="TicketAgent"
+                  width={400}
+                  height={200}
+                  className="h-full w-auto object-contain"
+                  priority
+                />
+              </div>
+            </div>
+          </div>
+
           <p className="text-3xl md:text-[56px] text-gray-200 animate-slide-up leading-tight font-extrabold text-center">
             השוואת מחירי כרטיסים
             <br />
