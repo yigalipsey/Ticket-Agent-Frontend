@@ -53,7 +53,7 @@ export default function Navbar() {
           >
             <Link
               href="/"
-              className="flex items-center hover:opacity-80 transition-opacity overflow-hidden bg-primary rounded-lg shadow-lg"
+              className="flex items-center hover:opacity-80 transition-opacity overflow-hidden rounded-lg shadow-lg"
               onClick={closeMobileMenu}
             >
               <div
@@ -65,8 +65,8 @@ export default function Navbar() {
                 <Image
                   src="/logo.svg"
                   alt="TicketAgent"
-                  width={400}
-                  height={200}
+                  width={300}
+                  height={150}
                   className="h-full w-auto object-contain"
                   priority
                 />
@@ -180,7 +180,7 @@ export default function Navbar() {
             />
 
             {/* Sidebar */}
-            <div className="fixed top-0 right-0 h-screen w-64 bg-white shadow-xl z-[99999] md:hidden pointer-events-auto overflow-y-auto">
+            <div className="fixed top-0 right-0 h-screen w-full bg-white shadow-xl z-[99999] md:hidden pointer-events-auto overflow-y-auto">
               <div className="flex flex-col h-full">
                 {/* Navigation Items */}
                 <div className="flex-1 px-4 mt-12 py-4 space-y-2">

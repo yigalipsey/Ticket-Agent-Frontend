@@ -117,6 +117,7 @@ export default function OfferForm({
             <option value="ILS">₪ שקל</option>
             <option value="USD">$ דולר</option>
             <option value="EUR">€ יורו</option>
+            <option value="GBP">£ לירה שטרלינג</option>
           </select>
         </div>
 

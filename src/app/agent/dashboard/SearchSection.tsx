@@ -18,8 +18,8 @@ export default function SearchSection() {
   const handleFixtureSelect = (fixture: SearchFixture) => {
     console.log("Selected fixture:", fixture);
 
-    // Navigate to agent fixture page
-    router.push(`/agent/fixtures/${fixture.slug}`);
+    // Navigate to agent fixture page with ID
+    router.push(`/agent/fixtures/${fixture.slug}?id=${fixture._id}`);
   };
 
   const handleFilterClick = () => {

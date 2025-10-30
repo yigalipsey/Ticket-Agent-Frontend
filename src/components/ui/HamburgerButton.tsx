@@ -22,53 +22,47 @@ export default function HamburgerButton({
     <button
       onClick={onClick}
       className={cn(
-        "relative flex flex-col items-center justify-center p-2",
-        "bg-white/20 backdrop-blur-sm rounded-xl",
-        "transition-all duration-[0.4s]",
-        "focus:outline-none active:outline-none",
-        "touch-manipulation",
+        "relative w-8 h-6 bg-transparent cursor-pointer block border-0 p-0",
+        "focus:outline-none",
         className
       )}
       aria-label={ariaLabel}
       aria-expanded={ariaExpanded ?? isOpen}
+      type="button"
     >
-      <div className="relative flex flex-col items-center justify-center h-8">
-        {/* Bar 1 - Top */}
-        <div
-          className={cn(
-            "rounded-full bg-primary w-8 mb-2.5",
-            "transition-all duration-[0.4s] h-0.5",
-            isOpen && "opacity-0 w-5"
-          )}
-        />
-
-        {/* Bar 2 - Middle (absolute, rotates on open) */}
-        <div
-          className={cn(
-            "rounded-full bg-primary w-8 h-0.5",
-            "absolute transition-all duration-[0.4s]",
-            isOpen && "rotate-45"
-          )}
-        />
-
-        {/* Bar 3 - Middle (absolute, rotates on open) */}
-        <div
-          className={cn(
-            "rounded-full bg-primary w-8 h-0.5",
-            "absolute transition-all duration-[0.4s]",
-            isOpen && "-rotate-45"
-          )}
-        />
-
-        {/* Bar 4 - Bottom */}
-        <div
-          className={cn(
-            "rounded-full bg-primary w-8 mt-2.5",
-            "transition-all duration-[0.4s] h-0.5",
-            isOpen && "opacity-0 w-5"
-          )}
-        />
-      </div>
+      <span
+        className={cn(
+          "block absolute w-full rounded-[9px] opacity-100 right-0",
+          "transition-all duration-[0.25s] ease-in-out",
+          "origin-right center",
+          isOpen
+            ? "bg-white rotate-45 top-0 right-[4px]"
+            : "bg-white top-0 rotate-0"
+        )}
+        style={{ height: "3px" }}
+      />
+      <span
+        className={cn(
+          "block absolute w-full rounded-[9px] right-0",
+          "transition-all duration-[0.25s] ease-in-out",
+          "origin-right center",
+          isOpen
+            ? "bg-white w-0 opacity-0 top-1/2 -translate-y-1/2"
+            : "bg-white opacity-100 top-1/2 -translate-y-1/2"
+        )}
+        style={{ height: "3px" }}
+      />
+      <span
+        className={cn(
+          "block absolute w-full rounded-[9px] opacity-100 right-0",
+          "transition-all duration-[0.25s] ease-in-out",
+          "origin-right center",
+          isOpen
+            ? "bg-white rotate-[-45deg] top-[21px] right-[4px]"
+            : "bg-white bottom-0 translate-y-full"
+        )}
+        style={{ height: "3px" }}
+      />
     </button>
   );
 }

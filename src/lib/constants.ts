@@ -24,6 +24,7 @@ export const CURRENCIES = {
   ILS: "₪",
   USD: "$",
   EUR: "€",
+  GBP: "£",
 } as const;
 
 // Date Formats

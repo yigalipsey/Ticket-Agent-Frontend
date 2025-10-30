@@ -29,7 +29,7 @@ export default function HeroSection() {
         <div className="flex flex-col items-center gap-4 md:gap-8 px-4 w-full md:max-w-4xl mx-auto">
           {/* Logo - רק במובייל */}
           <div className="flex items-center justify-center -mb-1 md:hidden">
-            <div className="bg-primary rounded-lg shadow-lg px-3 py-2">
+            <div className=" rounded-lg shadow-lg px-3 py-2">
               <div
                 className="h-20 w-auto"
                 style={{

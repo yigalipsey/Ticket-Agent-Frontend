@@ -39,6 +39,7 @@ export function formatCurrency(
     ILS: "₪",
     USD: "$",
     EUR: "€",
+    GBP: "£",
   };
 
   const symbol = symbols[currency as keyof typeof symbols] || currency;

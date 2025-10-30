@@ -48,6 +48,7 @@ export default function OfferFormFields({
         >
           <option value="EUR">EUR (יורו)</option>
           <option value="USD">USD (דולר אמריקאי)</option>
+          <option value="GBP">GBP (לירה שטרלינג)</option>
           <option value="ILS">ILS (שקל)</option>
         </select>
       </div>
@@ -86,4 +87,3 @@ export default function OfferFormFields({
     </div>
   );
 }
-

@@ -21,7 +21,7 @@ export interface CreateOfferResponse {
 class OfferService {
   async getFixtureIdBySlug(slug: string) {
     try {
-      const response = await apiClient.get(`/fixtures/slug/${slug}`);
+      const response = await apiClient.get(`/fixtures/by-slug/${slug}`);
       return response;
     } catch {
       return null;

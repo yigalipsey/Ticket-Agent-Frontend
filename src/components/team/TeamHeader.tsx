@@ -33,7 +33,10 @@ export function TeamHeader({
           priority
         />
         {/* Color Overlay */}
-        <div className="absolute inset-0" />
+        <div
+          className="absolute inset-0"
+          style={{ backgroundColor: "#09227459" }}
+        />
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40" />
       </div>
@@ -95,7 +98,7 @@ export function TeamHeaderLoading() {
         {/* Color Overlay */}
         <div
           className="absolute inset-0"
-          style={{ backgroundColor: "#0A297E60" }}
+          style={{ backgroundColor: "#09227459" }}
         />
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40" />

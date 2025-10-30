@@ -18,8 +18,8 @@ export default function SearchSection() {
   const handleFixtureSelect = (fixture: SearchFixture) => {
     console.log("Selected fixture:", fixture);
 
-    // Navigate to fixture page using the slug
-    router.push(`/fixtures/${fixture.slug}`);
+    // Navigate to fixture page using the slug and ID
+    router.push(`/fixtures/${fixture.slug}?id=${fixture._id}`);
   };
 
   return (

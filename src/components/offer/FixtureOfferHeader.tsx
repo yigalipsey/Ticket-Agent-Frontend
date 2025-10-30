@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { MapPin } from "lucide-react";
 
 interface FixtureOfferHeaderProps {
   homeTeam: { name: string; logo?: string };
@@ -125,9 +126,12 @@ export function FixtureOfferHeader({
 
             {/* Venue small under teams */}
             {venue && (
-              <div className="mt-4 text-sm text-white/80 px-3 py-1 bg-black/20 rounded">
-                {venue.name}
-                {venue.city ? `, ${venue.city}` : ""}
+              <div className="mt-4 text-sm text-white/80 px-3 py-1 bg-black/20 rounded flex items-center gap-2">
+                <MapPin className="w-4 h-4 flex-shrink-0" />
+                <span>
+                  {venue.name}
+                  {venue.city ? `, ${venue.city}` : ""}
+                </span>
               </div>
             )}
           </div>
