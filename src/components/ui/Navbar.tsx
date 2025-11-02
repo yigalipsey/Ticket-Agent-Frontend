@@ -13,9 +13,9 @@ export default function Navbar() {
   const { agent, isAuthenticated, logout } = useAgentAuth();
   const pathname = usePathname();
 
-  // דפים שבהם הלוגו לא יופיע במובייל
-  const hideLogoOnMobile = ["/", "/leagues", "/teams"];
-  const showMobileLogo = !hideLogoOnMobile.includes(pathname);
+  // בדף הבית הלוגו יופיע רק כשהוא בתפריט הפתוח, בדסקטופ תמיד
+  const isHomePage = pathname === "/";
+  const showMobileLogo = isHomePage ? isMobileMenuOpen : true;
 
   // הסתר ניווט רגיל אם המשתמש הוא סוכן
   const navigationItems =
@@ -49,9 +49,11 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Brand Logo - תמיד מופיע במובייל ובדסקטופ */}
+          {/* Brand Logo - בדף הבית מופיע רק כשהוא בתפריט פתוח, בשאר הדפים תמיד */}
           <div
-            className={`flex md:flex items-center order-2 md:order-1 pointer-events-auto ${
+            className={`${
+              showMobileLogo ? "flex" : "hidden"
+            } md:flex items-center order-2 md:order-1 pointer-events-auto ${
               isMobileMenuOpen ? "z-[10000000]" : ""
             }`}
           >
