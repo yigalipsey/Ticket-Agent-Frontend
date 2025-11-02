@@ -135,10 +135,48 @@ export default function LeagueFixtures({
         />
       )}
 
-      {/* טוען */}
+      {/* טוען - Skeleton */}
       {isLoading && (
-        <div className="text-center py-12">
-          <p className="text-gray-500">טוען משחקים...</p>
+        <div className="flex flex-col gap-3">
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={i}
+              className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm animate-pulse"
+            >
+              <div className="flex justify-between items-center gap-4">
+                {/* Home Team */}
+                <div className="flex items-center gap-3 flex-1">
+                  <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+                  <div className="space-y-2 flex-1">
+                    <div className="h-4 bg-gray-200 rounded w-24"></div>
+                    <div className="h-3 bg-gray-200 rounded w-16"></div>
+                  </div>
+                </div>
+
+                {/* Match Info */}
+                <div className="flex flex-col items-center gap-2 min-w-[120px]">
+                  <div className="h-4 bg-gray-200 rounded w-20"></div>
+                  <div className="h-3 bg-gray-200 rounded w-16"></div>
+                  <div className="h-3 bg-gray-200 rounded w-24"></div>
+                </div>
+
+                {/* Away Team */}
+                <div className="flex items-center gap-3 flex-1 justify-end">
+                  <div className="space-y-2 flex-1 text-right">
+                    <div className="h-4 bg-gray-200 rounded w-24 ml-auto"></div>
+                    <div className="h-3 bg-gray-200 rounded w-16 ml-auto"></div>
+                  </div>
+                  <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+                </div>
+              </div>
+
+              {/* Offers Info Skeleton */}
+              <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+                <div className="h-4 bg-gray-200 rounded w-32"></div>
+                <div className="h-8 bg-gray-200 rounded w-24"></div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
