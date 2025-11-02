@@ -5,27 +5,49 @@ import { CURRENCIES } from "@/lib/constants";
 
 interface OfferCardProps {
   offer: OfferResponse;
+  homeTeamName?: string;
+  awayTeamName?: string;
 }
 
-export function OfferCard({ offer }: OfferCardProps) {
+export function OfferCard({
+  offer,
+  homeTeamName,
+  awayTeamName,
+}: OfferCardProps) {
   const currencySymbol = CURRENCIES[offer.currency] || offer.currency;
   const agent = offer.agentId;
 
-  // Generate random rating between 3.5-5.0 for demo purposes
-  const rating = Math.round((Math.random() * 1.5 + 3.5) * 10) / 10;
-  const fullStars = Math.floor(rating);
+  // Always display 5 stars and a 5.0 rating
+  const rating = 5.0;
+  const fullStars = 5;
 
   const handleContactAgent = () => {
     if (agent?.whatsapp) {
-      const message = encodeURIComponent(
-        `שלום, אני מעוניין בהצעה שלך במחיר ${offer.price}${currencySymbol}`
-      );
-      window.open(`https://wa.me/${agent.whatsapp}?text=${message}`, "_blank");
+      // Sanitize WhatsApp number: remove all non-digits (wa.me requires digits only, no '+')
+      const sanitizedWhatsapp = agent.whatsapp.replace(/\D+/g, "");
+      const matchTitle =
+        homeTeamName && awayTeamName
+          ? `${homeTeamName} נגד ${awayTeamName}`
+          : undefined;
+      const baseText = matchTitle
+        ? `שלום, אני מעוניין בהצעה שלך למשחק ${matchTitle} במחיר ${offer.price}${currencySymbol}`
+        : `שלום, אני מעוניין בהצעה שלך במחיר ${offer.price}${currencySymbol}`;
+      const message = encodeURIComponent(baseText);
+      const url = `https://wa.me/${sanitizedWhatsapp}?text=${message}`;
+      // Log destination for debugging
+      // Note: Logs should be in English with checkpoints per user preference
+      console.log("[OFFER_CONTACT_001] Opening WhatsApp:", {
+        whatsapp: agent.whatsapp,
+        sanitizedWhatsapp,
+        matchTitle,
+        url,
+      });
+      window.open(url, "_blank");
     }
   };
 
   return (
-    <div className="bg-white border-t border-b border-gray-200 px-2 md:px-4 hover:bg-gray-50 transition-colors">
+    <div className="bg-white border-t last:border-b border-gray-200 px-2 md:px-4 hover:bg-gray-50 transition-colors">
       {/* Desktop layout */}
       <div className="hidden md:flex flex-row items-center gap-4">
         {/* Agent logo */}

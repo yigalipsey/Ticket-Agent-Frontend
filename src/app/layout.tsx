@@ -27,8 +27,7 @@ const openSans = Open_Sans({
 
 export const metadata: Metadata = {
   title: "TicketAgent - השוואת כרטיסים למשחקי כדורגל",
-  description:
-    "הרכיבו את החבילה המושלמת למשחקים שאתם אוהבים. השוואת הצעות כרטיסים למשחקי כדורגל מכל העולם.",
+  description: "צפו בהצעות כרטיסים למשחקים שאתם אוהבים. השוואת מחירים  .",
   keywords: "כרטיסים, כדורגל, משחקים, ליגות, קבוצות, אצטדיונים, השוואת מחירים",
   authors: [{ name: "TicketAgent Team" }],
   creator: "TicketAgent",
@@ -38,7 +37,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://ticketagent.com"),
+  metadataBase: new URL("https://ticketagent.co.il"),
   alternates: {
     canonical: "/",
   },

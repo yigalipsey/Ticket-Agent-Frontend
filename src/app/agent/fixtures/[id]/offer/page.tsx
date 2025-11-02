@@ -84,11 +84,6 @@ export default function AddOfferPage({ params }: AddOfferPageProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Page Title */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">הוסף הצעה למשחק</h1>
-        </div>
-
         {/* Offer Form */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <OfferForm

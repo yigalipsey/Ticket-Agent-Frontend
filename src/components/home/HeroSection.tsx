@@ -29,22 +29,20 @@ export default function HeroSection() {
         <div className="flex flex-col items-center gap-4 md:gap-8 px-4 w-full md:max-w-4xl mx-auto">
           {/* Logo - רק במובייל */}
           <div className="flex items-center justify-center -mb-1 md:hidden">
-            <div className=" rounded-lg shadow-lg px-3 py-2">
-              <div
-                className="h-20 w-auto"
-                style={{
-                  filter: "brightness(0) invert(1)",
-                }}
-              >
-                <Image
-                  src="/logo.svg"
-                  alt="TicketAgent"
-                  width={400}
-                  height={200}
-                  className="h-full w-auto object-contain"
-                  priority
-                />
-              </div>
+            <div
+              className="h-20 w-auto"
+              style={{
+                filter: "brightness(0) invert(1)",
+              }}
+            >
+              <Image
+                src="/logo.svg"
+                alt="TicketAgent"
+                width={400}
+                height={200}
+                className="h-full w-auto object-contain"
+                priority
+              />
             </div>
           </div>
 

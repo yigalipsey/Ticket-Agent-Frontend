@@ -57,7 +57,7 @@ export function OffersList({
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-0">
       {/* Price comparison text - above offers list */}
       {homeTeam && awayTeam && (
         <div className="mb-4 mt-0">
@@ -68,7 +68,12 @@ export function OffersList({
       )}
 
       {offers.map((offer) => (
-        <OfferCard key={offer._id} offer={offer} />
+        <OfferCard
+          key={offer._id}
+          offer={offer}
+          homeTeamName={homeTeam?.name}
+          awayTeamName={awayTeam?.name}
+        />
       ))}
     </div>
   );

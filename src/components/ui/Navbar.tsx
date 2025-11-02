@@ -17,6 +17,10 @@ export default function Navbar() {
   const hideLogoOnMobile = ["/", "/leagues", "/teams"];
   const showMobileLogo = !hideLogoOnMobile.includes(pathname);
 
+  // בדיקה אם הדף הוא דף offer (צריך נאב בר כחול ולא סטיקי)
+  const isOfferPage =
+    pathname?.includes("/agent/fixtures/") && pathname?.includes("/offer");
+
   // הסתר ניווט רגיל אם המשתמש הוא סוכן
   const navigationItems =
     isAuthenticated && agent
@@ -42,14 +46,24 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="absolute top-0 left-0 right-0 z-[99999] bg-transparent pointer-events-none">
+    <nav
+      className={`${
+        isOfferPage
+          ? "relative bg-primary"
+          : "absolute top-0 left-0 right-0 bg-transparent"
+      } z-[99999] pointer-events-none`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Brand Logo - בדסקטופ תמיד, במובייל רק שלא בדפים ראשי/ליגות/קבוצות */}
           <div
             className={`${
               showMobileLogo ? "flex" : "hidden"
-            } md:flex items-center order-2 md:order-1 pointer-events-auto`}
+            } md:flex items-center order-1 md:order-1 pointer-events-auto ${
+              isOfferPage
+                ? "static"
+                : "fixed top-4 left-4 z-[100000] md:static md:z-auto"
+            }`}
           >
             <Link
               href="/"
@@ -157,8 +171,8 @@ export default function Navbar() {
           {/* Mobile menu button - מובייל: ימין, דסקטופ: נסתר */}
           {/* המבורגר נשאר באותו מקום גם כשהוא פתוח - עם z-index גבוה כדי שיהיה מעל התפריט */}
           <div
-            className={`md:hidden order-1 md:order-2 pointer-events-auto relative ${
-              isMobileMenuOpen ? "z-[100000]" : ""
+            className={`md:hidden order-1 md:order-2 pointer-events-auto ${
+              isOfferPage ? "static" : "fixed top-4 right-4 z-[100000]"
             }`}
           >
             <HamburgerButton
@@ -180,7 +194,7 @@ export default function Navbar() {
             />
 
             {/* Sidebar */}
-            <div className="fixed top-0 right-0 h-screen w-full bg-white shadow-xl z-[99999] md:hidden pointer-events-auto overflow-y-auto">
+            <div className="fixed top-0 right-0 h-screen w-full bg-primary text-white shadow-xl z-[99999] md:hidden pointer-events-auto overflow-y-auto">
               <div className="flex flex-col h-full">
                 {/* Navigation Items */}
                 <div className="flex-1 px-4 mt-12 py-4 space-y-2">
@@ -188,7 +202,7 @@ export default function Navbar() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="block px-4 py-3 rounded-lg text-base font-medium transition-colors text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                      className="block px-4 py-3 rounded-lg text-base font-medium transition-colors text-white/90 hover:text-white hover:bg-white/10"
                       onClick={closeMobileMenu}
                     >
                       {item.label}
@@ -197,10 +211,10 @@ export default function Navbar() {
                 </div>
 
                 {/* User Menu */}
-                <div className="border-t border-gray-200 px-4 py-4">
+                <div className="border-t border-white/20 px-4 py-4">
                   {isAuthenticated ? (
                     <div className="space-y-2">
-                      <div className="px-4 py-2 text-sm text-gray-500 border-b border-gray-200 pb-3">
+                      <div className="px-4 py-2 text-sm text-white/80 border-b border-white/20 pb-3">
                         {agent?.email}
                         <br />
                         <span className="text-xs">
@@ -212,7 +226,7 @@ export default function Navbar() {
                       {agent && (
                         <Link
                           href="/agent/dashboard"
-                          className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                          className="block px-4 py-3 rounded-lg text-base font-medium text-white/90 hover:text-white hover:bg-white/10"
                           onClick={closeMobileMenu}
                         >
                           דשבורד סוכן
@@ -223,7 +237,7 @@ export default function Navbar() {
                           handleLogout();
                           closeMobileMenu();
                         }}
-                        className="block w-full text-right px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-100"
+                        className="block w-full text-right px-4 py-3 rounded-lg text-base font-medium text-white/90 hover:text-red-200 hover:bg-white/10"
                       >
                         התנתק
                       </button>
@@ -231,7 +245,7 @@ export default function Navbar() {
                   ) : (
                     <Link
                       href="/agent/login"
-                      className="block px-4 py-3 rounded-lg text-base font-medium text-center bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                      className="block px-4 py-3 rounded-lg text-base font-medium text-center bg-white text-primary hover:bg-white/90 transition-colors"
                       onClick={closeMobileMenu}
                     >
                       כניסת סוכנים

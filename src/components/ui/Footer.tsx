@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   Trophy,
   Facebook,
@@ -14,7 +15,7 @@ export default function Footer() {
     <footer className="bg-[#092274] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Column 1 - Navigation */}
           <div>
             <h4 className="text-lg font-bold mb-4 flex items-center gap-2">
@@ -162,8 +163,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-white" />
-                <a href="tel:+972123456789" className="hover:opacity-80">
-                  072-123-4567
+                <a href="tel:0533350910" className="hover:opacity-80">
+                  053-335-0910
                 </a>
               </li>
             </ul>
@@ -209,17 +210,22 @@ export default function Footer() {
         <div className="pt-8 border-t border-white/30">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             {/* Logo */}
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-white/30 rounded-lg flex items-center justify-center">
-                <Trophy className="w-5 h-5 text-white" />
+            <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
+              <div
+                className="h-10 w-auto md:h-14"
+                style={{
+                  filter: "brightness(0) invert(1)",
+                }}
+              >
+                <Image
+                  src="/logo.svg"
+                  alt="TicketAgent"
+                  width={300}
+                  height={150}
+                  className="h-full w-auto object-contain"
+                />
               </div>
-              <div>
-                <h3 className="text-lg font-bold text-white">TicketAgent</h3>
-                <p className="text-xs text-white">
-                  השוואת כרטיסים למשחקי כדורגל
-                </p>
-              </div>
-            </div>
+            </Link>
 
             {/* Copyright */}
             <p className="text-sm text-white">

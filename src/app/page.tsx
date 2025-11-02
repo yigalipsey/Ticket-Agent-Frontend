@@ -14,7 +14,7 @@ import AgentService from "@/services/agentService";
 export default async function HomePage() {
   const [leaguesRes, fixturesRes, agentsRes] = await Promise.all([
     LeagueService.getAllLeaguesWithTeams(),
-    FixtureService.getHotFixtures(5),
+    FixtureService.getHotFixtures(20),
     AgentService.getAllAgents(),
   ]);
 
@@ -39,7 +39,7 @@ export default async function HomePage() {
   const hotTeams = uniqueTeams.filter((team) => team.isPopular);
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
       {/* Hydration של SSR data ל-React Query cache */}
       <ClientHydration
         initialLeagues={leagues}
