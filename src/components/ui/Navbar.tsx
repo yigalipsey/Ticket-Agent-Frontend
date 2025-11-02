@@ -27,6 +27,7 @@ export default function Navbar() {
           { href: "/teams", label: "קבוצות" },
           { href: "/fixtures", label: "משחקים" },
           { href: "/venues", label: "אצטדיונים" },
+          { href: "/agents", label: "סוכנים" },
         ];
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);

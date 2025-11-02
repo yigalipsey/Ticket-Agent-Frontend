@@ -82,7 +82,7 @@ const TopAgentsSection = ({ agents }: TopAgentsSectionProps) => {
           title={{ mobile: "סוכנים מובילים", desktop: "הסוכנים המובילים שלנו" }}
           subtitle="סוכנים עם דירוג גבוה וביקורות אימות"
           buttonText="הכל"
-          href="/#"
+          href="/agents"
         />
 
         {/* Mobile - Horizontal scroll */}

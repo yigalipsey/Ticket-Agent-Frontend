@@ -25,6 +25,9 @@ const openSans = Open_Sans({
   variable: "--font-open-sans",
 });
 
+const baseUrl =
+  process.env.NEXT_PUBLIC_BASE_URL || "https://www.ticketagent.co.il";
+
 export const metadata: Metadata = {
   title: "TicketAgent - השוואת כרטיסים למשחקי כדורגל",
   description: "צפו בהצעות כרטיסים למשחקים שאתם אוהבים. השוואת מחירים  .",
@@ -37,14 +40,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://ticketagent.co.il"),
+  metadataBase: new URL(baseUrl),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "TicketAgent - השוואת כרטיסים למשחקי כדורגל",
     description: "הרכיבו את החבילה המושלמת למשחקים שאתם אוהבים",
-    url: "https://ticketagent.com",
+    url: baseUrl,
     siteName: "TicketAgent",
     images: [
       {
@@ -75,7 +78,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
+    google: process.env.GOOGLE_VERIFICATION_CODE,
   },
 };
 

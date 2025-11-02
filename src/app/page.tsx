@@ -10,6 +10,8 @@ import ClientHydration from "@/components/ClientHydration";
 import LeagueService from "@/services/leagueService";
 import FixtureService from "@/services/fixtureService";
 import AgentService from "@/services/agentService";
+import { StructuredData } from "@/components/seo";
+import { generateStructuredData } from "@/lib/seo";
 
 export default async function HomePage() {
   const [leaguesRes, fixturesRes, agentsRes] = await Promise.all([
@@ -38,8 +40,16 @@ export default async function HomePage() {
   const uniqueTeams = Array.from(teamsMap.values());
   const hotTeams = uniqueTeams.filter((team) => team.isPopular);
 
+  // Structured data for SEO
+  const organizationData = generateStructuredData("organization", {});
+  const websiteData = generateStructuredData("website", {});
+
   return (
     <div className="min-h-screen">
+      {/* Structured Data for SEO */}
+      {organizationData && <StructuredData data={organizationData} />}
+      {websiteData && <StructuredData data={websiteData} />}
+
       {/* Hydration של SSR data ל-React Query cache */}
       <ClientHydration
         initialLeagues={leagues}
