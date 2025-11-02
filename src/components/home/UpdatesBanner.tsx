@@ -5,7 +5,7 @@ import React from "react";
 export default function UpdatesBanner() {
   return (
     <section
-      className="relative mb-16 w-full py-6 my-16 bg-black mx-auto max-w-[90%] sm:max-w-3xl md:max-w-4xl lg:max-w-5xl overflow-hidden rounded-2xl"
+      className="relative mb-16 w-full py-10 my-16 bg-black mx-auto max-w-[90%] sm:max-w-3xl md:max-w-4xl lg:max-w-5xl overflow-hidden rounded-2xl"
       aria-label="updates-banner"
       dir="rtl"
     >
@@ -21,14 +21,9 @@ export default function UpdatesBanner() {
       {/* תוכן מרכזי */}
       <div className="relative z-10 px-5 py-6 sm:py-8 md:py-10 flex flex-col items-center text-center">
         <div className="w-full max-w-3xl">
-          <h2 className="text-white text-lg sm:text-2xl md:text-3xl font-bold leading-tight">
+          <h2 className="text-white  mb-4 text-lg sm:text-2xl md:text-3xl font-bold leading-tight">
             קבל עדכונים בלעדיים
           </h2>
-
-          <p className="mt-2 text-white/90 text-xs sm:text-sm md:text-base max-w-2xl mx-auto">
-            קבל התראות על משחקים, הצעות כרטיסים וחדשות כדורגל ישירות לתיבת הדואר
-            שלך
-          </p>
         </div>
 
         {/* טופס בשורה אחת גם במובייל — מצטמצם במידות קטנות */}
@@ -78,7 +73,7 @@ export default function UpdatesBanner() {
         </div>
 
         {/* הערה קטנה מרכזית */}
-        <div className="w-full mt-3 sm:mt-4 text-xs text-white/70 max-w-2xl mx-auto">
+        <div className=" md:block w-full mt-3 sm:mt-4 text-xs text-white/70 max-w-2xl mx-auto">
           בלחיצה על הרשמה אתה מאשר קבלת עדכונים. ניתן להסיר הרשמה בכל עת.
         </div>
       </div>

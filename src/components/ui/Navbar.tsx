@@ -17,10 +17,6 @@ export default function Navbar() {
   const hideLogoOnMobile = ["/", "/leagues", "/teams"];
   const showMobileLogo = !hideLogoOnMobile.includes(pathname);
 
-  // בדיקה אם הדף הוא דף offer (צריך נאב בר כחול ולא סטיקי)
-  const isOfferPage =
-    pathname?.includes("/agent/fixtures/") && pathname?.includes("/offer");
-
   // הסתר ניווט רגיל אם המשתמש הוא סוכן
   const navigationItems =
     isAuthenticated && agent
@@ -47,22 +43,16 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`${
-        isOfferPage
-          ? "relative bg-primary"
-          : "absolute top-0 left-0 right-0 bg-transparent"
-      } z-[99999] pointer-events-none`}
+      className={`absolute top-0 left-0 right-0 bg-transparent pointer-events-none ${
+        isMobileMenuOpen ? "z-[10000000]" : "z-[99999]"
+      }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Brand Logo - בדסקטופ תמיד, במובייל רק שלא בדפים ראשי/ליגות/קבוצות */}
+          {/* Brand Logo - תמיד מופיע במובייל ובדסקטופ */}
           <div
-            className={`${
-              showMobileLogo ? "flex" : "hidden"
-            } md:flex items-center order-1 md:order-1 pointer-events-auto ${
-              isOfferPage
-                ? "static"
-                : "fixed top-4 left-4 z-[100000] md:static md:z-auto"
+            className={`flex md:flex items-center order-2 md:order-1 pointer-events-auto ${
+              isMobileMenuOpen ? "z-[10000000]" : ""
             }`}
           >
             <Link
@@ -71,7 +61,9 @@ export default function Navbar() {
               onClick={closeMobileMenu}
             >
               <div
-                className="h-10 w-auto md:h-14"
+                className={`h-10 w-auto md:h-14 ${
+                  isMobileMenuOpen ? "drop-shadow-lg" : ""
+                }`}
                 style={{
                   filter: "brightness(0) invert(1)",
                 }}
@@ -172,7 +164,7 @@ export default function Navbar() {
           {/* המבורגר נשאר באותו מקום גם כשהוא פתוח - עם z-index גבוה כדי שיהיה מעל התפריט */}
           <div
             className={`md:hidden order-1 md:order-2 pointer-events-auto ${
-              isOfferPage ? "static" : "fixed top-4 right-4 z-[100000]"
+              isMobileMenuOpen ? "z-[10000000]" : ""
             }`}
           >
             <HamburgerButton
@@ -189,12 +181,12 @@ export default function Navbar() {
           <>
             {/* Backdrop */}
             <div
-              className="fixed inset-0 bg-black/50 z-[99998] md:hidden"
+              className="fixed inset-0 bg-black/50 z-[999998] md:hidden"
               onClick={closeMobileMenu}
             />
 
             {/* Sidebar */}
-            <div className="fixed top-0 right-0 h-screen w-full bg-primary text-white shadow-xl z-[99999] md:hidden pointer-events-auto overflow-y-auto">
+            <div className="fixed top-0 right-0 h-screen w-full bg-primary text-white shadow-xl z-[999999] md:hidden pointer-events-auto overflow-y-auto">
               <div className="flex flex-col h-full">
                 {/* Navigation Items */}
                 <div className="flex-1 px-4 mt-12 py-4 space-y-2">

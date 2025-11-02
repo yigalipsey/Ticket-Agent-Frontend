@@ -83,7 +83,10 @@ export default function AddOfferPage({ params }: AddOfferPageProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Blue background div under navbar */}
+      <div className="bg-primary h-16 w-full absolute top-0 left-0 right-0 z-[99998]"></div>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
         {/* Offer Form */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <OfferForm
