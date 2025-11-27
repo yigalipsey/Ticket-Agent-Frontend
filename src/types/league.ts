@@ -20,7 +20,6 @@ export interface Team {
   _id: string;
   id?: string; // Alias for _id
   name: string;
-  name_he: string;
   name_en: string;
   code: string;
   slug: string;

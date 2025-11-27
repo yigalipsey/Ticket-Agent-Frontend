@@ -8,6 +8,7 @@ import {
   Youtube,
   Mail,
   Phone,
+  Accessibility,
 } from "lucide-react";
 
 export default function Footer() {
@@ -143,6 +144,15 @@ export default function Footer() {
                 >
                   <span className="text-white">›</span>
                   תנאי שימוש
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/accessibility"
+                  className="flex items-center gap-2 hover:opacity-80"
+                >
+                  <Accessibility className="w-4 h-4 text-white" />
+                  הצהרת נגישות
                 </Link>
               </li>
             </ul>

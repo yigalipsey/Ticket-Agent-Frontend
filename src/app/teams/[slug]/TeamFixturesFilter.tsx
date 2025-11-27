@@ -14,7 +14,6 @@ interface League {
   _id: string;
   id?: string;
   name?: string;
-  nameHe?: string;
   slug?: string;
 }
 

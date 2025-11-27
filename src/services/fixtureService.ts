@@ -2,6 +2,8 @@
 import { apiClient } from "@/lib/api";
 import { API_ENDPOINTS } from "@/lib/constants";
 import { Fixture } from "@/types/fixture";
+import { Team } from "@/types/team";
+import { Venue } from "@/types/venue";
 
 export interface ServiceResult<T> {
   data: T | null;
@@ -23,51 +25,77 @@ export class FixtureService {
       );
 
       // Normalize the data to match FixtureCard expectations
-      const fixtures: Fixture[] = rawFixtures.map((fixture) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const fixtures: Fixture[] = rawFixtures.map((fixture: any) => ({
         ...fixture,
         id: fixture._id || fixture.id,
         homeTeam: fixture.homeTeam
-          ? {
+          ? ({
               ...fixture.homeTeam,
               id: fixture.homeTeam._id || fixture.homeTeam.id,
-              name:
-                fixture.homeTeam.name_he ||
-                fixture.homeTeam.name_en ||
-                fixture.homeTeam.name,
-              nameHe: fixture.homeTeam.name_he,
+              name: fixture.homeTeam.name || fixture.homeTeam.name_en || "",
+              slug: fixture.homeTeam.slug || "",
+              country:
+                fixture.homeTeam.country_he ||
+                fixture.homeTeam.country_en ||
+                fixture.homeTeam.country ||
+                "",
               logo: fixture.homeTeam.logoUrl || fixture.homeTeam.logo,
               logoUrl: fixture.homeTeam.logoUrl || fixture.homeTeam.logo,
-            }
-          : null,
+            } as Team)
+          : ({
+              name: "",
+              slug: "",
+              country: "",
+            } as Team),
         awayTeam: fixture.awayTeam
-          ? {
+          ? ({
               ...fixture.awayTeam,
               id: fixture.awayTeam._id || fixture.awayTeam.id,
-              name:
-                fixture.awayTeam.name_he ||
-                fixture.awayTeam.name_en ||
-                fixture.awayTeam.name,
-              nameHe: fixture.awayTeam.name_he,
+              name: fixture.awayTeam.name || fixture.awayTeam.name_en || "",
+              slug: fixture.awayTeam.slug || "",
+              country:
+                fixture.awayTeam.country_he ||
+                fixture.awayTeam.country_en ||
+                fixture.awayTeam.country ||
+                "",
               logo: fixture.awayTeam.logoUrl || fixture.awayTeam.logo,
               logoUrl: fixture.awayTeam.logoUrl || fixture.awayTeam.logo,
-            }
-          : null,
+            } as Team)
+          : ({
+              name: "",
+              slug: "",
+              country: "",
+            } as Team),
         venue: fixture.venue
-          ? {
+          ? ({
               ...fixture.venue,
               id: fixture.venue._id || fixture.venue.id,
-              name:
-                fixture.venue.name_he ||
-                fixture.venue.name_en ||
-                fixture.venue.name,
-              nameHe: fixture.venue.name_he,
+              slug: fixture.venue.slug || "",
+              name: fixture.venue.name || "",
+              nameHe: fixture.venue.name,
+              country:
+                fixture.venue.country_he ||
+                fixture.venue.country_en ||
+                fixture.venue.country ||
+                "",
               city:
                 fixture.venue.city_he ||
                 fixture.venue.city_en ||
-                fixture.venue.city,
+                fixture.venue.city ||
+                "",
               cityHe: fixture.venue.city_he,
-            }
-          : null,
+              capacity: fixture.venue.capacity || 0,
+              surface:
+                (fixture.venue.surface as "grass" | "artificial" | "hybrid") ||
+                "grass",
+            } as Venue)
+          : ({
+              slug: "",
+              country: "",
+              capacity: 0,
+              surface: "grass" as const,
+            } as Venue),
       }));
 
       return {
@@ -210,28 +238,49 @@ export class FixtureService {
             homeTeam: {
               id: f.homeTeam?._id || f.homeTeam?.id,
               _id: f.homeTeam?._id || f.homeTeam?.id,
-              name: f.homeTeam?.name,
-              slug: f.homeTeam?.slug,
-              logo: f.homeTeam?.logoUrl,
-              logoUrl: f.homeTeam?.logoUrl,
+              name: f.homeTeam?.name || f.homeTeam?.name_en || "",
+              slug: f.homeTeam?.slug || "",
+              country:
+                f.homeTeam?.country_he ||
+                f.homeTeam?.country_en ||
+                f.homeTeam?.country ||
+                "",
+              logo: f.homeTeam?.logoUrl || f.homeTeam?.logo,
+              logoUrl: f.homeTeam?.logoUrl || f.homeTeam?.logo,
               city: f.venue?.city || "",
-            },
+            } as Team,
             awayTeam: {
               id: f.awayTeam?._id || f.awayTeam?.id,
               _id: f.awayTeam?._id || f.awayTeam?.id,
-              name: f.awayTeam?.name,
-              slug: f.awayTeam?.slug,
-              logo: f.awayTeam?.logoUrl,
-              logoUrl: f.awayTeam?.logoUrl,
+              name: f.awayTeam?.name || f.awayTeam?.name_en || "",
+              slug: f.awayTeam?.slug || "",
+              country:
+                f.awayTeam?.country_he ||
+                f.awayTeam?.country_en ||
+                f.awayTeam?.country ||
+                "",
+              logo: f.awayTeam?.logoUrl || f.awayTeam?.logo,
+              logoUrl: f.awayTeam?.logoUrl || f.awayTeam?.logo,
               city: f.venue?.city || "",
-            },
+            } as Team,
             venue: {
               id: f.venue?._id || f.venue?.id,
               _id: f.venue?._id || f.venue?.id,
-              name: f.venue?.name,
-              city: f.venue?.city,
-              capacity: f.venue?.capacity,
-            },
+              slug: f.venue?.slug || "",
+              name: f.venue?.name || "",
+              nameHe: f.venue?.name,
+              country:
+                f.venue?.country_he ||
+                f.venue?.country_en ||
+                f.venue?.country ||
+                "",
+              city: f.venue?.city_he || f.venue?.city_en || f.venue?.city || "",
+              cityHe: f.venue?.city_he,
+              capacity: f.venue?.capacity || 0,
+              surface:
+                (f.venue?.surface as "grass" | "artificial" | "hybrid") ||
+                "grass",
+            } as Venue,
             league: {
               id: f.league?._id || f.league?.id,
               _id: f.league?._id || f.league?.id,

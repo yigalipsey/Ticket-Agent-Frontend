@@ -5,7 +5,7 @@ import { ChevronDown } from "lucide-react";
 
 interface VenueFilterProps {
   selectedVenue: string | null;
-  availableVenues: Array<{ _id: string; name: string; nameHe?: string }>;
+  availableVenues: Array<{ _id: string; name: string }>;
   onVenueChange: (venueId: string | null) => void;
   label?: string;
 }
@@ -19,8 +19,7 @@ export function VenueFilter({
   const [isOpen, setIsOpen] = useState(false);
 
   const selectedVenueLabel = selectedVenue
-    ? availableVenues.find((v) => v._id === selectedVenue)?.nameHe ||
-      availableVenues.find((v) => v._id === selectedVenue)?.name ||
+    ? availableVenues.find((v) => v._id === selectedVenue)?.name ||
       "אצטדיון לא ידוע"
     : label;
 
@@ -69,7 +68,7 @@ export function VenueFilter({
                     : "text-gray-700"
                 }`}
               >
-                {venue.nameHe || venue.name}
+                {venue.name}
               </button>
             ))}
           </div>

@@ -10,8 +10,8 @@ interface HotFixturesSectionProps {
 export default function HotFixturesSection({
   fixtures,
 }: HotFixturesSectionProps) {
-  // הגבלת המשחקים ל-5 מקסימום
-  const limitedFixtures = fixtures?.slice(0, 5) || [];
+  // הצגת כל המשחקים החמים שהתקבלו מה-API
+  const displayFixtures = fixtures || [];
 
   return (
     <section className="pb-4 md:pb-8 bg-white">
@@ -26,10 +26,10 @@ export default function HotFixturesSection({
           href="/fixtures"
         />
 
-        {limitedFixtures && limitedFixtures.length > 0 ? (
+        {displayFixtures && displayFixtures.length > 0 ? (
           <div className="pb-8">
             <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-              {limitedFixtures.map((fixture) => (
+              {displayFixtures.map((fixture) => (
                 <div
                   key={fixture._id || fixture.id}
                   className="flex-shrink-0 w-64 md:w-72 lg:w-80"

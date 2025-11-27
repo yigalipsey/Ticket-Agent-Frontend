@@ -15,13 +15,26 @@ export function OfferCard({
   awayTeamName,
 }: OfferCardProps) {
   const currencySymbol = CURRENCIES[offer.currency] || offer.currency;
-  const agent = offer.agentId;
+  // Support both new format (ownerId) and backward compatibility (agentId)
+  const agent =
+    offer.agentId || (offer.ownerType === "Agent" ? offer.ownerId : null);
 
   // Always display 5 stars and a 5.0 rating
   const rating = 5.0;
   const fullStars = 5;
 
   const handleContactAgent = () => {
+    // If there's a URL, open it directly (for suppliers/agents with website)
+    if (offer.url) {
+      console.log("[OFFER_CONTACT_001] Opening purchase URL:", {
+        url: offer.url,
+        offerId: offer._id,
+      });
+      window.open(offer.url, "_blank");
+      return;
+    }
+
+    // Otherwise, open WhatsApp (for agents without website)
     if (agent?.whatsapp) {
       // Sanitize WhatsApp number: remove all non-digits (wa.me requires digits only, no '+')
       const sanitizedWhatsapp = agent.whatsapp.replace(/\D+/g, "");
@@ -36,7 +49,7 @@ export function OfferCard({
       const url = `https://wa.me/${sanitizedWhatsapp}?text=${message}`;
       // Log destination for debugging
       // Note: Logs should be in English with checkpoints per user preference
-      console.log("[OFFER_CONTACT_001] Opening WhatsApp:", {
+      console.log("[OFFER_CONTACT_002] Opening WhatsApp:", {
         whatsapp: agent.whatsapp,
         sanitizedWhatsapp,
         matchTitle,
@@ -45,6 +58,12 @@ export function OfferCard({
       window.open(url, "_blank");
     }
   };
+
+  // Determine button text and disabled state
+  const hasUrl = !!offer.url;
+  const hasWhatsapp = !!agent?.whatsapp;
+  const buttonText = hasUrl ? "לרכישה" : "יצירת קשר";
+  const isButtonDisabled = !offer.isAvailable || (!hasUrl && !hasWhatsapp);
 
   return (
     <div className="bg-white border-t last:border-b border-gray-200 px-2 md:px-4 hover:bg-gray-50 transition-colors">
@@ -101,14 +120,14 @@ export function OfferCard({
           </div>
         </div>
 
-        {/* Contact button */}
+        {/* Contact/Purchase button */}
         <div className="flex-shrink-0">
           <button
             onClick={handleContactAgent}
-            disabled={!offer.isAvailable || !agent?.whatsapp}
+            disabled={isButtonDisabled}
             className="bg-primary hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-6 rounded-lg transition-colors text-base whitespace-nowrap"
           >
-            יצירת קשר
+            {buttonText}
           </button>
         </div>
       </div>
@@ -163,14 +182,14 @@ export function OfferCard({
           </div>
         </div>
 
-        {/* Column 4 - Contact button */}
+        {/* Column 4 - Contact/Purchase button */}
         <div className="flex-1 flex justify-center items-center">
           <button
             onClick={handleContactAgent}
-            disabled={!offer.isAvailable || !agent?.whatsapp}
+            disabled={isButtonDisabled}
             className="bg-primary hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-1.5 px-2 rounded-lg transition-colors text-xs"
           >
-            יצירת קשר
+            {buttonText}
           </button>
         </div>
       </div>

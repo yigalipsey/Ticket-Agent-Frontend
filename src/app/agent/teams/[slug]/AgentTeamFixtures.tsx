@@ -97,7 +97,6 @@ export default function AgentTeamFixtures({
         ? {
             _id: fixture.league._id || fixture.league.id || "",
             name: fixture.league.name || "",
-            nameHe: fixture.league.nameHe,
             slug: fixture.league.slug || "",
           }
         : undefined,

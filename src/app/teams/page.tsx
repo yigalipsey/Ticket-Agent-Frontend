@@ -29,7 +29,7 @@ async function TeamsContent() {
             {/* League Title */}
             <div className="text-right mb-4">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-                קבוצות {league.nameHe || league.name}
+                קבוצות {league.name}
               </h2>
             </div>
 

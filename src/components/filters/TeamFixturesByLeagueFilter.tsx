@@ -7,7 +7,6 @@ interface LeagueOption {
   _id: string;
   id?: string;
   name?: string;
-  nameHe?: string;
   slug?: string;
 }
 
@@ -34,7 +33,7 @@ export function TeamFixturesLeagueFilter({
         const league = availableLeagues.find(
           (l) => (l._id || l.id) === selectedLeague
         );
-        return league?.nameHe || league?.name || "ליגה לא ידועה";
+        return league?.name || "ליגה לא ידועה";
       })()
     : label;
 
@@ -83,7 +82,7 @@ export function TeamFixturesLeagueFilter({
                       : "text-gray-900"
                   }`}
                 >
-                  {league.nameHe || league.name}
+                  {league.name}
                 </button>
               );
             })}

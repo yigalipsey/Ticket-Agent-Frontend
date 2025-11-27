@@ -7,9 +7,17 @@ interface Offer {
   _id: string;
   price: number;
   currency: string;
+  ownerType?: "Agent" | "Supplier";
+  ownerId?: {
+    name?: string;
+    whatsapp?: string;
+    imageUrl?: string;
+  };
+  // Backward compatibility - populated by backend
   agentId?: {
     name?: string;
     whatsapp?: string;
+    imageUrl?: string;
   };
   isAvailable?: boolean;
   metadata?: {

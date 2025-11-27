@@ -8,7 +8,6 @@ interface Team {
   id?: string;
   _id?: string;
   name: string;
-  nameHe?: string;
   logo?: string;
   logoUrl?: string;
   city?: string;

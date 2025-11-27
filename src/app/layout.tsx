@@ -3,6 +3,10 @@ import { Inter, Heebo, Rubik, Open_Sans } from "next/font/google";
 import { ReactQueryProvider, AgentAuthProvider } from "@/providers";
 import { Navbar, Footer } from "@/components/ui";
 import { UpdatesBanner } from "@/components";
+import {
+  AccessibilityToolbar,
+  CookieConsent,
+} from "@/components/accessibility";
 import "./globals.css";
 
 const inter = Inter({
@@ -43,6 +47,15 @@ export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   alternates: {
     canonical: "/",
+  },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
   openGraph: {
     title: "TicketAgent - השוואת כרטיסים למשחקי כדורגל",
@@ -94,27 +107,19 @@ export default function RootLayout({
       className={`bg-white ${inter.variable} ${heebo.variable} ${rubik.variable} ${openSans.variable}`}
     >
       <head>
-        <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
         <link rel="manifest" href="/site.webmanifest" />
-        <meta name="theme-color" content="#0A1F44" />
+        <meta name="theme-color" content="#0D329A" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Accessibility metadata */}
+        <meta
+          name="accessibility"
+          content="This website complies with Israeli Standard 5568 and WCAG 2.1 Level AA"
+        />
+        <meta name="accessibility-coordinator" content="Yigal Lipsey" />
+        <meta
+          name="accessibility-email"
+          content="infotiketagent@gmail.com"
+        />
       </head>
       <body className={`min-h-screen bg-white text-gray-900 font-open-sans`}>
         <ReactQueryProvider>
@@ -124,13 +129,21 @@ export default function RootLayout({
               <Navbar />
 
               {/* Main Content */}
-              <main className="flex-1 bg-white">{children}</main>
+              <main className="flex-1 bg-white" id="main-content">
+                {children}
+              </main>
 
               {/* Updates banner above footer */}
               <UpdatesBanner />
 
               {/* Footer */}
               <Footer />
+
+              {/* Accessibility Toolbar - globally available */}
+              <AccessibilityToolbar />
+
+              {/* Cookie Consent Banner */}
+              <CookieConsent />
             </div>
           </AgentAuthProvider>
         </ReactQueryProvider>

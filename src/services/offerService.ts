@@ -18,6 +18,42 @@ export interface CreateOfferResponse {
   message?: string;
 }
 
+export interface OfferResponse {
+  _id: string;
+  fixtureId: string;
+  ownerType?: "Agent" | "Supplier";
+  ownerId?: {
+    _id?: string;
+    name?: string;
+    whatsapp?: string;
+    imageUrl?: string;
+    agentType?: string;
+    companyName?: string;
+    logoUrl?: string;
+    isActive?: boolean;
+  };
+  // Backward compatibility - populated by backend
+  agentId?: {
+    _id?: string;
+    name?: string;
+    whatsapp?: string;
+    imageUrl?: string;
+    agentType?: string;
+    companyName?: string;
+    logoUrl?: string;
+    isActive?: boolean;
+  };
+  price: number;
+  currency: "EUR" | "USD" | "ILS" | "GBP";
+  ticketType?: "standard" | "vip";
+  isHospitality?: boolean;
+  isAvailable: boolean;
+  notes?: string;
+  url?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 class OfferService {
   async getFixtureIdBySlug(slug: string) {
     try {
@@ -28,7 +64,14 @@ class OfferService {
     }
   }
 
-  async getOffersByFixtureId(fixtureId: string, options?: any) {
+  async getOffersByFixtureId(
+    fixtureId: string,
+    options?: {
+      limit?: number;
+      sortBy?: string;
+      sortOrder?: "asc" | "desc";
+    }
+  ) {
     try {
       const response = await apiClient.get(`/offers/fixture/${fixtureId}`, {
         params: options,

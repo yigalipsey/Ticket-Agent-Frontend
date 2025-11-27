@@ -39,7 +39,7 @@ export default function HotTeamsSection({ teams }: HotTeamsSectionProps) {
                   {team.logoUrl ? (
                     <Image
                       src={team.logoUrl}
-                      alt={team.name_he || team.name}
+                      alt={team.name}
                       width={64}
                       height={64}
                       className="w-16 h-16 object-contain group-hover:scale-110 transition-transform duration-200"
@@ -53,7 +53,7 @@ export default function HotTeamsSection({ teams }: HotTeamsSectionProps) {
                   )}
                 </div>
                 <h3 className="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
-                  {team.name_he || team.name}
+                  {team.name}
                 </h3>
               </Link>
             ))}

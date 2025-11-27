@@ -37,7 +37,7 @@ export default function LeagueFixtures({
   const { availableMonths, availableVenues } = useMemo(() => {
     const venues = new Map<
       string,
-      { _id: string; name: string; nameHe?: string }
+      { _id: string; name: string }
     >();
 
     // חודשים מגיעים מהליגה עצמה
@@ -49,7 +49,6 @@ export default function LeagueFixtures({
         venues.set(fixture.venue._id, {
           _id: fixture.venue._id,
           name: fixture.venue.name,
-          nameHe: fixture.venue.nameHe || fixture.venue.name_he,
         });
       }
     });

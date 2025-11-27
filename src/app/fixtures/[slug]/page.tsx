@@ -25,7 +25,7 @@ export default async function FixtureOffersPage({
     try {
       const idResult = await OfferService.getFixtureIdBySlug(slug);
 
-      if (!idResult) {
+      if (!idResult?._id) {
         notFound();
       }
 
@@ -56,13 +56,28 @@ export default async function FixtureOffersPage({
       fixture: offersData?.fixture,
     });
 
-    // אם אין משחק, נחזיר notFound
-    if (!offersData || !offersData.fixture) {
+    fixture = offersData?.fixture;
+    offers = offersData?.offers || [];
+
+    // אם אין משחק ב-response אבל יש הצעות, זה אומר שהמשחק קיים אבל לא נטען נכון
+    // אם אין משחק ואין הצעות, המשחק כנראה לא קיים ב-DB
+    if (!fixture) {
+      console.warn("⚠️ Fixture not found in offers response:", {
+        fixtureId,
+        slug,
+        hasOffers: offers.length > 0,
+      });
+
+      // אם יש הצעות אבל אין משחק, זה בעיה - נחזיר שגיאה
+      if (offers.length > 0) {
+        console.error(
+          "❌ Offers exist but fixture is missing - data inconsistency!"
+        );
+      }
+
+      // אם אין משחק בכלל, נחזיר notFound
       notFound();
     }
-
-    fixture = offersData.fixture;
-    offers = offersData.offers;
 
     // אם אין הצעות, נציג מסך ריק
     if (!offers || offers.length === 0) {

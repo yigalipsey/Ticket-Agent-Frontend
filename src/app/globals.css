@@ -75,9 +75,87 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  /* Accessibility: Font size adjustments */
+  html.text-size-normal {
+    font-size: 16px;
+  }
+
+  html.text-size-large {
+    font-size: 18px;
+  }
+
+  html.text-size-xlarge {
+    font-size: 20px;
+  }
+
+  html.text-size-xxlarge {
+    font-size: 24px;
+  }
+
+  /* Accessibility: High contrast mode */
+  html.high-contrast {
+    --primary-dark: #000000;
+    --primary-medium: #1a1a1a;
+    --primary-light: #333333;
+  }
+
+  html.high-contrast body {
+    @apply bg-white text-black;
+  }
+
+  html.high-contrast .bg-primary-dark {
+    @apply bg-black;
+  }
+
+  html.high-contrast .text-gray-700,
+  html.high-contrast .text-gray-600 {
+    @apply text-black;
+  }
+
+  html.high-contrast .border-gray-200,
+  html.high-contrast .border-gray-300 {
+    @apply border-black;
+  }
+
+  /* Accessibility: Keyboard navigation highlights */
+  html.keyboard-navigation *:focus {
+    @apply outline-4 outline-offset-2 outline-primary-dark;
+    outline-style: solid;
+  }
+
+  html.keyboard-navigation *:focus-visible {
+    @apply outline-4 outline-offset-2 outline-primary-dark;
+    outline-style: solid;
+  }
+
+  /* Screen reader only class */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .sr-only.focus\:not-sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
 }
 
 @layer components {
+
   /* Custom component styles */
   .line-clamp-2 {
     display: -webkit-box;
@@ -144,6 +222,7 @@
 }
 
 @layer utilities {
+
   /* Text utilities */
   .text-balance {
     text-wrap: balance;
@@ -154,11 +233,11 @@
   }
 
   /* Spacing utilities */
-  .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+  .space-x-reverse> :not([hidden])~ :not([hidden]) {
     --tw-space-x-reverse: 1;
   }
 
-  .space-y-reverse > :not([hidden]) ~ :not([hidden]) {
+  .space-y-reverse> :not([hidden])~ :not([hidden]) {
     --tw-space-y-reverse: 1;
   }
 
@@ -195,6 +274,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -205,6 +285,7 @@
     transform: translateY(10px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -212,10 +293,12 @@
 }
 
 @keyframes pulseSoft {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.8;
   }
@@ -225,6 +308,7 @@
   0% {
     background-position: 0 0, 0 0, 0 0, 1em 1em;
   }
+
   100% {
     background-position: 2em 2em, 2em 2em, 2em 2em, 3em 3em;
   }
@@ -254,6 +338,7 @@
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

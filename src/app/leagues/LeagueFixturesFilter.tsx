@@ -7,7 +7,7 @@ interface LeagueFilterProps {
   selectedMonth: string | null;
   selectedVenue: string | null;
   availableMonths: string[];
-  availableVenues: Array<{ _id: string; name: string; nameHe?: string }>;
+  availableVenues: Array<{ _id: string; name: string }>;
   onMonthChange: (month: string | null) => void;
   onVenueChange: (venueId: string | null) => void;
   onReset?: () => void;
