@@ -1,6 +1,7 @@
 import React from "react";
 import FixtureService from "@/services/fixtureService";
 import FixtureCard from "@/components/fixture/FixtureCard";
+import FireLoader from "@/components/ui/FireLoader";
 
 export default async function FixturesPage() {
   const res = await FixtureService.getHotFixtures(20);
@@ -19,7 +20,10 @@ export default async function FixturesPage() {
           <div className="absolute inset-0 bg-[url('/images/small-pitch.avif')] bg-cover bg-center opacity-20" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/10" />
         </div>
-        <div className="relative z-10 flex items-center justify-center h-full">
+        <div className="relative z-10 flex flex-col items-center justify-center h-full">
+          <div className="mb-4">
+            <FireLoader />
+          </div>
           <div className="px-4 text-center">
             <h1 className="text-3xl md:text-5xl font-extrabold text-white">
               המשחקים החמים

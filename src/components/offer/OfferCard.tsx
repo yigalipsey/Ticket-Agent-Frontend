@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { User } from "lucide-react";
 import { OfferResponse } from "@/services/offerService";
 import { CURRENCIES } from "@/lib/constants";
 
@@ -16,8 +17,15 @@ export function OfferCard({
 }: OfferCardProps) {
   const currencySymbol = CURRENCIES[offer.currency] || offer.currency;
   // Support both new format (ownerId) and backward compatibility (agentId)
+  // Include both Agent and Supplier ownerId
   const agent =
-    offer.agentId || (offer.ownerType === "Agent" ? offer.ownerId : null);
+    offer.agentId ||
+    (offer.ownerType === "Agent" || offer.ownerType === "Supplier"
+      ? offer.ownerId
+      : null);
+
+  // Get image URL - both Agents and Suppliers use imageUrl
+  const imageUrl = agent?.imageUrl;
 
   // Always display 5 stars and a 5.0 rating
   const rating = 5.0;
@@ -71,19 +79,19 @@ export function OfferCard({
       <div className="hidden md:flex flex-row items-center gap-4">
         {/* Agent logo */}
         <div className="flex-shrink-0">
-          {agent?.imageUrl ? (
-            <div className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center flex-shrink-0">
+          {imageUrl ? (
+            <div className="w-32 h-20 flex items-center justify-center flex-shrink-0">
               <Image
-                src={agent.imageUrl}
+                src={imageUrl}
                 alt={agent?.name || "סוכן כרטיסים"}
-                width={80}
+                width={128}
                 height={80}
                 className="w-full h-full object-contain"
               />
             </div>
           ) : (
-            <div className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 flex-shrink-0 text-xl md:text-2xl font-bold">
-              {(agent?.name || "?")?.charAt(0).toUpperCase()}
+            <div className="w-32 h-20 flex items-center justify-center flex-shrink-0">
+              <User className="w-10 h-10 text-gray-400" />
             </div>
           )}
         </div>
@@ -136,19 +144,19 @@ export function OfferCard({
       <div className="md:hidden flex flex-row items-center justify-between gap-1">
         {/* Column 1 - Agent logo */}
         <div className="flex-1 flex justify-center items-center">
-          {agent?.imageUrl ? (
-            <div className="w-12 h-12 flex items-center justify-center">
+          {imageUrl ? (
+            <div className="w-20 h-14 flex items-center justify-center">
               <Image
-                src={agent.imageUrl}
+                src={imageUrl}
                 alt={agent?.name || "סוכן כרטיסים"}
-                width={48}
-                height={48}
+                width={80}
+                height={56}
                 className="w-full h-full object-contain"
               />
             </div>
           ) : (
-            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 text-xl font-bold">
-              {(agent?.name || "?")?.charAt(0).toUpperCase()}
+            <div className="w-20 h-14 flex items-center justify-center">
+              <User className="w-8 h-8 text-gray-400" />
             </div>
           )}
         </div>

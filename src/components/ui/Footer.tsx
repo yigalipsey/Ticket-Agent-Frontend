@@ -96,7 +96,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/partnerships"
+                  href="/partners"
                   className="flex items-center gap-2 hover:opacity-80"
                 >
                   <span className="text-white">›</span>
@@ -112,7 +112,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
-                  href="/help"
+                  href="/support"
                   className="flex items-center gap-2 hover:opacity-80"
                 >
                   <span className="text-white">›</span>

@@ -5,3 +5,4 @@ export { default as TeamService } from "./teamService";
 export { default as OfferService } from "./offerService";
 export { default as AgentService } from "./agentService";
 export { default as SearchService } from "./searchService";
+export { default as VenueService } from "./venueService";

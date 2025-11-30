@@ -153,16 +153,91 @@ export class FixtureService {
       >(`${API_ENDPOINTS.FIXTURES}/by-league`, params);
 
       // הבקאנד עשוי להחזיר מערך או אובייקט עם fixtures
-      let fixtures: Fixture[] = [];
+      let rawFixtures: any[] = [];
       let availableMonths: string[] = [];
 
       if (Array.isArray(response)) {
-        fixtures = response;
+        rawFixtures = response;
       } else if (response && typeof response === "object") {
-        fixtures = (response as { fixtures?: Fixture[] }).fixtures || [];
+        rawFixtures = (response as { fixtures?: any[] }).fixtures || [];
         availableMonths =
           (response as { availableMonths?: string[] }).availableMonths || [];
       }
+
+      // נרמול הנתונים - המרת city_he/city_en ל-city/cityHe
+      const fixtures: Fixture[] = rawFixtures.map((f) => {
+        return {
+          id: f._id || f.id,
+          _id: f._id || f.id,
+          slug: f.slug,
+          homeTeam: {
+            id: f.homeTeam?._id || f.homeTeam?.id,
+            _id: f.homeTeam?._id || f.homeTeam?.id,
+            name: f.homeTeam?.name || f.homeTeam?.name_en || "",
+            slug: f.homeTeam?.slug || "",
+            country:
+              f.homeTeam?.country_he ||
+              f.homeTeam?.country_en ||
+              f.homeTeam?.country ||
+              "",
+            logo: f.homeTeam?.logoUrl || f.homeTeam?.logo,
+            logoUrl: f.homeTeam?.logoUrl || f.homeTeam?.logo,
+            city: f.venue?.city_he || f.venue?.city_en || f.venue?.city || "",
+          } as Team,
+          awayTeam: {
+            id: f.awayTeam?._id || f.awayTeam?.id,
+            _id: f.awayTeam?._id || f.awayTeam?.id,
+            name: f.awayTeam?.name || f.awayTeam?.name_en || "",
+            slug: f.awayTeam?.slug || "",
+            country:
+              f.awayTeam?.country_he ||
+              f.awayTeam?.country_en ||
+              f.awayTeam?.country ||
+              "",
+            logo: f.awayTeam?.logoUrl || f.awayTeam?.logo,
+            logoUrl: f.awayTeam?.logoUrl || f.awayTeam?.logo,
+            city: f.venue?.city_he || f.venue?.city_en || f.venue?.city || "",
+          } as Team,
+          venue: {
+            id: f.venue?._id || f.venue?.id,
+            _id: f.venue?._id || f.venue?.id,
+            slug: f.venue?.slug || "",
+            name: f.venue?.name || "",
+            nameHe: f.venue?.name,
+            country:
+              f.venue?.country_he ||
+              f.venue?.country_en ||
+              f.venue?.country ||
+              "",
+            city: f.venue?.city_he || f.venue?.city_en || f.venue?.city || "",
+            cityHe: f.venue?.city_he,
+            capacity: f.venue?.capacity || 0,
+            surface:
+              (f.venue?.surface as "grass" | "artificial" | "hybrid") ||
+              "grass",
+          } as Venue,
+          league: {
+            id: f.league?._id || f.league?.id,
+            _id: f.league?._id || f.league?.id,
+            name: f.league?.name,
+            nameHe: f.league?.nameHe,
+            slug: f.league?.slug,
+            country: f.league?.country,
+            logoUrl: f.league?.logoUrl,
+          },
+          date: f.date,
+          time: new Date(f.date).toLocaleTimeString(),
+          status:
+            f.status === "Not Started"
+              ? "scheduled"
+              : f.status?.toLowerCase(),
+          round: f.roundNumber || f.round,
+          offers: f.offers || [],
+          lowestPrice: f.minPrice?.amount || 0,
+          totalOffers: f.totalOffers || 0,
+          minPrice: f.minPrice,
+        };
+      }) as Fixture[];
 
       return {
         data: {

@@ -6,6 +6,7 @@ import { Fixture } from "@/types/fixture";
 import LeagueFixturesFilter from "@/app/leagues/LeagueFixturesFilter";
 import { useLeagueFixtures } from "@/hooks/fixture";
 import { useLeagueData } from "@/hooks/league";
+import { calculateAvailableFilters } from "@/utils/fixtureFilters";
 
 interface LeagueFixturesProps {
   leagueId: string | null;
@@ -33,32 +34,6 @@ export default function LeagueFixtures({
   // שליפת פרטי הליגה (כולל החודשים)
   const { league } = useLeagueData(leagueSlug, leagueId);
 
-  // חישוב חודשים ואצטדיונים זמינים
-  const { availableMonths, availableVenues } = useMemo(() => {
-    const venues = new Map<
-      string,
-      { _id: string; name: string }
-    >();
-
-    // חודשים מגיעים מהליגה עצמה
-    const months = league?.months || [];
-
-    // אצטדיונים מחושבים מהמשחקים
-    initialFixtures.forEach((fixture) => {
-      if (fixture.venue?._id && fixture.venue?.name) {
-        venues.set(fixture.venue._id, {
-          _id: fixture.venue._id,
-          name: fixture.venue.name,
-        });
-      }
-    });
-
-    return {
-      availableMonths: months,
-      availableVenues: Array.from(venues.values()),
-    };
-  }, [league, initialFixtures]);
-
   // שליפת משחקים עם Hook מותאם אישית
   const { fixtures, isLoading } = useLeagueFixtures(
     leagueId,
@@ -71,6 +46,11 @@ export default function LeagueFixtures({
     },
     initialFixtures
   );
+
+  // חישוב חודשים ואצטדיונים זמינים
+  const { availableMonths, availableVenues } = useMemo(() => {
+    return calculateAvailableFilters(league, initialFixtures, fixtures);
+  }, [league, initialFixtures, fixtures]);
 
   // פילטר משחקים (client-side)
   // רק כאשר יש חודש+אצטדיון - נסנן את האצטדיון ב-client

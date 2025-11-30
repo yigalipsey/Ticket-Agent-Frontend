@@ -29,7 +29,6 @@ export interface OfferResponse {
     imageUrl?: string;
     agentType?: string;
     companyName?: string;
-    logoUrl?: string;
     isActive?: boolean;
   };
   // Backward compatibility - populated by backend
@@ -40,7 +39,6 @@ export interface OfferResponse {
     imageUrl?: string;
     agentType?: string;
     companyName?: string;
-    logoUrl?: string;
     isActive?: boolean;
   };
   price: number;

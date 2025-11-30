@@ -33,32 +33,6 @@ export default function AgentLeagueFixtures({
   // שליפת פרטי הליגה (כולל החודשים)
   const { league } = useLeagueData(leagueSlug, leagueId);
 
-  // חישוב חודשים ואצטדיונים זמינים
-  const { availableMonths, availableVenues } = useMemo(() => {
-    const venues = new Map<
-      string,
-      { _id: string; name: string }
-    >();
-
-    // חודשים מגיעים מהליגה עצמה
-    const months = league?.months || [];
-
-    // אצטדיונים מחושבים מהמשחקים
-    initialFixtures.forEach((fixture) => {
-      if (fixture.venue?._id && fixture.venue?.name) {
-        venues.set(fixture.venue._id, {
-          _id: fixture.venue._id,
-          name: fixture.venue.name,
-        });
-      }
-    });
-
-    return {
-      availableMonths: months,
-      availableVenues: Array.from(venues.values()),
-    };
-  }, [league, initialFixtures]);
-
   // שליפת משחקים עם Hook מותאם אישית
   // הסוכן רואה את כל המשחקים (ללא hasOffers) כדי להוסיף הצעות חדשות
   const { fixtures, isLoading } = useLeagueFixtures(
@@ -71,6 +45,71 @@ export default function AgentLeagueFixtures({
     },
     initialFixtures
   );
+
+  // חישוב חודשים ואצטדיונים זמינים
+  const { availableMonths, availableVenues } = useMemo(() => {
+    const venues = new Map<
+      string,
+      { _id: string; name: string; nameHe?: string }
+    >();
+    const monthsSet = new Set<string>();
+    const now = new Date();
+    const currentMonth = `${now.getFullYear()}-${String(
+      now.getMonth() + 1
+    ).padStart(2, "0")}`;
+
+    // חודשים מגיעים מהליגה עצמה (אם יש) - רק מעכשיו והלאה
+    const leagueMonths = league?.months || [];
+    leagueMonths.forEach((month) => {
+      if (month >= currentMonth) {
+        monthsSet.add(month);
+      }
+    });
+
+    // חודשים מחושבים מהמשחקים (fallback אם אין בליגה) - רק מעכשיו והלאה
+    initialFixtures.forEach((fixture) => {
+      if (fixture.venue?._id && fixture.venue?.name) {
+        venues.set(fixture.venue._id, {
+          _id: fixture.venue._id,
+          name: fixture.venue.name,
+          nameHe: fixture.venue.nameHe || fixture.venue.name_he,
+        });
+      }
+
+      // חישוב חודש מהמשחק - רק אם המשחק בעתיד
+      if (fixture.date) {
+        const fixtureDate = new Date(fixture.date);
+        if (fixtureDate >= now) {
+          const monthKey = `${fixtureDate.getFullYear()}-${String(
+            fixtureDate.getMonth() + 1
+          ).padStart(2, "0")}`;
+          if (monthKey >= currentMonth) {
+            monthsSet.add(monthKey);
+          }
+        }
+      }
+    });
+
+    // גם מהמשחקים הנוכחיים (אם יש) - רק מעכשיו והלאה
+    fixtures.forEach((fixture) => {
+      if (fixture.date) {
+        const fixtureDate = new Date(fixture.date);
+        if (fixtureDate >= now) {
+          const monthKey = `${fixtureDate.getFullYear()}-${String(
+            fixtureDate.getMonth() + 1
+          ).padStart(2, "0")}`;
+          if (monthKey >= currentMonth) {
+            monthsSet.add(monthKey);
+          }
+        }
+      }
+    });
+
+    return {
+      availableMonths: Array.from(monthsSet).sort(),
+      availableVenues: Array.from(venues.values()),
+    };
+  }, [league, initialFixtures, fixtures]);
 
   // פילטר משחקים (client-side)
   const visibleFixtures = useMemo(() => {
