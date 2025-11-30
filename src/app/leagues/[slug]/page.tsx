@@ -38,7 +38,7 @@ export default async function LeaguePage({
   let fixtures: Fixture[] = [];
   if (leagueId) {
     const fixturesResult = await FixtureService.getLeagueFixtures(leagueId, {
-      limit: 30,
+      limit: 20,
       page: 1,
       hasOffers: true, // משיכת רק משחקים עם הצעות
     });

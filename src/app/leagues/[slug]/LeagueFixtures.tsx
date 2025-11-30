@@ -38,7 +38,7 @@ export default function LeagueFixtures({
   const { fixtures, isLoading } = useLeagueFixtures(
     leagueId,
     {
-      limit: 100,
+      limit: 20,
       page: 1,
       month: filters.month,
       venueId: filters.venueId,
