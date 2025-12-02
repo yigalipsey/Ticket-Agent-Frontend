@@ -50,6 +50,7 @@ const config: Config = {
         "fade-in": "fadeIn 0.5s ease-in-out",
         "slide-up": "slideUp 0.3s ease-out",
         "pulse-soft": "pulseSoft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "shimmer": "shimmer 2s infinite linear",
       },
       keyframes: {
         fadeIn: {
@@ -63,6 +64,10 @@ const config: Config = {
         pulseSoft: {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.8" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-1000px 0" },
+          "100%": { backgroundPosition: "1000px 0" },
         },
       },
     },

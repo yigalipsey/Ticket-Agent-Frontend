@@ -18,36 +18,36 @@ export interface CreateOfferResponse {
   message?: string;
 }
 
+export interface OfferOwnerInfo {
+  id?: string;
+  _id?: string;
+  name?: string;
+  slug?: string;
+  whatsapp?: string;
+  imageUrl?: string;
+  logoUrl?: string;
+  agentType?: string;
+  companyName?: string;
+  isActive?: boolean;
+}
+
 export interface OfferResponse {
-  _id: string;
+  id?: string;
+  _id?: string;
   fixtureId: string;
   ownerType?: "Agent" | "Supplier";
-  ownerId?: {
-    _id?: string;
-    name?: string;
-    whatsapp?: string;
-    imageUrl?: string;
-    agentType?: string;
-    companyName?: string;
-    isActive?: boolean;
-  };
+  owner?: OfferOwnerInfo;
+  ownerId?: OfferOwnerInfo;
   // Backward compatibility - populated by backend
-  agentId?: {
-    _id?: string;
-    name?: string;
-    whatsapp?: string;
-    imageUrl?: string;
-    agentType?: string;
-    companyName?: string;
-    isActive?: boolean;
-  };
+  agentId?: OfferOwnerInfo;
   price: number;
   currency: "EUR" | "USD" | "ILS" | "GBP";
   ticketType?: "standard" | "vip";
   isHospitality?: boolean;
   isAvailable: boolean;
-  notes?: string;
-  url?: string;
+  notes?: string | null;
+  url?: string | null;
+  fallbackContact?: string | null;
   createdAt?: string;
   updatedAt?: string;
 }

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Heebo, Rubik, Open_Sans } from "next/font/google";
 import { ReactQueryProvider, AgentAuthProvider } from "@/providers";
 import { Navbar, Footer } from "@/components/ui";
-import { UpdatesBanner } from "@/components";
 import {
   AccessibilityToolbar,
   CookieConsent,
@@ -49,10 +48,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/favicon.ico", sizes: "any" },
-    ],
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
     apple: [
       { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
@@ -116,10 +112,7 @@ export default function RootLayout({
           content="This website complies with Israeli Standard 5568 and WCAG 2.1 Level AA"
         />
         <meta name="accessibility-coordinator" content="Yigal Lipsey" />
-        <meta
-          name="accessibility-email"
-          content="infotiketagent@gmail.com"
-        />
+        <meta name="accessibility-email" content="infotiketagent@gmail.com" />
       </head>
       <body className={`min-h-screen bg-white text-gray-900 font-open-sans`}>
         <ReactQueryProvider>
@@ -132,9 +125,6 @@ export default function RootLayout({
               <main className="flex-1 bg-white" id="main-content">
                 {children}
               </main>
-
-              {/* Updates banner above footer */}
-              <UpdatesBanner />
 
               {/* Footer */}
               <Footer />

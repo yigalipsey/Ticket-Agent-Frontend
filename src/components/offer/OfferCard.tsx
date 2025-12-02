@@ -16,16 +16,16 @@ export function OfferCard({
   awayTeamName,
 }: OfferCardProps) {
   const currencySymbol = CURRENCIES[offer.currency] || offer.currency;
-  // Support both new format (ownerId) and backward compatibility (agentId)
-  // Include both Agent and Supplier ownerId
-  const agent =
+  const owner =
+    offer.owner ||
+    offer.ownerId ||
     offer.agentId ||
     (offer.ownerType === "Agent" || offer.ownerType === "Supplier"
       ? offer.ownerId
       : null);
 
-  // Get image URL - both Agents and Suppliers use imageUrl
-  const imageUrl = agent?.imageUrl;
+  const imageUrl = owner?.logoUrl || owner?.imageUrl || null;
+  const whatsappNumber = offer.fallbackContact || owner?.whatsapp || null;
 
   // Always display 5 stars and a 5.0 rating
   const rating = 5.0;
@@ -36,16 +36,16 @@ export function OfferCard({
     if (offer.url) {
       console.log("[OFFER_CONTACT_001] Opening purchase URL:", {
         url: offer.url,
-        offerId: offer._id,
+        offerId: offer.id || offer._id,
       });
       window.open(offer.url, "_blank");
       return;
     }
 
     // Otherwise, open WhatsApp (for agents without website)
-    if (agent?.whatsapp) {
+    if (whatsappNumber) {
       // Sanitize WhatsApp number: remove all non-digits (wa.me requires digits only, no '+')
-      const sanitizedWhatsapp = agent.whatsapp.replace(/\D+/g, "");
+      const sanitizedWhatsapp = whatsappNumber.replace(/\D+/g, "");
       const matchTitle =
         homeTeamName && awayTeamName
           ? `${homeTeamName} נגד ${awayTeamName}`
@@ -58,7 +58,7 @@ export function OfferCard({
       // Log destination for debugging
       // Note: Logs should be in English with checkpoints per user preference
       console.log("[OFFER_CONTACT_002] Opening WhatsApp:", {
-        whatsapp: agent.whatsapp,
+        whatsapp: whatsappNumber,
         sanitizedWhatsapp,
         matchTitle,
         url,
@@ -68,8 +68,8 @@ export function OfferCard({
   };
 
   // Determine button text and disabled state
-  const hasUrl = !!offer.url;
-  const hasWhatsapp = !!agent?.whatsapp;
+  const hasUrl = Boolean(offer.url);
+  const hasWhatsapp = Boolean(whatsappNumber);
   const buttonText = hasUrl ? "לרכישה" : "יצירת קשר";
   const isButtonDisabled = !offer.isAvailable || (!hasUrl && !hasWhatsapp);
 
@@ -83,7 +83,7 @@ export function OfferCard({
             <div className="w-32 h-20 flex items-center justify-center flex-shrink-0">
               <Image
                 src={imageUrl}
-                alt={agent?.name || "סוכן כרטיסים"}
+                alt={owner?.name || "ספק כרטיסים"}
                 width={128}
                 height={80}
                 className="w-full h-full object-contain"
@@ -148,7 +148,7 @@ export function OfferCard({
             <div className="w-20 h-14 flex items-center justify-center">
               <Image
                 src={imageUrl}
-                alt={agent?.name || "סוכן כרטיסים"}
+                alt={owner?.name || "ספק כרטיסים"}
                 width={80}
                 height={56}
                 className="w-full h-full object-contain"

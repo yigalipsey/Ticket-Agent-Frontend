@@ -189,7 +189,7 @@ export default function Navbar() {
             />
 
             {/* Sidebar */}
-            <div className="fixed top-0 right-0 h-screen w-full bg-primary text-white shadow-xl z-[999999] md:hidden pointer-events-auto overflow-y-auto">
+            <div className="fixed top-0 right-0 h-[100dvh] w-full bg-primary text-white shadow-xl z-[999999] md:hidden pointer-events-auto overflow-y-auto">
               <div className="flex flex-col h-full">
                 {/* Navigation Items */}
                 <div className="flex-1 px-4 mt-12 py-4 space-y-2">

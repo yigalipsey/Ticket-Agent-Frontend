@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingCart } from "lucide-react";
 import { Team } from "@/types";
 import SectionHeader from "./SectionHeader";
 
@@ -28,11 +27,13 @@ export default function HotTeamsSection({ teams }: HotTeamsSectionProps) {
 
         {hotTeams && hotTeams.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-            {hotTeams.slice(0, 10).map((team) => (
+            {hotTeams.slice(0, 12).map((team, index) => (
               <Link
                 key={team._id || team.id}
                 href={`/teams/${team.slug}?id=${team._id || team.id}`}
-                className="group flex flex-col items-center text-center hover:scale-105 transition-transform duration-200 bg-white p-4 rounded-lg"
+                className={`group flex flex-col items-center text-center hover:scale-105 transition-transform duration-200 bg-white p-4 rounded-lg ${
+                  index >= 10 ? "hidden md:flex" : ""
+                }`}
                 style={{ boxShadow: "0px 3px 8px 0px #00000014" }}
               >
                 <div className="w-16 h-16 mb-3 flex items-center justify-center">

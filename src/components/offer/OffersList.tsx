@@ -2,31 +2,10 @@
 
 import React from "react";
 import { OfferCard } from "./OfferCard";
-
-interface Offer {
-  _id: string;
-  price: number;
-  currency: string;
-  ownerType?: "Agent" | "Supplier";
-  ownerId?: {
-    name?: string;
-    whatsapp?: string;
-    imageUrl?: string;
-  };
-  // Backward compatibility - populated by backend
-  agentId?: {
-    name?: string;
-    whatsapp?: string;
-    imageUrl?: string;
-  };
-  isAvailable?: boolean;
-  metadata?: {
-    notes?: string;
-  };
-}
+import { OfferResponse } from "@/services/offerService";
 
 interface OffersListProps {
-  offers: Offer[];
+  offers: OfferResponse[];
   isLoading?: boolean;
   error?: string | null;
   homeTeam?: { name: string };
@@ -75,9 +54,9 @@ export function OffersList({
         </div>
       )}
 
-      {offers.map((offer) => (
+      {offers.map((offer, index) => (
         <OfferCard
-          key={offer._id}
+          key={offer.id || offer._id || `${offer.ownerType}-${index}`}
           offer={offer}
           homeTeamName={homeTeam?.name}
           awayTeamName={awayTeam?.name}
