@@ -1,46 +1,13 @@
-import Image from "next/image";
-import { Star } from "lucide-react";
+import React from "react";
 import SectionHeader from "./SectionHeader";
-
-interface Agent {
-  _id: string;
-  name: string;
-  email: string;
-  whatsapp: string;
-  agentType: "individual" | "agency";
-  companyName?: string;
-  imageUrl?: string;
-  isActive: boolean;
-  reviewStats: {
-    totalReviews: number;
-    averageRating: number;
-    verifiedReviews: number;
-    recentReviews: Array<{
-      rating: number;
-      comment: string;
-      reviewerName: string;
-      createdAt: string;
-      isVerified: boolean;
-    }>;
-  };
-}
+import AgentCard from "@/components/agent/AgentCard";
+import { Agent } from "@/services/agentService";
 
 interface TopAgentsSectionProps {
   agents: Agent[];
 }
 
 const TopAgentsSection = ({ agents }: TopAgentsSectionProps) => {
-  const getAgentImageUrl = (imageUrl?: string): string | undefined => {
-    if (!imageUrl) return undefined;
-    if (imageUrl.includes("res.cloudinary.com")) {
-      const urlParts = imageUrl.split("/image/upload/");
-      if (urlParts.length === 2) {
-        return `${urlParts[0]}/image/upload/f_png/${urlParts[1]}`;
-      }
-    }
-    return imageUrl;
-  };
-
   const topAgents = agents
     .filter((agent) => agent.reviewStats.totalReviews > 0)
     .sort((a, b) =>
@@ -50,117 +17,59 @@ const TopAgentsSection = ({ agents }: TopAgentsSectionProps) => {
     )
     .slice(0, 3);
 
-  const renderStars = (rating: number) =>
-    Array.from({ length: 5 }, (_, index) => (
-      <Star
-        key={index}
-        className={`w-4 h-4 ${
-          index < Math.floor(rating)
-            ? "fill-yellow-400 text-yellow-400"
-            : "text-gray-300"
-        }`}
-      />
-    ));
-
   if (topAgents.length === 0) {
     return (
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
             סוכנים מובילים
           </h2>
-          <p className="text-gray-600">אין סוכנים זמינים כרגע</p>
+          <p className="text-gray-500 text-sm">אין סוכנים זמינים כרגע</p>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="pb-4 md:pb-8 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-12 md:py-16 bg-gray-50 w-full relative overflow-hidden">
+      {/* Decorative background elements - Subtle */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-primary/5 rounded-full blur-3xl opacity-30"></div>
+        <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-blue-500/5 rounded-full blur-3xl opacity-30"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SectionHeader
           title={{ mobile: "סוכנים מובילים", desktop: "הסוכנים המובילים שלנו" }}
-          subtitle="סוכנים עם דירוג גבוה וביקורות אימות"
-          buttonText="הכל"
+          subtitle="הצוות המובחר שלנו לשירותך"
+          buttonText="לכל הסוכנים"
           href="/agents"
         />
 
         {/* Mobile - Horizontal scroll */}
-        <div className="flex gap-4 overflow-x-auto pb-4 md:hidden snap-x snap-mandatory scrollbar-hide">
+        {/* Increased spacing (space-x-4 rtl / gap-4) and padding to fix overlap */}
+        <div className="flex gap-6 overflow-x-auto pb-8 md:hidden snap-x snap-mandatory scrollbar-hide -mx-4 px-6">
           {topAgents.map((agent) => (
             <div
               key={agent._id}
-              className="relative flex-shrink-0 w-[280px] rounded-lg border border-gray-200 hover:shadow-lg transition-shadow duration-300 overflow-hidden text-center snap-start"
+              // Reduced width slightly to 80vw and ensured max-width is managed
+              // Added 'snap-center' and flex-shrink-0
+              className="flex-shrink-0 w-[80vw] max-w-[300px] snap-center"
             >
-              <div className="relative p-16">
-                <div className="absolute inset-0 mt-2 w-[95%]  mx-auto bg-gray-200 rounded-lg" />
-
-                {getAgentImageUrl(agent.imageUrl) && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="relative w-40 aspect-[4/3]">
-                      <Image
-                        src={getAgentImageUrl(agent.imageUrl)!}
-                        alt={agent.name}
-                        fill
-                        className="object-contain"
-                        sizes="128px"
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  {agent.name}
-                </h3>
-                <div className="flex items-center justify-center space-x-1 mb-3">
-                  {renderStars(agent.reviewStats.averageRating)}
-                </div>
-                <button className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition-colors font-medium">
-                  צור קשר עם הסוכן
-                </button>
+              <div className="h-full px-1"> {/* Extra horizontal padding inside container */}
+                 <AgentCard agent={agent} variant="minimal" />
               </div>
             </div>
           ))}
+          {/* Spacer for last item so it's not cut off */}
+          <div className="w-2 flex-shrink-0" />
         </div>
 
         {/* Desktop */}
-        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="hidden md:grid grid-cols-3 gap-6">
           {topAgents.map((agent) => (
-            <div
-              key={agent._id}
-              className="relative rounded-lg border border-gray-200 hover:shadow-lg transition-shadow duration-300 overflow-hidden text-center"
-            >
-              <div className="relative p-16">
-                <div className="absolute inset-0 mt-2 w-[95%]  mx-auto bg-gray-200 rounded-lg" />
-
-                {getAgentImageUrl(agent.imageUrl) && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="relative w-40 aspect-[4/3]">
-                      <Image
-                        src={getAgentImageUrl(agent.imageUrl)!}
-                        alt={agent.name}
-                        fill
-                        className="object-contain"
-                        sizes="128px"
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  {agent.name}
-                </h3>
-                <div className="flex items-center justify-center space-x-1 mb-3">
-                  {renderStars(agent.reviewStats.averageRating)}
-                </div>
-                <button className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition-colors font-medium">
-                  צור קשר עם הסוכן
-                </button>
-              </div>
+            <div key={agent._id} className="h-full">
+              <AgentCard agent={agent} variant="minimal" />
             </div>
           ))}
         </div>

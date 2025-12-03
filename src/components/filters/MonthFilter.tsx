@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { ChevronDown, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface MonthFilterProps {
   selectedMonth: string | null;
@@ -17,6 +18,23 @@ export function MonthFilter({
   label = "כל החודשים",
 }: MonthFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const selectedMonthLabel = selectedMonth
     ? new Date(selectedMonth).toLocaleDateString("he-IL", {
@@ -26,57 +44,71 @@ export function MonthFilter({
     : label;
 
   return (
-    <div className="relative">
+    <div className="relative w-full md:w-auto" ref={containerRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between px-4 py-2 bg-white border border-primary rounded-lg hover:bg-gray-50 focus:outline-none whitespace-nowrap"
+        className={cn(
+          "flex items-center justify-between px-4 py-2 border rounded-full transition-all duration-200 whitespace-nowrap w-full md:min-w-[160px]",
+          isOpen
+            ? "border-primary ring-1 ring-primary/10 bg-white shadow-sm"
+            : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/50 text-gray-700"
+        )}
       >
-        <span className="text-sm font-medium text-primary">
+        <span className={cn("text-sm font-medium truncate", selectedMonth ? "text-primary" : "text-gray-700")}>
           {selectedMonthLabel}
         </span>
         <ChevronDown
-          className={`h-4 w-4 text-primary transition-transform ml-2 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={cn(
+            "h-4 w-4 transition-transform flex-shrink-0 ml-2 text-gray-400",
+            isOpen && "rotate-180 text-primary"
+          )}
         />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-1 bg-white border border-primary rounded-lg z-10 min-w-[200px]">
-          <div className="py-1">
-            <button
-              onClick={() => {
-                onMonthChange(null);
-                setIsOpen(false);
-              }}
-              className={`w-full px-4 py-2 text-right text-sm hover:bg-gray-50 ${
-                selectedMonth === null
-                  ? "bg-blue-50 text-blue-600"
-                  : "text-gray-700"
-              }`}
-            >
-              {label}
-            </button>
-            {availableMonths.map((month) => (
+        <div className="absolute top-full right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-xl z-20 max-h-64 overflow-y-auto w-full md:min-w-[220px] md:w-auto p-1 animate-in fade-in zoom-in-95 duration-100">
+          <button
+            onClick={() => {
+              onMonthChange(null);
+              setIsOpen(false);
+            }}
+            className={cn(
+              "w-full px-3 py-2.5 text-right text-sm rounded-lg flex items-center justify-between transition-colors",
+              selectedMonth === null
+                ? "bg-primary/5 text-primary font-medium"
+                : "text-gray-700 hover:bg-gray-50"
+            )}
+          >
+            <span>{label}</span>
+            {selectedMonth === null && <Check className="h-4 w-4" />}
+          </button>
+          
+          {availableMonths.map((month) => {
+            const isSelected = selectedMonth === month;
+            return (
               <button
                 key={month}
                 onClick={() => {
                   onMonthChange(month);
                   setIsOpen(false);
                 }}
-                className={`w-full px-4 py-2 text-right text-sm hover:bg-gray-50 ${
-                  selectedMonth === month
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-700"
-                }`}
+                className={cn(
+                  "w-full px-3 py-2.5 text-right text-sm rounded-lg flex items-center justify-between transition-colors whitespace-nowrap",
+                  isSelected
+                    ? "bg-primary/5 text-primary font-medium"
+                    : "text-gray-700 hover:bg-gray-50"
+                )}
               >
-                {new Date(month).toLocaleDateString("he-IL", {
-                  month: "long",
-                  year: "numeric",
-                })}
+                <span>
+                  {new Date(month).toLocaleDateString("he-IL", {
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </span>
+                {isSelected && <Check className="h-4 w-4" />}
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
       )}
     </div>

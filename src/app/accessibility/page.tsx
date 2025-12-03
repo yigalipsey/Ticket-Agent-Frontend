@@ -11,7 +11,7 @@ export default function AccessibilityPage() {
     return (
         <div className="min-h-screen bg-white pb-12">
             {/* Hero Section */}
-            <div className="bg-blue-600 text-white py-16 px-4 sm:px-6 lg:px-8 text-center">
+            <div className="bg-[#092274] text-white py-16 px-4 sm:px-6 lg:px-8 text-center">
                 <div className="flex justify-center mb-4">
                     <div className="bg-white/20 p-3 rounded-full">
                         <Accessibility className="w-10 h-10 text-white" />

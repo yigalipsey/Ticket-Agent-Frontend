@@ -3,6 +3,10 @@ import Image from "next/image";
 import { User } from "lucide-react";
 import { OfferResponse } from "@/services/offerService";
 import { CURRENCIES } from "@/lib/constants";
+import {
+  renderStarRow,
+  roundUpToNextHalf,
+} from "@/components/offer/TrustpilotStars";
 
 interface OfferCardProps {
   offer: OfferResponse;
@@ -27,12 +31,26 @@ export function OfferCard({
   const imageUrl = owner?.logoUrl || owner?.imageUrl || null;
   const whatsappNumber = offer.fallbackContact || owner?.whatsapp || null;
 
-  // Always display 5 stars and a 5.0 rating
-  const rating = 5.0;
-  const fullStars = 5;
+  const isSupplier = offer.ownerType === "Supplier";
+  const ratingValue =
+    isSupplier && owner?.trustpilotRating != null
+      ? Number(owner.trustpilotRating)
+      : null;
+  const normalizedRating =
+    typeof ratingValue === "number" && Number.isFinite(ratingValue)
+      ? Math.round(Math.min(5, Math.max(0, ratingValue)) * 10) / 10
+      : null;
+  const roundedStarRating = roundUpToNextHalf(normalizedRating);
+  const hasRating = roundedStarRating !== null;
+  const ratingLabel =
+    normalizedRating !== null ? normalizedRating.toFixed(1) : "—";
+  const trustpilotHref =
+    isSupplier && typeof owner?.trustpilotUrl === "string"
+      ? owner.trustpilotUrl
+      : null;
+  const hasTrustpilotLink = Boolean(trustpilotHref);
 
   const handleContactAgent = () => {
-    // If there's a URL, open it directly (for suppliers/agents with website)
     if (offer.url) {
       console.log("[OFFER_CONTACT_001] Opening purchase URL:", {
         url: offer.url,
@@ -42,9 +60,7 @@ export function OfferCard({
       return;
     }
 
-    // Otherwise, open WhatsApp (for agents without website)
     if (whatsappNumber) {
-      // Sanitize WhatsApp number: remove all non-digits (wa.me requires digits only, no '+')
       const sanitizedWhatsapp = whatsappNumber.replace(/\D+/g, "");
       const matchTitle =
         homeTeamName && awayTeamName
@@ -55,8 +71,6 @@ export function OfferCard({
         : `שלום, אני מעוניין בהצעה שלך במחיר ${offer.price}${currencySymbol}`;
       const message = encodeURIComponent(baseText);
       const url = `https://wa.me/${sanitizedWhatsapp}?text=${message}`;
-      // Log destination for debugging
-      // Note: Logs should be in English with checkpoints per user preference
       console.log("[OFFER_CONTACT_002] Opening WhatsApp:", {
         whatsapp: whatsappNumber,
         sanitizedWhatsapp,
@@ -67,7 +81,6 @@ export function OfferCard({
     }
   };
 
-  // Determine button text and disabled state
   const hasUrl = Boolean(offer.url);
   const hasWhatsapp = Boolean(whatsappNumber);
   const buttonText = hasUrl ? "לרכישה" : "יצירת קשר";
@@ -97,25 +110,30 @@ export function OfferCard({
         </div>
 
         {/* Star rating */}
-        <div className="flex-shrink-0 flex">
-          <div className="flex items-center gap-1">
-            {[...Array(5)].map((_, i) => (
-              <svg
-                key={i}
-                className={`w-4 h-4 md:w-5 md:h-5 ${
-                  i < fullStars ? "text-yellow-400" : "text-gray-300"
-                }`}
-                fill="currentColor"
-                viewBox="0 0 20 20"
+        {hasRating && (
+          <div className="flex-shrink-0 flex flex-col items-center text-center pr-4">
+            {hasTrustpilotLink ? (
+              <a
+                href={trustpilotHref ?? "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[10px] uppercase tracking-wide text-primary font-semibold hover:text-primary-dark transition-colors"
               >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-            ))}
-            <span className="hidden md:inline text-sm text-gray-600 ml-1">
-              {rating}
-            </span>
+                trustpilot
+              </a>
+            ) : (
+              <span className="text-[10px] uppercase tracking-wide text-gray-400">
+                trustpilot
+              </span>
+            )}
+            <div className="flex items-center gap-1">
+              {renderStarRow(roundedStarRating!, "w-4 h-4 md:w-5 md:h-5")}
+              <span className="hidden md:inline text-sm text-gray-600 ml-1">
+                {ratingLabel}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Price */}
         <div className="flex-1 text-right">
@@ -162,22 +180,28 @@ export function OfferCard({
         </div>
 
         {/* Column 2 - Star rating */}
-        <div className="flex-1 flex justify-center items-center">
-          <div className="flex items-center gap-0.5">
-            {[...Array(5)].map((_, i) => (
-              <svg
-                key={i}
-                className={`w-4 h-4 ${
-                  i < fullStars ? "text-yellow-400" : "text-gray-300"
-                }`}
-                fill="currentColor"
-                viewBox="0 0 20 20"
+        {hasRating && (
+          <div className="flex-1 flex flex-col justify-center items-center text-center">
+            {hasTrustpilotLink ? (
+              <a
+                href={trustpilotHref ?? "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[10px] uppercase tracking-wide text-primary font-semibold hover:text-primary-dark transition-colors mb-1"
               >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-            ))}
+                trustpilot
+              </a>
+            ) : (
+              <span className="text-[10px] uppercase tracking-wide text-gray-400 mb-1">
+                trustpilot
+              </span>
+            )}
+            <div className="flex items-center gap-1">
+              {renderStarRow(roundedStarRating!, "w-4 h-4")}
+              <span className="text-xs text-gray-600">{ratingLabel}</span>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Column 3 - Price */}
         <div className="flex-1 flex justify-center items-center text-center">

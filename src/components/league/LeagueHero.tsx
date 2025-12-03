@@ -40,35 +40,37 @@ export function LeagueHero({ league }: LeagueHeroProps) {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 h-full flex flex-col items-center justify-center gap-6 px-4 sm:px-6 lg:px-8 py-8">
-        {/* Main Hero Box */}
-        <div className="relative max-w-4xl mx-auto text-center">
-          <div className="flex flex-col items-center gap-6">
-            {/* League Logo with white background */}
+      <div className="relative z-10 h-full flex items-center justify-center">
+        <div className="px-4">
+          {/* Logo and League Name Container - side by side */}
+          <div className="flex items-center gap-4">
+            {/* League Logo */}
             {league.logoUrl && (
-              <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg bg-white">
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="relative w-20 h-20 md:w-24 md:h-24">
-                    <Image
-                      src={league.logoUrl}
-                      alt={`לוגו ${league.nameHe || league.name}`}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
+              <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg bg-white/10 backdrop-blur-md border border-white/20 flex-shrink-0">
+                <div className="w-full h-full flex items-center justify-center p-4">
+                  <Image
+                    src={league.logoUrl}
+                    alt={`לוגו ${league.nameHe || league.name}`}
+                    width={120}
+                    height={120}
+                    className="object-contain"
+                  />
                 </div>
               </div>
             )}
 
-            {/* League Title */}
-            <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">
+            {/* League Name */}
+            <div className="flex flex-col gap-2">
+              <p className="text-white/90 text-lg md:text-xl text-right">
+                השוואת מחירי כרטיסים
+              </p>
+              <h1 className="text-3xl md:text-4xl font-bold text-white text-right">
                 {league.nameHe || league.name}
               </h1>
-
+              
               {/* League Description */}
               {league.description && (
-                <p className="text-sm md:text-base text-white/90 mt-2 drop-shadow-md">
+                <p className="text-white/90 text-lg md:text-xl text-right hidden md:block max-w-xl">
                   {league.description}
                 </p>
               )}

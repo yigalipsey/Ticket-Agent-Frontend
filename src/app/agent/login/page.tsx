@@ -58,13 +58,13 @@ export default function AgentLoginPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-primary-dark/80 via-primary/70 to-black/80 backdrop-blur-[2px]" />
 
         {/* Login Form - Centered */}
-        <div className="relative z-10 flex items-center justify-center h-full px-4">
-          <div className="w-full max-w-md animate-slide-up">
+        <div className="relative z-10 flex items-center justify-center h-full px-4 py-10 sm:py-0">
+          <div className="w-full max-w-sm sm:max-w-md animate-slide-up scale-[0.96] sm:scale-100">
             {/* Glassmorphism Card */}
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl overflow-hidden p-8 sm:p-10">
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-10">
               {/* Header */}
-              <div className="text-center mb-10">
-                <h2 className="text-3xl font-bold text-white mb-2 tracking-tight">
+              <div className="text-center mb-6 sm:mb-10">
+                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">
                   כניסת סוכנים
                 </h2>
                 <p className="text-gray-300 text-sm">
@@ -72,7 +72,7 @@ export default function AgentLoginPage() {
                 </p>
               </div>
 
-              <form className="space-y-6" onSubmit={handleSubmit}>
+              <form className="space-y-5 sm:space-y-6" onSubmit={handleSubmit}>
                 <div>
                   <label
                     htmlFor="email"

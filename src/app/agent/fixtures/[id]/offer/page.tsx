@@ -82,13 +82,32 @@ export default function AddOfferPage({ params }: AddOfferPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Blue background div under navbar */}
-      <div className="bg-primary h-16 w-full absolute top-0 left-0 right-0 z-[99998]"></div>
+    <div className="min-h-screen flex flex-col font-sans" dir="rtl">
+      {/* Hero Section with Form Overlay */}
+      <section className="relative min-h-screen w-full overflow-hidden flex items-center justify-center py-20">
+        {/* Background Video */}
+        <video
+          className="absolute inset-0 w-full h-full object-cover scale-105 fixed"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster="/images/people-soccer-stadium.avif"
+        >
+          <source
+            src="/videos/0_Soccer_Football_3840x2160.mp4"
+            type="video/mp4"
+          />
+          {/* Fallback for browsers that don't support video */}
+          <div className="absolute inset-0 bg-[url('/images/people-soccer-stadium.avif')] bg-cover bg-center bg-no-repeat" />
+        </video>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
-        {/* Offer Form */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        {/* Dark Overlay with Blur */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-dark/90 via-primary/80 to-black/90 backdrop-blur-[3px] fixed" />
+
+        {/* Content - Centered */}
+        <div className="relative z-10 w-full max-w-2xl px-4 animate-slide-up">
           <OfferForm
             fixtureId={fixtureId}
             onSuccess={() => {
@@ -98,7 +117,7 @@ export default function AddOfferPage({ params }: AddOfferPageProps) {
             onCancel={() => router.back()}
           />
         </div>
-      </div>
+      </section>
     </div>
   );
 }

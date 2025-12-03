@@ -31,7 +31,7 @@ export default function ContactPage() {
     return (
         <div className="min-h-screen bg-white pb-12">
             {/* Hero Section */}
-            <div className="bg-blue-900 text-white py-16 px-4 sm:px-6 lg:px-8 text-center">
+            <div className="bg-[#092274] text-white py-16 px-4 sm:px-6 lg:px-8 text-center">
                 <h1 className="text-4xl font-bold mb-4 font-heebo">צור קשר</h1>
                 <p className="text-xl text-blue-100 max-w-2xl mx-auto">
                     יש לכם שאלה? צריכים עזרה? אנחנו כאן בשבילכם.

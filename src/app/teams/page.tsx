@@ -3,7 +3,7 @@ import HeroSection from "@/components/home/HeroSection";
 import { TeamCarousel } from "@/components/league/TeamCarousel";
 import LeagueService from "@/services/leagueService";
 import { League } from "@/types";
-import { Spinner } from "@/components/ui";
+import TeamsPageLoading from "./loading";
 
 async function TeamsContent() {
   const leaguesRes = await LeagueService.getAllLeaguesWithTeams();
@@ -50,13 +50,7 @@ export default function TeamsPage() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Suspense
-          fallback={
-            <div className="flex justify-center py-12">
-              <Spinner size="lg" />
-            </div>
-          }
-        >
+        <Suspense fallback={<TeamsPageLoading />}>
           <TeamsContent />
         </Suspense>
       </main>

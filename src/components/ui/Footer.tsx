@@ -4,8 +4,22 @@ import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-b from-[#092274] to-[#061850] text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="bg-gradient-to-b from-[#092274] to-[#061850] text-white relative overflow-hidden">
+      {/* Soccer Net Background Pattern (Hexagons only, Mesh-like) */}
+      <div
+        className="absolute inset-0 opacity-[0.06] pointer-events-none"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.98 15v30L30 60 4.02 45V15z' fill='none' stroke='%23ffffff' stroke-width='1' stroke-opacity='1' /%3E%3C/svg%3E")`,
+          backgroundSize: "60px 60px", // Smaller size for tighter mesh
+          backgroundRepeat: "repeat",
+          // Radial gradient mask that fades out faster towards the edges
+          // Started fading earlier (40%) and faster to 80%
+          maskImage:
+            "radial-gradient(circle at center, rgba(0,0,0,1) 20%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0) 80%)",
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
         {/* Main Content */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Column 1 - Quick Links */}
@@ -119,6 +133,16 @@ export default function Footer() {
               </a>
             </div>
           </div>
+        </div>
+
+        {/* Disclaimer */}
+        <div className="mb-8 p-4 bg-white/5 rounded-lg text-xs text-gray-300 text-center leading-relaxed max-w-4xl mx-auto border border-white/5 backdrop-blur-sm">
+          <p>
+            האתר מציג מידע ומחירים מאתרים אחרים בלבד. אין לנו כל צד בעסקאות
+            המתבצעות מול הספקים. המחירים המוצגים עשויים להיות שונים מהמחיר בפועל
+            עקב אי עדכון בזמן. אנו עושים את מירב המאמצים שהעדכונים יתבצעו בזמן
+            ובצורה מדויקת, אך ייתכנו פערים. השימוש באתר הוא באחריות המשתמש בלבד.
+          </p>
         </div>
 
         {/* Bottom Bar */}

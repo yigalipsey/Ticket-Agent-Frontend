@@ -76,18 +76,20 @@ export function TeamFixturesFilter({
   }, [fixtures]);
 
   return (
-    <div className="bg-white rounded-lg p-4 pb-3">
-      {/* Desktop: All filters in one row */}
-      <div className="hidden md:flex md:flex-wrap gap-4">
+    <div className="w-full">
+      {/* Desktop & Tablet Layout */}
+      <div className="hidden md:flex md:flex-wrap items-center gap-4 bg-white p-1 rounded-2xl border border-gray-100 shadow-sm md:w-fit">
         <HomeAwayFilter
           selectedFilter={selectedFilter as HomeAwayFilterType}
           onFilterChange={setSelectedFilter}
           labels={{
             all: "כל המשחקים",
-            home: "משחקי בית",
-            away: "משחקי חוץ",
+            home: "בית",
+            away: "חוץ",
           }}
         />
+
+        <div className="h-8 w-px bg-gray-200 mx-1" />
 
         <TeamFixturesLeagueFilter
           selectedLeague={selectedLeague}
@@ -104,20 +106,20 @@ export function TeamFixturesFilter({
         />
       </div>
 
-      {/* Mobile: First row - Home/Away, Second row - League and Month together */}
-      <div className="flex md:hidden flex-col gap-4">
+      {/* Mobile Layout - Scrollable or Stacked */}
+      <div className="flex md:hidden flex-col gap-3">
         <HomeAwayFilter
           selectedFilter={selectedFilter as HomeAwayFilterType}
           onFilterChange={setSelectedFilter}
           labels={{
-            all: "כל המשחקים",
-            home: "משחקי בית",
-            away: "משחקי חוץ",
+            all: "הכל",
+            home: "בית",
+            away: "חוץ",
           }}
+          fullWidth
         />
 
-        {/* Second row - League and Month together */}
-        <div className="flex gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <TeamFixturesLeagueFilter
             selectedLeague={selectedLeague}
             availableLeagues={availableLeagues}

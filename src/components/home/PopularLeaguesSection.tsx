@@ -16,7 +16,7 @@ export default function PopularLeaguesSection({
   const len = popularLeagues.length;
 
   return (
-    <section className="w-full bg-white pb-4 md:pb-8">
+    <section className="w-full bg-gray-50 py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader
           title={{ mobile: "ליגות פופולריות", desktop: "ליגות פופולריות" }}
@@ -37,12 +37,11 @@ export default function PopularLeaguesSection({
                 <div
                   key={league._id || league.id}
                   // width fills the grid cell; no borders in the gap because gap is separate
-                  className={`${borderTop} ${borderBottom} bg-white hover:bg-gray-50 transition-colors`}
+                  className={`${borderTop} ${borderBottom} bg-gray-50 hover:bg-white transition-colors`}
                 >
                   <Link
-                    href={`/leagues/${league.slug}?id=${
-                      league._id || league.id
-                    }`}
+                    href={`/leagues/${league.slug}?id=${league._id || league.id
+                      }`}
                     className="block px-0 py-3 md:px-4 md:py-6"
                   >
                     <div className="flex   items-center justify-between">

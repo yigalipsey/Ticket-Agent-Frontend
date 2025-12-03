@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Heebo, Rubik, Open_Sans } from "next/font/google";
 import { ReactQueryProvider, AgentAuthProvider } from "@/providers";
-import { Navbar, Footer } from "@/components/ui";
+import { Navbar } from "@/components/ui";
+import ConditionalFooter from "@/components/ui/ConditionalFooter";
 import {
   AccessibilityToolbar,
   CookieConsent,
@@ -126,8 +127,8 @@ export default function RootLayout({
                 {children}
               </main>
 
-              {/* Footer */}
-              <Footer />
+              {/* Footer - hidden on agent pages */}
+              <ConditionalFooter />
 
               {/* Accessibility Toolbar - globally available */}
               <AccessibilityToolbar />

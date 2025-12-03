@@ -7,6 +7,7 @@ export interface Agent {
   whatsapp: string;
   agentType: "individual" | "agency";
   companyName?: string;
+  imageUrl?: string;
   isActive: boolean;
   reviewStats: {
     totalReviews: number;
@@ -49,6 +50,27 @@ class AgentService {
         error:
           error instanceof Error ? error.message : "Failed to fetch agents",
       };
+    }
+  }
+
+  async getAgentById(id: string): Promise<{ success: boolean; data?: Agent; error?: string }> {
+    try {
+        // Reusing getAllAgents and filtering for now since we don't know if /agents/:id exists
+        // Optimization: Ideally backend should have get by ID.
+        const allAgents = await this.getAllAgents();
+        if (allAgents.success) {
+            const agent = allAgents.data.find(a => a._id === id);
+            if (agent) {
+                return { success: true, data: agent };
+            }
+            return { success: false, error: "Agent not found" };
+        }
+        return { success: false, error: allAgents.error };
+    } catch (error: unknown) {
+        return {
+            success: false,
+            error: error instanceof Error ? error.message : "Failed to fetch agent"
+        };
     }
   }
 }

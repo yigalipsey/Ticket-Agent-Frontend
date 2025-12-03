@@ -13,7 +13,7 @@ export default function PartnersPage() {
     return (
         <div className="min-h-screen bg-white pb-12">
             {/* Hero Section */}
-            <div className="bg-slate-900 text-white py-20 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden">
+            <div className="bg-[#092274] text-white py-20 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-purple-900/50 z-0" />
                 <div className="relative z-10 max-w-4xl mx-auto">
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 font-heebo">

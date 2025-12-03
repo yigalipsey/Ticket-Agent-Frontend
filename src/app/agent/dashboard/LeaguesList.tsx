@@ -2,7 +2,7 @@
 
 import React from "react";
 import { League } from "@/types/league";
-import { LeagueList } from "@/components";
+import { LeaguesGrid } from "@/components/league";
 
 interface LeaguesListProps {
   leagues: League[];
@@ -16,12 +16,7 @@ export default function LeaguesList({
   error,
 }: LeaguesListProps) {
   if (isLoading) {
-    return (
-      <div className="text-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <p className="text-gray-600">טוען ליגות...</p>
-      </div>
-    );
+    return <LeaguesGrid leagues={[]} isLoading={true} />;
   }
 
   if (error) {
@@ -50,7 +45,5 @@ export default function LeaguesList({
     );
   }
 
-  return (
-    <LeagueList leagues={leagues} hrefPrefix="/agent" showButton={false} />
-  );
+  return <LeaguesGrid leagues={leagues} hrefPrefix="/agent" />;
 }

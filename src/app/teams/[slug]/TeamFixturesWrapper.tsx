@@ -180,7 +180,7 @@ export default function TeamFixturesWrapper({
                         </div>
                       </div>
                       {/* Venue skeleton on desktop */}
-                      <div className="flex flex-col gap-1 flex-shrink-0 bg-gray-50 rounded-lg px-3 py-2 w-[220px]">
+                      <div className="flex flex-col gap-1 flex-shrink-0 bg-gray-50 rounded-lg px-3 py-2 w-[280px]">
                         <div className="flex items-center gap-2 min-w-0">
                           <div className="w-4 h-4 bg-gray-200 rounded animate-pulse"></div>
                           <div className="h-3 w-16 bg-gray-200 rounded animate-pulse"></div>

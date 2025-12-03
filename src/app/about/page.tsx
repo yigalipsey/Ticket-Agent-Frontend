@@ -11,7 +11,7 @@ export default function AboutPage() {
     return (
         <div className="min-h-screen bg-white pb-12">
             {/* Hero Section */}
-            <div className="bg-blue-900 text-white py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+            <div className="bg-[#092274] text-white py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[url('/stadium-bg.jpg')] opacity-10 bg-cover bg-center" />
                 <div className="max-w-7xl mx-auto relative z-10 text-center">
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 font-heebo">

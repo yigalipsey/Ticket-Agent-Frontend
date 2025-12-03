@@ -5,7 +5,7 @@ export interface CreateOfferData {
   price: number;
   currency: string;
   ticketType: string;
-  notes?: string;
+  url?: string;
 }
 
 export interface CreateOfferResponse {
@@ -29,6 +29,8 @@ export interface OfferOwnerInfo {
   agentType?: string;
   companyName?: string;
   isActive?: boolean;
+  trustpilotRating?: number | null;
+  trustpilotUrl?: string | null;
 }
 
 export interface OfferResponse {

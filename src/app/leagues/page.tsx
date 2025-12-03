@@ -1,10 +1,9 @@
 "use client";
 
 import React from "react";
-import { LeagueList } from "@/components";
+import { LeaguesGrid } from "@/components/league";
 import { useAllLeagues } from "@/hooks";
 import HeroSection from "@/components/home/HeroSection";
-import { Spinner } from "@/components/ui";
 
 export default function LeaguesPage() {
   const { leagues, isLoading, error } = useAllLeagues();
@@ -25,23 +24,28 @@ export default function LeaguesPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <HeroSection />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {isLoading ? (
-          <div className="flex justify-center py-12">
-            <Spinner size="lg" />
+        <div className="flex flex-col space-y-8">
+          <div className="text-right">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              ליגות מובילות
+            </h1>
+            <p className="text-gray-500 text-lg">
+              בחר ליגה לצפייה במשחקים ורכישת כרטיסים
+            </p>
           </div>
-        ) : (
-          <LeagueList
-            leagues={leagues}
-            showDescription={true}
-            showStats={true}
-          />
-        )}
+
+          {isLoading ? (
+            <LeaguesGrid leagues={[]} isLoading={true} />
+          ) : (
+            <LeaguesGrid leagues={leagues} />
+          )}
+        </div>
       </main>
     </div>
   );

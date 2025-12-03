@@ -1,13 +1,12 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { Trophy } from "lucide-react";
 import { League } from "@/types";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.css";
 import { useRouter } from "next/navigation";
+import LeagueCardItem from "./LeagueCardItem";
 
 export interface LeagueListProps {
   leagues: League[];
@@ -17,6 +16,7 @@ export interface LeagueListProps {
   onLeagueClick?: (league: League) => void;
   hrefPrefix?: string; // להוסיף prefix לאי-ר שונות של routes
   showButton?: boolean; // האם להציג כפתור "צפה בהצעות"
+  layout?: "carousel" | "grid";
 }
 
 const LeagueList: React.FC<LeagueListProps> = ({
@@ -27,6 +27,7 @@ const LeagueList: React.FC<LeagueListProps> = ({
   onLeagueClick,
   hrefPrefix = "", // ברירת מחדל empty להוספת /agent אם צריך
   showButton = true, // ברירת מחדל - להציג כפתור
+  layout = "carousel",
 }) => {
   const router = useRouter();
 
@@ -79,6 +80,28 @@ const LeagueList: React.FC<LeagueListProps> = ({
     );
   }
 
+  if (layout === "grid") {
+    return (
+      <div className={className}>
+        <div className="text-right mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+            בחר ליגה
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-8">
+          {leagues.map((league) => (
+            <LeagueCardItem
+              key={league._id}
+              league={league}
+              onClick={() => handleLeagueClick(league)}
+              variant="card"
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={className}>
       <div className="relative bg-white">
@@ -117,36 +140,10 @@ const LeagueList: React.FC<LeagueListProps> = ({
           <div ref={sliderRef} className="keen-slider bg-white flex-1">
             {leagues.map((league) => (
               <div key={league._id} className="keen-slider__slide">
-                <div
+                <LeagueCardItem
+                  league={league}
                   onClick={() => handleLeagueClick(league)}
-                  className="group flex flex-col items-center text-center space-y-3 p-4 cursor-pointer"
-                >
-                  {league.logoUrl ? (
-                    <div className="rounded-full p-[1px] transition-transform group-hover:scale-105 w-[80px] h-[80px] md:w-[100px] md:h-[100px] bg-primary">
-                      <div
-                        className="relative w-full h-full rounded-full flex items-center justify-center"
-                        style={{
-                          background: "white",
-                        }}
-                      >
-                        <Image
-                          src={league.logoUrl}
-                          alt={league.nameHe || league.name}
-                          width={60}
-                          height={60}
-                          className="object-contain w-16 h-16 md:w-20 md:h-20"
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="rounded-full w-[80px] h-[80px] md:w-[100px] md:h-[100px] bg-gray-200 flex items-center justify-center">
-                      <Trophy className="w-10 h-10 md:w-12 md:h-12 text-gray-400" />
-                    </div>
-                  )}
-                  <h3 className="font-semibold text-gray-900 group-hover:text-primary transition-colors text-sm md:text-base leading-tight">
-                    {league.nameHe || league.name}
-                  </h3>
-                </div>
+                />
               </div>
             ))}
           </div>

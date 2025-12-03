@@ -48,7 +48,7 @@ export function TeamHeader({
           <div className="flex items-center gap-4">
             {/* Team Logo */}
             {(team.logoUrl || team.logo) && (
-              <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg bg-white flex-shrink-0">
+              <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg bg-white/10 backdrop-blur-md border border-white/20 flex-shrink-0">
                 <div className="w-full h-full flex items-center justify-center p-4">
                   <Image
                     src={team.logoUrl || team.logo || ""}
@@ -108,7 +108,7 @@ export function TeamHeaderLoading() {
       <div className="relative z-10 h-full flex items-center justify-center">
         <div className="px-4">
           <div className="flex items-center gap-4">
-            <div className="w-32 h-32 md:w-40 md:h-40 bg-white/80 rounded-full animate-pulse"></div>
+            <div className="w-32 h-32 md:w-40 md:h-40 bg-white/10 backdrop-blur-md border border-white/20 rounded-full animate-pulse"></div>
             <div className="flex flex-col gap-2">
               <div className="h-6 bg-white/80 rounded w-48 animate-pulse"></div>
               <div className="h-12 bg-white/80 rounded w-64 animate-pulse"></div>

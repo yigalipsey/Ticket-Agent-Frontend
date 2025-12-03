@@ -31,24 +31,24 @@ export function LeagueFilter({
   };
 
   return (
-    <div className="bg-white rounded-lg p-4 relative z-50">
-      <div className="flex flex-row gap-3 items-start flex-wrap">
+    <div className="w-full">
+      <div className="grid grid-cols-2 md:flex md:flex-row gap-3 items-start md:items-center w-full">
         <VenueFilter
           selectedVenue={selectedVenue}
           availableVenues={availableVenues}
           onVenueChange={onVenueChange}
-          label="אצטדיון"
+          label="כל האצטדיונים"
         />
         <MonthFilter
           selectedMonth={selectedMonth}
           availableMonths={availableMonths}
           onMonthChange={onMonthChange}
-          label="חודש"
+          label="כל החודשים"
         />
         {onReset && hasActiveFilters && (
           <button
             onClick={handleReset}
-            className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium text-sm whitespace-nowrap"
+            className="col-span-2 md:col-span-1 w-full md:w-auto px-4 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors font-medium text-sm whitespace-nowrap"
           >
             איפוס מסננים
           </button>

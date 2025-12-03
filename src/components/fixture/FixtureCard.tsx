@@ -8,7 +8,6 @@ import {
   Clock,
   ChevronLeft,
   Ticket,
-  Globe,
 } from "lucide-react";
 import { Fixture } from "@/types";
 import { formatDate, formatTime, formatCurrency } from "@/lib/utils";
@@ -137,7 +136,7 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
               </div>
               {/* Venue on desktop - same row as button */}
               {showVenue && fixture.venue && (
-                <div className="flex flex-col gap-1 flex-shrink-0 bg-gray-50 rounded-lg px-3 py-2 w-[220px]">
+                <div className="flex flex-col gap-1 flex-shrink-0 bg-gray-50 rounded-lg px-3 py-2 w-[280px]">
                   {/* Match time on desktop - above venue */}
                   {fixture.date && (
                     <div className="flex items-center gap-2 min-w-0">
@@ -154,9 +153,9 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                         {fixture.venue.name}
                       </div>
                       {/* City in Hebrew below venue name */}
-                      {(fixture.venue.cityHe || fixture.venue.city) && (
+                      {(fixture.venue.city_he || fixture.venue.city) && (
                         <div className="text-xs text-gray-600 truncate">
-                          {fixture.venue.cityHe || fixture.venue.city}
+                          {fixture.venue.city_he || fixture.venue.city}
                         </div>
                       )}
                     </div>
@@ -180,9 +179,9 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                     <div className="font-medium text-gray-900 truncate">
                       {fixture.venue.name}
                     </div>
-                    {(fixture.venue.cityHe || fixture.venue.city) && (
+                    {(fixture.venue.city_he || fixture.venue.city) && (
                       <div className="text-xs text-gray-600 truncate">
-                        {fixture.venue.cityHe || fixture.venue.city}
+                        {fixture.venue.city_he || fixture.venue.city}
                       </div>
                     )}
                   </div>
@@ -332,9 +331,9 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                 <div className="text-sm font-medium text-gray-900">
                   {fixture.venue.name}
                 </div>
-                {(fixture.venue.cityHe || fixture.venue.city) && (
+                {(fixture.venue.city_he || fixture.venue.city) && (
                   <div className="text-xs text-gray-600">
-                    {fixture.venue.cityHe || fixture.venue.city}
+                    {fixture.venue.city_he || fixture.venue.city}
                   </div>
                 )}
               </div>

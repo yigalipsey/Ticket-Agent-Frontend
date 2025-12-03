@@ -5,7 +5,7 @@ export interface OfferFormData {
   price: number;
   currency: string;
   ticketType: string;
-  notes?: string;
+  url?: string;
 }
 
 export interface UseOfferFormProps {
@@ -36,7 +36,7 @@ export const useOfferForm = ({
     price: 0,
     currency: "EUR",
     ticketType: "standard",
-    notes: "",
+    url: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,7 +65,7 @@ export const useOfferForm = ({
       price: 0,
       currency: "EUR",
       ticketType: "standard",
-      notes: "",
+      url: "",
     });
     setError(null);
     setIsSubmitting(false);
@@ -92,6 +92,19 @@ export const useOfferForm = ({
       return;
     }
 
+    if (formData.url) {
+      try {
+        const parsedUrl = new URL(formData.url);
+        if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+          setError("הקישור חייב להתחיל ב-http או https");
+          return;
+        }
+      } catch {
+        setError("אנא הזן קישור תקין לדף המכירה");
+        return;
+      }
+    }
+
     setIsSubmitting(true);
     setError(null);
 
@@ -101,7 +114,7 @@ export const useOfferForm = ({
         price: formData.price,
         currency: formData.currency,
         ticketType: formData.ticketType,
-        notes: formData.notes || undefined,
+        url: formData.url?.trim() || undefined,
       };
 
       const result = await OfferService.createOffer(offerData);

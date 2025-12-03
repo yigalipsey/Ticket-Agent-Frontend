@@ -14,6 +14,7 @@ export interface League {
   isPopular: boolean;
   months?: string[]; // Available months in YYYY-MM format
   teams?: Team[]; // Optional teams array
+  teamsCount?: number;
 }
 
 export interface Team {

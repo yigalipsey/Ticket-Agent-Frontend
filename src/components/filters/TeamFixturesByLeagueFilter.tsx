@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { ChevronDown, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface LeagueOption {
   _id: string;
@@ -27,6 +28,23 @@ export function TeamFixturesLeagueFilter({
   label = "כל הליגות",
 }: TeamFixturesLeagueFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const selectedLeagueLabel = selectedLeague
     ? (() => {
@@ -38,55 +56,68 @@ export function TeamFixturesLeagueFilter({
     : label;
 
   return (
-    <div className="relative">
+    <div className="relative w-full md:w-auto" ref={containerRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between px-4 py-2 bg-transparent border border-primary text-primary rounded-lg hover:bg-primary/10 focus:outline-none whitespace-nowrap"
+        className={cn(
+          "flex items-center justify-between px-4 py-2 border rounded-full transition-all duration-200 whitespace-nowrap w-full md:min-w-[140px]",
+          isOpen
+            ? "border-primary ring-1 ring-primary/10 bg-white shadow-sm"
+            : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/50 text-gray-700"
+        )}
       >
-        <span className="text-sm font-medium">{selectedLeagueLabel}</span>
+        <span className={cn("text-sm font-medium truncate", selectedLeague ? "text-primary" : "text-gray-700")}>
+          {selectedLeagueLabel}
+        </span>
         <ChevronDown
-          className={`h-4 w-4 transition-transform flex-shrink-0 ml-2 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={cn(
+            "h-4 w-4 transition-transform flex-shrink-0 ml-2 text-gray-400",
+            isOpen && "rotate-180 text-primary"
+          )}
         />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-1 bg-white border border-primary rounded-lg shadow-lg z-10 max-h-64 overflow-y-auto min-w-[200px]">
-          <div className="py-1">
-            <button
-              onClick={() => {
-                onLeagueChange(null);
-                setIsOpen(false);
-              }}
-              className={`w-full px-4 py-2 text-right text-sm hover:bg-gray-50 ${
-                selectedLeague === null
-                  ? "bg-blue-50 text-blue-600 font-medium"
-                  : "text-gray-900"
-              }`}
-            >
-              {label}
-            </button>
-            {availableLeagues.map((league) => {
-              const leagueId = league._id || league.id;
-              return (
-                <button
-                  key={leagueId}
-                  onClick={() => {
-                    onLeagueChange(leagueId || null);
-                    setIsOpen(false);
-                  }}
-                  className={`w-full px-4 py-2 text-right text-sm hover:bg-gray-50 whitespace-nowrap ${
-                    selectedLeague === leagueId
-                      ? "bg-blue-50 text-blue-600 font-medium"
-                      : "text-gray-900"
-                  }`}
-                >
-                  {league.name}
-                </button>
-              );
-            })}
-          </div>
+        <div className="absolute top-full right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-xl z-20 max-h-64 overflow-y-auto w-full md:min-w-[220px] md:w-auto p-1 animate-in fade-in zoom-in-95 duration-100">
+          <button
+            onClick={() => {
+              onLeagueChange(null);
+              setIsOpen(false);
+            }}
+            className={cn(
+              "w-full px-3 py-2.5 text-right text-sm rounded-lg flex items-center justify-between transition-colors",
+              selectedLeague === null
+                ? "bg-primary/5 text-primary font-medium"
+                : "text-gray-700 hover:bg-gray-50"
+            )}
+          >
+            <span>{label}</span>
+            {selectedLeague === null && <Check className="h-4 w-4" />}
+          </button>
+          
+          {availableLeagues.map((league) => {
+            const leagueId = league._id || league.id;
+            const isSelected = selectedLeague === leagueId;
+            
+            return (
+              <button
+                key={leagueId}
+                onClick={() => {
+                  onLeagueChange(leagueId || null);
+                  setIsOpen(false);
+                }}
+                className={cn(
+                  "w-full px-3 py-2.5 text-right text-sm rounded-lg flex items-center justify-between transition-colors whitespace-nowrap",
+                  isSelected
+                    ? "bg-primary/5 text-primary font-medium"
+                    : "text-gray-700 hover:bg-gray-50"
+                )}
+              >
+                <span>{league.name}</span>
+                {isSelected && <Check className="h-4 w-4" />}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

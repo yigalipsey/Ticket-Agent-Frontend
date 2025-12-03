@@ -39,7 +39,7 @@ export default function SupportPage() {
     return (
         <div className="min-h-screen bg-white pb-12">
             {/* Hero Search Section */}
-            <div className="bg-blue-600 py-20 px-4 sm:px-6 lg:px-8 text-center">
+            <div className="bg-[#092274] py-20 px-4 sm:px-6 lg:px-8 text-center">
                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-8 font-heebo">
                     איך אפשר לעזור לך היום?
                 </h1>

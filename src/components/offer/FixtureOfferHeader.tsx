@@ -47,29 +47,6 @@ export function FixtureOfferHeader({
         {/* Centered content */}
         <div className="relative z-10 w-full mt-5 h-full flex items-center justify-center">
           <div className="flex flex-col items-center justify-center text-center px-4">
-            {/* Date above (small) */}
-            <div className="mb-4 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg text-sm text-white/90 flex items-center gap-2">
-              {/* Calendar Icon */}
-              <svg
-                className="w-4 h-4 text-white/80"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-
-              {/* Date + Time */}
-              <span>
-                {formattedDate} • {formattedTime}
-              </span>
-            </div>
-
             {/* Teams block: increased horizontal gap, logos boxed, names below, VS centered absolute */}
             <div className="relative flex  items-center justify-center gap-12 w-full ">
               {/* HOME */}
@@ -122,6 +99,13 @@ export function FixtureOfferHeader({
                   {awayTeam.name}
                 </div>
               </div>
+            </div>
+
+            {/* Date under teams */}
+            <div className="mt-6 text-lg md:text-xl text-white font-medium flex items-center gap-2 dir-rtl">
+              <span>{formattedDate}</span>
+              <span className="mx-1">•</span>
+              <span>{formattedTime}</span>
             </div>
 
             {/* Venue small under teams */}

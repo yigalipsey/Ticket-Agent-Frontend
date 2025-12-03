@@ -1,6 +1,6 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import OfferService from "@/services/offerService";
+import OfferService, { type OfferResponse } from "@/services/offerService";
 import { FixtureOfferHeader } from "@/components/offer/FixtureOfferHeader";
 import { OffersList } from "@/components/offer/OffersList";
 import { OffersSkeleton } from "@/components/offer/OffersSkeleton";
@@ -9,6 +9,63 @@ interface FixtureOffersPageProps {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ id?: string }>;
 }
+
+type FixtureLike = {
+  _id?: string | null;
+  date?: string | null;
+  homeTeam?: {
+    name?: string | null;
+    logo?: string | null;
+    logoUrl?: string | null;
+  } | null;
+  awayTeam?: {
+    name?: string | null;
+    logo?: string | null;
+    logoUrl?: string | null;
+  } | null;
+  venue?: { name?: string | null; city?: string | null } | null;
+  league?: { name?: string | null } | null;
+};
+
+type OffersQueryResult = {
+  offers?: OfferResponse[];
+  fixture?: FixtureLike | null;
+};
+
+const formatSlugSegment = (segment: string) =>
+  segment
+    .split("-")
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+
+const buildFixtureFromSlug = (slug: string): FixtureLike | null => {
+  const match = slug.match(/(.+)-vs-(.+)-(\d{4}-\d{2}-\d{2})$/);
+
+  if (!match) {
+    return null;
+  }
+
+  const [, homeSegment, awaySegment, dateSegment] = match;
+  const parsedDate = dateSegment ? new Date(dateSegment) : null;
+
+  return {
+    _id: `slug-${slug}`,
+    date: parsedDate ? parsedDate.toISOString() : null,
+    homeTeam: {
+      name: formatSlugSegment(homeSegment),
+      logo: null,
+      logoUrl: null,
+    },
+    awayTeam: {
+      name: formatSlugSegment(awaySegment),
+      logo: null,
+      logoUrl: null,
+    },
+    venue: null,
+    league: null,
+  };
+};
 
 export default async function FixtureOffersPage({
   params,
@@ -23,7 +80,9 @@ export default async function FixtureOffersPage({
   // אם אין ID, נבצע שליפה לפי slug (לנחיתה ישירה)
   if (!fixtureId) {
     try {
-      const idResult = await OfferService.getFixtureIdBySlug(slug);
+      const idResult = (await OfferService.getFixtureIdBySlug(slug)) as {
+        _id?: string;
+      } | null;
 
       if (!idResult?._id) {
         notFound();
@@ -36,17 +95,21 @@ export default async function FixtureOffersPage({
     }
   }
 
-  // קבלת פרטי המשחק (במידת הצורך נבצע שליפה נוספת)
-  let fixture = null;
-  let offers = null;
+  if (!fixtureId) {
+    notFound();
+  }
+
+  const fallbackFixture = buildFixtureFromSlug(slug);
+  let fixture: FixtureLike | null = fallbackFixture;
+  let offers: OfferResponse[] = [];
 
   try {
     // שלב 2: קבלת ההצעות (כולל פרטי משחק מההצעה הראשונה)
-    const offersData = await OfferService.getOffersByFixtureId(fixtureId, {
+    const offersData = (await OfferService.getOffersByFixtureId(fixtureId, {
       limit: 100,
       sortBy: "price",
       sortOrder: "asc",
-    });
+    })) as OffersQueryResult | null;
 
     console.log("🎯 [FIXTURE OFFERS PAGE] Offers data received:", {
       fixtureId,
@@ -56,27 +119,23 @@ export default async function FixtureOffersPage({
       fixture: offersData?.fixture,
     });
 
-    fixture = offersData?.fixture;
+    fixture = offersData?.fixture || fallbackFixture;
     offers = offersData?.offers || [];
 
-    // אם אין משחק ב-response אבל יש הצעות, זה אומר שהמשחק קיים אבל לא נטען נכון
-    // אם אין משחק ואין הצעות, המשחק כנראה לא קיים ב-DB
     if (!fixture) {
-      console.warn("⚠️ Fixture not found in offers response:", {
-        fixtureId,
-        slug,
-        hasOffers: offers.length > 0,
-      });
-
-      // אם יש הצעות אבל אין משחק, זה בעיה - נחזיר שגיאה
-      if (offers.length > 0) {
-        console.error(
-          "❌ Offers exist but fixture is missing - data inconsistency!"
-        );
-      }
-
-      // אם אין משחק בכלל, נחזיר notFound
-      notFound();
+      return (
+        <div className="min-h-screen bg-white flex flex-col items-center justify-center px-4">
+          <div className="max-w-2xl text-center space-y-4">
+            <h1 className="text-2xl font-bold text-gray-900">
+              לא הצלחנו לטעון את פרטי המשחק
+            </h1>
+            <p className="text-gray-600">
+              ייתכן שהקישור אינו מעודכן או שהמשחק הוסר. אנא נסה לעדכן את הדף או
+              חזור לעמוד הראשי כדי לבחור משחק אחר.
+            </p>
+          </div>
+        </div>
+      );
     }
 
     // אם אין הצעות, נציג מסך ריק
@@ -92,13 +151,13 @@ export default async function FixtureOffersPage({
               name: fixture.awayTeam?.name || "קבוצה",
               logo: fixture.awayTeam?.logoUrl || fixture.awayTeam?.logo || "",
             }}
-            date={fixture.date}
+            date={fixture.date || new Date().toISOString()}
             venue={{
               name: fixture.venue?.name || "אצטדיון",
-              city: fixture.venue?.city,
+              city: fixture.venue?.city ?? undefined,
             }}
             league={{
-              name: fixture.league?.name || "ליגה",
+              name: fixture.league?.name ?? "ליגה",
             }}
             totalOffers={0}
           />
@@ -130,13 +189,13 @@ export default async function FixtureOffersPage({
             name: fixture.awayTeam?.name || "קבוצה",
             logo: fixture.awayTeam?.logoUrl || fixture.awayTeam?.logo || "",
           }}
-          date={fixture.date}
+          date={fixture.date || new Date().toISOString()}
           venue={{
             name: fixture.venue?.name || "אצטדיון",
-            city: fixture.venue?.city,
+            city: fixture.venue?.city ?? undefined,
           }}
           league={{
-            name: fixture.league?.name || "ליגה",
+            name: fixture.league?.name ?? "ליגה",
           }}
           totalOffers={offers?.length || 0}
         />
@@ -171,13 +230,13 @@ export default async function FixtureOffersPage({
               name: fixture.awayTeam?.name || "קבוצה",
               logo: fixture.awayTeam?.logoUrl || fixture.awayTeam?.logo || "",
             }}
-            date={fixture.date}
+            date={fixture.date || new Date().toISOString()}
             venue={{
               name: fixture.venue?.name || "אצטדיון",
-              city: fixture.venue?.city,
+              city: fixture.venue?.city ?? undefined,
             }}
             league={{
-              name: fixture.league?.name || "ליגה",
+              name: fixture.league?.name ?? "ליגה",
             }}
             totalOffers={0}
           />
