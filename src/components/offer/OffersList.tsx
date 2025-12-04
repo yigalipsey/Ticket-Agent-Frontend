@@ -49,7 +49,7 @@ export function OffersList({
       {homeTeam && awayTeam && (
         <div className="mb-4 mt-0">
           <h1 className="text-lg md:text-xl font-semibold text-gray-900 text-right">
-            השוואת מחירי כרטיסים ל&apos;{homeTeam.name} נגד {awayTeam.name}
+            השוואת מחירי כרטיסים ל{homeTeam.name} נגד {awayTeam.name}
           </h1>
         </div>
       )}

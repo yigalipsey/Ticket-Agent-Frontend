@@ -162,7 +162,7 @@ export default async function FixtureOffersPage({
             totalOffers={0}
           />
 
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+          <main className="max-w-7xl mx-auto px-1 sm:px-4 md:px-6 lg:px-8 pb-8">
             {/* Message */}
             <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
               <p className="text-base font-medium text-yellow-900">
@@ -241,7 +241,7 @@ export default async function FixtureOffersPage({
             totalOffers={0}
           />
 
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+          <main className="max-w-7xl mx-auto px-1 sm:px-4 md:px-6 lg:px-8 pb-8">
             <div className="mt-8 bg-red-50 border border-red-200 rounded-lg p-8 text-center">
               <h2 className="text-2xl font-bold text-red-800 mb-4">שגיאה</h2>
               <p className="text-red-600">
