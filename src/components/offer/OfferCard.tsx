@@ -47,10 +47,11 @@ export function OfferCard({
     typeof ratingValue === "number" && Number.isFinite(ratingValue)
       ? Math.round(Math.min(5, Math.max(0, ratingValue)) * 10) / 10
       : null;
-  const roundedStarRating = roundUpToNextHalf(normalizedRating);
-  const hasRating = hasOwner && normalizedRating !== null;
+  const roundedStarRating = roundUpToNextHalf(normalizedRating) ?? 0;
+  // Always show rating for agents/suppliers, default to 0.0 if no rating exists
+  const hasRating = hasOwner;
   const ratingLabel =
-    normalizedRating !== null ? normalizedRating.toFixed(1) : "—";
+    normalizedRating !== null ? normalizedRating.toFixed(1) : "0.0";
 
   // Get rating URL and provider
   const ratingUrl =
@@ -136,19 +137,23 @@ export function OfferCard({
         {/* Star rating */}
         {hasRating && (
           <div className="flex-shrink-0 flex flex-col items-center text-center pr-6">
-            {hasRatingLink ? (
-              <a
-                href={ratingUrl ?? "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[10px] uppercase tracking-wide text-primary font-semibold hover:text-primary-dark transition-colors"
-              >
-                {providerLabel}
-              </a>
-            ) : (
-              <span className="text-[10px] uppercase tracking-wide text-gray-400">
-                {providerLabel}
-              </span>
+            {normalizedRating !== null && (
+              <>
+                {hasRatingLink ? (
+                  <a
+                    href={ratingUrl ?? "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[10px] uppercase tracking-wide text-primary font-semibold hover:text-primary-dark transition-colors"
+                  >
+                    {providerLabel}
+                  </a>
+                ) : (
+                  <span className="text-[10px] uppercase tracking-wide text-gray-400">
+                    {providerLabel}
+                  </span>
+                )}
+              </>
             )}
             <div className="flex items-center gap-1">
               {renderStarRow(roundedStarRating ?? 0, "w-4 h-4 md:w-5 md:h-5")}
@@ -214,30 +219,32 @@ export function OfferCard({
         </div>
 
         {/* Star rating */}
-        <div className="flex flex-col justify-center items-center min-w-0">
-          {hasRating && (
-            <>
-              {hasRatingLink ? (
-                <a
-                  href={ratingUrl ?? "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[9px] uppercase tracking-wide text-primary font-semibold hover:text-primary-dark transition-colors leading-tight text-center w-full truncate px-0.5"
-                >
-                  {providerLabel}
-                </a>
-              ) : (
-                <span className="text-[9px] uppercase tracking-wide text-gray-400 leading-tight text-center w-full truncate px-0.5">
-                  {providerLabel}
-                </span>
-              )}
-              <div className="flex items-center justify-center gap-0.5 mt-0.5">
-                {renderStarRow(roundedStarRating ?? 0, "w-2.5 h-2.5")}
-                <span className="text-[9px] text-gray-600">{ratingLabel}</span>
-              </div>
-            </>
-          )}
-        </div>
+        {hasRating && (
+          <div className="flex flex-col justify-center items-center min-w-0">
+            {normalizedRating !== null && (
+              <>
+                {hasRatingLink ? (
+                  <a
+                    href={ratingUrl ?? "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[9px] uppercase tracking-wide text-primary font-semibold hover:text-primary-dark transition-colors leading-tight text-center w-full truncate px-0.5"
+                  >
+                    {providerLabel}
+                  </a>
+                ) : (
+                  <span className="text-[9px] uppercase tracking-wide text-gray-400 leading-tight text-center w-full truncate px-0.5">
+                    {providerLabel}
+                  </span>
+                )}
+              </>
+            )}
+            <div className="flex items-center justify-center gap-0.5 mt-0.5">
+              {renderStarRow(roundedStarRating ?? 0, "w-2.5 h-2.5")}
+              <span className="text-[9px] text-gray-600">{ratingLabel}</span>
+            </div>
+          </div>
+        )}
 
         {/* Badges */}
         <div className="flex flex-col justify-center items-center min-w-0">

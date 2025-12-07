@@ -11,6 +11,7 @@ import {
   PenLine,
   Eye,
   Globe,
+  Instagram,
 } from "lucide-react";
 import { Agent } from "@/services/agentService";
 
@@ -114,7 +115,17 @@ const AgentCard: React.FC<AgentCardProps> = ({
 
             <div className="w-px h-4 bg-gray-200"></div>
 
-            {agent.websiteUrl ? (
+            {agent.instagramUrl ? (
+              <Link
+                href={agent.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-[#E4405F] transition-colors"
+                title="אינסטגרם"
+              >
+                <Instagram className="w-6 h-6" />
+              </Link>
+            ) : agent.websiteUrl ? (
               <Link
                 href={agent.websiteUrl}
                 target="_blank"
@@ -242,7 +253,17 @@ const AgentCard: React.FC<AgentCardProps> = ({
 
             <div className="w-px h-4 bg-gray-200"></div>
 
-            {agent.websiteUrl ? (
+            {agent.instagramUrl ? (
+              <Link
+                href={agent.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-gray-500 hover:text-[#E4405F] transition-colors text-sm font-medium"
+              >
+                <Instagram className="w-5 h-5" />
+                <span className="hidden sm:inline">אינסטגרם</span>
+              </Link>
+            ) : agent.websiteUrl ? (
               <Link
                 href={agent.websiteUrl}
                 target="_blank"

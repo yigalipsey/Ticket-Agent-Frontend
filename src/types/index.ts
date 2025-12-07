@@ -105,6 +105,8 @@ export interface Agent {
   agentType: "individual" | "agency";
   companyName?: string;
   imageUrl?: string;
+  websiteUrl?: string;
+  instagramUrl?: string;
   createdAt: string;
   updatedAt: string;
 }

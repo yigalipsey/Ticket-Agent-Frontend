@@ -16,11 +16,34 @@ export default function Loading() {
       {/* Fixtures Loading Skeleton */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
         <div className="space-y-6">
-          {/* Filters Skeleton */}
-          <div className="flex flex-wrap gap-3 animate-pulse">
-            <div className="h-10 w-24 bg-gray-200 rounded-lg"></div>
-            <div className="h-10 w-32 bg-gray-200 rounded-lg"></div>
-            <div className="h-10 w-28 bg-gray-200 rounded-lg"></div>
+          {/* Filters Skeleton - Matches TeamFixturesFilter UI */}
+          <div className="w-full animate-pulse">
+            {/* Desktop & Tablet Layout Skeleton */}
+            <div className="hidden md:flex items-center gap-4 bg-white p-1 rounded-2xl border border-gray-100 shadow-sm w-fit">
+              {/* Home/Away Buttons Skeleton - pill shape */}
+              <div className="h-[42px] w-[300px] bg-gray-100 rounded-full border border-gray-200"></div>
+
+              {/* Divider */}
+              <div className="h-8 w-px bg-gray-200 mx-1"></div>
+
+              {/* League Filter Skeleton - rounded-full */}
+              <div className="h-10 w-40 bg-gray-100 rounded-full border border-gray-200"></div>
+
+              {/* Month Filter Skeleton - rounded-full */}
+              <div className="h-10 w-40 bg-gray-100 rounded-full border border-gray-200"></div>
+            </div>
+
+            {/* Mobile Layout Skeleton */}
+            <div className="flex md:hidden flex-col gap-3">
+              {/* Home/Away Buttons Skeleton - pill shape */}
+              <div className="h-10 w-full bg-gray-100 rounded-full border border-gray-200"></div>
+
+              {/* Dropdowns Grid Skeleton */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="h-10 w-full bg-gray-100 rounded-full border border-gray-200"></div>
+                <div className="h-10 w-full bg-gray-100 rounded-full border border-gray-200"></div>
+              </div>
+            </div>
           </div>
 
           {/* Fixtures Skeleton */}
@@ -116,11 +139,3 @@ export default function Loading() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
