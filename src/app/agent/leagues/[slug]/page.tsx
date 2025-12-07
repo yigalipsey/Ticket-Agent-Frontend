@@ -31,8 +31,10 @@ export default async function AgentLeaguePage({
 
   let fixtures: Fixture[] = [];
   if (leagueId) {
+    // בסוכן - משיכת כל המשחקים מה-cache (ללא limit)
+    // אם יש cache עם כל המשחקים, נמשך את כולם
     const fixturesResult = await FixtureService.getLeagueFixtures(leagueId, {
-      limit: 100,
+      // לא נשלח limit - כך נמשך את כל המשחקים מה-cache
       page: 1,
     });
     if (fixturesResult.success && fixturesResult.data) {

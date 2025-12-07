@@ -8,6 +8,8 @@ import {
   Clock,
   ChevronLeft,
   Ticket,
+  Trash2,
+  Pencil,
 } from "lucide-react";
 import { Fixture } from "@/types";
 import { formatDate, formatTime, formatCurrency } from "@/lib/utils";
@@ -20,8 +22,10 @@ export interface FixtureCardProps {
   showVenue?: boolean;
   showLeague?: boolean;
   className?: string;
-  mode?: "user" | "agent";
+  mode?: "user" | "agent" | "agent-edit" | "agent-manage";
   onAddOffer?: () => void;
+  onEditOffer?: () => void;
+  onDeleteOffer?: () => void;
   variant?: "card" | "horizontal";
 }
 
@@ -32,6 +36,8 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
   className,
   mode = "user",
   onAddOffer,
+  onEditOffer,
+  onDeleteOffer,
   variant = "card",
 }) => {
   // Horizontal variant - for internal pages
@@ -48,111 +54,146 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
         ? formatCurrency(fixture.minPrice.amount, fixture.minPrice.currency)
         : null;
 
+    const wrapperClasses =
+      mode === "agent" || mode === "agent-edit" || mode === "agent-manage"
+        ? "bg-white border border-gray-200 rounded-lg md:border-0 md:border-b md:rounded-none md:last:border-b-0"
+        : "bg-white border-b border-gray-200 last:border-b-0";
+
     return (
-      <div className="bg-white border-b border-gray-200 last:border-b-0">
+      <div className={wrapperClasses}>
         <div
-          className={`p-4 flex flex-row items-start gap-4 relative ${
-            className || ""
-          }`}
+          className={`p-4 flex ${
+            mode === "agent" || mode === "agent-edit" || mode === "agent-manage"
+              ? "flex-col md:flex-row"
+              : "flex-row"
+          } items-start gap-4 relative ${className || ""}`}
         >
-          {/* Date Box - Right side (start in RTL), aligned to top */}
-          <div className="flex flex-col items-center justify-start bg-gray-50 px-3 py-2 rounded flex-shrink-0 w-20 h-20 mt-1">
-            <span className="text-xs text-gray-500">{dayOfWeek}</span>
-            <span className="text-xl font-bold text-gray-900">
-              {day}/{month}
-            </span>
-            <span className="text-xs text-gray-600">{year}</span>
-          </div>
+          {/* Content wrapper for Agent Mobile */}
+          <div className="flex flex-row gap-4 w-full md:w-auto md:flex-1 min-w-0">
+            {/* Date Box - Right side (start in RTL), aligned to top */}
+            <div className="flex flex-col items-center justify-start bg-gray-50 px-3 py-2 rounded flex-shrink-0 w-20 h-20 mt-1">
+              <span className="text-xs text-gray-500">{dayOfWeek}</span>
+              <span className="text-xl font-bold text-gray-900">
+                {day}/{month}
+              </span>
+              <span className="text-xs text-gray-600">{year}</span>
+            </div>
 
-          {/* Desktop containers wrapper */}
-          <div className="hidden md:flex items-center gap-4">
-            {/* League logo - Right after date box (desktop only) */}
-            {fixture.league?.logoUrl && (
-              <div className="flex flex-col items-center justify-center gap-2 flex-shrink-0 w-20 h-20">
-                <div className="w-12 h-12 flex items-center justify-center">
-                  <Image
-                    src={fixture.league.logoUrl}
-                    alt={fixture.league.name || "League"}
-                    width={48}
-                    height={48}
-                    className="w-full h-full object-contain"
-                  />
+            {/* Desktop containers wrapper */}
+            <div className="hidden md:flex items-center gap-4">
+              {/* League logo - Right after date box (desktop only) */}
+              {fixture.league?.logoUrl && (
+                <div className="flex flex-col items-center justify-center gap-2 flex-shrink-0 w-20 h-20">
+                  <div className="w-12 h-12 flex items-center justify-center">
+                    <Image
+                      src={fixture.league.logoUrl}
+                      alt={fixture.league.name || "League"}
+                      width={48}
+                      height={48}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
 
-          {/* Teams */}
-          <div className="flex md:items-center flex-1 min-w-0 gap-2 md:gap-6">
-            {/* Desktop layout - with logos */}
-            <div className="hidden md:flex items-center gap-6 min-w-0">
-              <div className="flex items-start gap-6 min-h-[80px] flex-shrink-0">
-                {/* Home Team */}
-                <div className="flex flex-col items-center gap-2 w-32">
-                  {(fixture.homeTeam.logo || fixture.homeTeam.logoUrl) && (
-                    <div className="w-12 h-12 flex items-center justify-center">
-                      <Image
-                        src={
-                          (fixture.homeTeam.logo ||
-                            fixture.homeTeam.logoUrl) as string
-                        }
-                        alt={fixture.homeTeam.name || "Home Team"}
-                        width={48}
-                        height={48}
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                  )}
-                  <span className="text-base font-medium text-gray-900 text-center whitespace-nowrap">
-                    {fixture.homeTeam.name}
+            {/* Teams */}
+            <div className="flex md:items-center flex-1 min-w-0 gap-2 md:gap-6">
+              {/* Desktop layout - with logos */}
+              <div className="hidden md:flex items-center gap-6 min-w-0">
+                <div className="flex items-start gap-6 min-h-[80px] flex-shrink-0">
+                  {/* Home Team */}
+                  <div className="flex flex-col items-center gap-2 w-32">
+                    {(fixture.homeTeam.logo || fixture.homeTeam.logoUrl) && (
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <Image
+                          src={
+                            (fixture.homeTeam.logo ||
+                              fixture.homeTeam.logoUrl) as string
+                          }
+                          alt={fixture.homeTeam.name || "Home Team"}
+                          width={48}
+                          height={48}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    )}
+                    <span className="text-base font-medium text-gray-900 text-center whitespace-nowrap">
+                      {fixture.homeTeam.name}
+                    </span>
+                  </div>
+
+                  {/* VS */}
+                  <span className="text-base font-medium text-gray-400 px-2 flex-shrink-0 self-center">
+                    נגד
                   </span>
-                </div>
 
-                {/* VS */}
-                <span className="text-base font-medium text-gray-400 px-2 flex-shrink-0 self-center">
-                  נגד
-                </span>
-
-                {/* Away Team */}
-                <div className="flex flex-col items-center gap-2 w-32">
-                  {(fixture.awayTeam.logo || fixture.awayTeam.logoUrl) && (
-                    <div className="w-12 h-12 flex items-center justify-center">
-                      <Image
-                        src={
-                          (fixture.awayTeam.logo ||
-                            fixture.awayTeam.logoUrl) as string
-                        }
-                        alt={fixture.awayTeam.name || "Away Team"}
-                        width={48}
-                        height={48}
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                  )}
-                  <span className="text-base font-medium text-gray-900 text-center whitespace-nowrap">
-                    {fixture.awayTeam.name}
-                  </span>
+                  {/* Away Team */}
+                  <div className="flex flex-col items-center gap-2 w-32">
+                    {(fixture.awayTeam.logo || fixture.awayTeam.logoUrl) && (
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <Image
+                          src={
+                            (fixture.awayTeam.logo ||
+                              fixture.awayTeam.logoUrl) as string
+                          }
+                          alt={fixture.awayTeam.name || "Away Team"}
+                          width={48}
+                          height={48}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    )}
+                    <span className="text-base font-medium text-gray-900 text-center whitespace-nowrap">
+                      {fixture.awayTeam.name}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              {/* Venue on desktop - same row as button */}
-              {showVenue && fixture.venue && (
-                <div className="flex flex-col gap-1 flex-shrink-0 bg-gray-50 rounded-lg px-3 py-2 w-[280px]">
-                  {/* Match time on desktop - above venue */}
-                  {fixture.date && (
+                {/* Venue on desktop - same row as button */}
+                {showVenue && fixture.venue && (
+                  <div className="flex flex-col gap-1 flex-shrink-0 bg-gray-50 rounded-lg px-3 py-2 w-[280px]">
+                    {/* Match time on desktop - above venue */}
+                    {fixture.date && (
+                      <div className="flex items-center gap-2 min-w-0">
+                        <Clock className="w-4 h-4 text-gray-600 flex-shrink-0" />
+                        <span className="text-sm text-gray-600 truncate">
+                          {formatTime(fixture.date)}
+                        </span>
+                      </div>
+                    )}
                     <div className="flex items-center gap-2 min-w-0">
-                      <Clock className="w-4 h-4 text-gray-600 flex-shrink-0" />
-                      <span className="text-sm text-gray-600 truncate">
-                        {formatTime(fixture.date)}
-                      </span>
+                      <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                      <div className="min-w-0">
+                        <div className="text-sm font-medium text-gray-900 truncate">
+                          {fixture.venue.name}
+                        </div>
+                        {/* City in Hebrew below venue name */}
+                        {(fixture.venue.city_he || fixture.venue.city) && (
+                          <div className="text-xs text-gray-600 truncate">
+                            {fixture.venue.city_he || fixture.venue.city}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  )}
-                  <div className="flex items-center gap-2 min-w-0">
-                    <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile layout - text only */}
+              <div className="md:hidden flex flex-col flex-1 w-full min-w-0 gap-1 text-right">
+                <div className="flex items-center flex-wrap w-full text-base font-medium text-gray-900">
+                  <span>{fixture.homeTeam.name}</span>
+                  <span className="text-gray-400 mx-1">נגד</span>
+                  <span>{fixture.awayTeam.name}</span>
+                </div>
+                {/* Venue on mobile */}
+                {showVenue && fixture.venue && (
+                  <div className="flex items-center gap-2 text-sm text-gray-600 max-w-[200px]">
+                    <MapPin className="h-3 w-3 text-gray-400 flex-shrink-0" />
                     <div className="min-w-0">
-                      <div className="text-sm font-medium text-gray-900 truncate">
+                      <div className="font-medium text-gray-900 truncate">
                         {fixture.venue.name}
                       </div>
-                      {/* City in Hebrew below venue name */}
                       {(fixture.venue.city_he || fixture.venue.city) && (
                         <div className="text-xs text-gray-600 truncate">
                           {fixture.venue.city_he || fixture.venue.city}
@@ -160,53 +201,32 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
                       )}
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-
-            {/* Mobile layout - text only */}
-            <div className="md:hidden flex flex-col flex-1 w-full min-w-0 gap-1 text-right">
-              <div className="flex items-center flex-wrap w-full text-base font-medium text-gray-900">
-                <span>{fixture.homeTeam.name}</span>
-                <span className="text-gray-400 mx-1">נגד</span>
-                <span>{fixture.awayTeam.name}</span>
-              </div>
-              {/* Venue on mobile */}
-              {showVenue && fixture.venue && (
-                <div className="flex items-center gap-2 text-sm text-gray-600 max-w-[200px]">
-                  <MapPin className="h-3 w-3 text-gray-400 flex-shrink-0" />
-                  <div className="min-w-0">
-                    <div className="font-medium text-gray-900 truncate">
-                      {fixture.venue.name}
-                    </div>
-                    {(fixture.venue.city_he || fixture.venue.city) && (
-                      <div className="text-xs text-gray-600 truncate">
-                        {fixture.venue.city_he || fixture.venue.city}
-                      </div>
-                    )}
+                )}
+                {/* Price on mobile - under venue */}
+                {hasMinPrice && formattedMinPrice && (
+                  <div className="flex items-center gap-1 text-sm font-semibold text-primary-dark">
+                    <Ticket className="w-3 h-3 flex-shrink-0" />
+                    <span>
+                      {mode === "agent-edit" || mode === "agent-manage"
+                        ? ""
+                        : "החל מ-"}
+                      {formattedMinPrice}
+                    </span>
                   </div>
-                </div>
-              )}
-              {/* Price on mobile - under venue */}
-              {hasMinPrice && formattedMinPrice && (
-                <div className="flex items-center gap-1 text-sm font-semibold text-primary-dark">
-                  <Ticket className="w-3 h-3 flex-shrink-0" />
-                  <span>
-                    החל מ-
-                    {formattedMinPrice}
-                  </span>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
 
           {/* CTA Button */}
           <div
             className={`${
-              mode === "agent"
-                ? "pb-4 md:static md:pb-0 md:w-auto md:h-auto md:min-w-[180px]"
-                : "absolute left-4 bottom-4 md:relative md:left-auto md:bottom-auto"
-            } w-10 h-10 md:w-auto md:h-auto flex-shrink-0 md:self-center`}
+              mode === "agent" ||
+              mode === "agent-edit" ||
+              mode === "agent-manage"
+                ? "pb-0 md:static md:pb-0 md:w-auto md:h-auto md:min-w-[180px] w-full"
+                : "absolute left-4 bottom-4 md:relative md:left-auto md:bottom-auto w-10 h-10 md:w-auto md:h-auto"
+            } flex-shrink-0 md:self-center`}
           >
             {mode === "agent" ? (
               <Button
@@ -218,6 +238,67 @@ const FixtureCard: React.FC<FixtureCardProps> = ({
               >
                 הוסף הצעה
               </Button>
+            ) : mode === "agent-manage" ? (
+              <div className="flex flex-row items-center justify-end gap-6 w-full md:w-auto">
+                {/* Price Display for Manage Mode - Desktop Only */}
+                {hasMinPrice && formattedMinPrice && (
+                  <div className="hidden md:flex items-center justify-end gap-2">
+                    <span className="text-sm text-gray-500">מחיר:</span>
+                    <span className="text-xl font-bold text-primary-dark">
+                      {formattedMinPrice}
+                    </span>
+                  </div>
+                )}
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (onDeleteOffer) {
+                        onDeleteOffer();
+                      }
+                    }}
+                    className="text-red-500 hover:text-red-700 hover:bg-red-50 px-2"
+                  >
+                    <Trash2 className="w-4 h-4 ml-1" />
+                    מחק
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (onEditOffer) {
+                        onEditOffer();
+                      }
+                    }}
+                    className="text-gray-500 hover:text-primary hover:bg-blue-50 px-2"
+                  >
+                    <Pencil className="w-4 h-4 ml-1" />
+                    ערוך
+                  </Button>
+                </div>
+              </div>
+            ) : mode === "agent-edit" ? (
+              <div className="flex flex-row md:flex-col items-center md:items-end gap-4 w-full">
+                {hasMinPrice && formattedMinPrice && (
+                  <div className="hidden md:flex items-center gap-1 text-lg font-bold text-primary-dark">
+                    <span>{formattedMinPrice}</span>
+                  </div>
+                )}
+                <Button
+                  variant="outline"
+                  size="md"
+                  fullWidth
+                  onClick={onEditOffer}
+                  className="w-full md:w-auto px-8"
+                >
+                  ערוך
+                </Button>
+              </div>
             ) : (
               <Link
                 href={`/fixtures/${fixture.slug}?id=${

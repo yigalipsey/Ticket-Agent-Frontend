@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { User } from "lucide-react";
+import { User, Crown } from "lucide-react";
 import { OfferResponse } from "@/services/offerService";
 import { CURRENCIES } from "@/lib/constants";
 import {
@@ -107,8 +107,11 @@ export function OfferCard({
   const buttonText = hasUrl ? "לרכישה" : "יצירת קשר";
   const isButtonDisabled = !offer.isAvailable || (!hasUrl && !hasWhatsapp);
 
+  const isVip = offer.ticketType === "vip";
+  const isHospitality = offer.isHospitality;
+
   return (
-    <div className="bg-white border-t last:border-b border-gray-200 px-1 md:px-4 hover:bg-gray-50 transition-colors">
+    <div className="bg-white border-t last:border-b border-gray-200 px-0 md:px-4 hover:bg-gray-50 transition-colors">
       {/* Desktop layout */}
       <div className="hidden md:flex flex-row items-center gap-8">
         {/* Agent logo */}
@@ -156,14 +159,24 @@ export function OfferCard({
           </div>
         )}
 
+        {/* Badges - Separate container */}
+        <div className="flex-shrink-0 flex flex-col items-center justify-center gap-1.5 min-w-[100px]">
+          {isVip || isHospitality ? (
+            <div className="flex items-center gap-1.5 bg-slate-900 text-amber-200 text-xs px-3 py-1 rounded-full font-medium border border-amber-500/30 shadow-sm">
+              <Crown className="w-3.5 h-3.5 text-amber-400" />
+              <span>כרטיס אירוח</span>
+            </div>
+          ) : null}
+        </div>
+
         {/* Price */}
-        <div className="flex-1 text-right pr-6">
+        <div className="flex-1 text-right pr-6 flex flex-col justify-center items-end">
           <div className="flex flex-col md:flex-row md:items-center gap-0 md:gap-3">
             <span className="text-xs md:text-sm text-gray-600">החל מ</span>
-            <span className="text-lg md:text-2xl font-bold text-gray-900">
-              {currencySymbol}
-              {offer.price}
-            </span>
+            <div className="text-lg md:text-2xl font-bold text-gray-900 flex flex-row items-center gap-1">
+              <span>{currencySymbol}</span>
+              <span>{offer.price}</span>
+            </div>
           </div>
         </div>
 
@@ -180,69 +193,81 @@ export function OfferCard({
       </div>
 
       {/* Mobile layout - Proportional width distribution */}
-      <div className="md:hidden flex flex-row items-center w-full gap-2 py-2">
-        {/* Agent logo - proportional width */}
-        <div className="flex-[0_0_18%] flex justify-center items-center min-w-0">
+      <div className="md:hidden grid grid-cols-[1fr_1fr_1fr_0.8fr_1.2fr] items-center w-full gap-1 py-2 px-1">
+        {/* Agent logo */}
+        <div className="flex justify-center items-center min-w-0">
           {imageUrl ? (
-            <div className="w-full max-w-[56px] h-10 flex items-center justify-center">
+            <div className="w-full h-9 flex items-center justify-center px-1">
               <Image
                 src={imageUrl}
                 alt={owner?.name || "ספק כרטיסים"}
-                width={56}
-                height={40}
+                width={50}
+                height={36}
                 className="w-full h-full object-contain"
               />
             </div>
           ) : (
-            <div className="w-full max-w-[56px] h-10 flex items-center justify-center">
-              <User className="w-6 h-6 text-gray-400" />
+            <div className="w-full h-9 flex items-center justify-center">
+              <User className="w-5 h-5 text-gray-400" />
             </div>
           )}
         </div>
 
-        {/* Star rating - proportional width */}
-        {hasRating && (
-          <div className="flex-[0_0_20%] flex flex-col justify-center items-center min-w-0">
-            {hasRatingLink ? (
-              <a
-                href={ratingUrl ?? "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[9px] uppercase tracking-wide text-primary font-semibold hover:text-primary-dark transition-colors leading-tight text-center"
-              >
-                {providerLabel}
-              </a>
-            ) : (
-              <span className="text-[9px] uppercase tracking-wide text-gray-400 leading-tight text-center">
-                {providerLabel}
-              </span>
-            )}
-            <div className="flex items-center justify-center gap-0.5 mt-0.5">
-              {renderStarRow(roundedStarRating ?? 0, "w-3 h-3")}
-              <span className="text-[10px] text-gray-600">{ratingLabel}</span>
-            </div>
-          </div>
-        )}
+        {/* Star rating */}
+        <div className="flex flex-col justify-center items-center min-w-0">
+          {hasRating && (
+            <>
+              {hasRatingLink ? (
+                <a
+                  href={ratingUrl ?? "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[9px] uppercase tracking-wide text-primary font-semibold hover:text-primary-dark transition-colors leading-tight text-center w-full truncate px-0.5"
+                >
+                  {providerLabel}
+                </a>
+              ) : (
+                <span className="text-[9px] uppercase tracking-wide text-gray-400 leading-tight text-center w-full truncate px-0.5">
+                  {providerLabel}
+                </span>
+              )}
+              <div className="flex items-center justify-center gap-0.5 mt-0.5">
+                {renderStarRow(roundedStarRating ?? 0, "w-2.5 h-2.5")}
+                <span className="text-[9px] text-gray-600">{ratingLabel}</span>
+              </div>
+            </>
+          )}
+        </div>
 
-        {/* Price - takes remaining space, aligned to right (RTL) - same as desktop */}
-        <div className="flex-1 min-w-0 flex justify-end items-center px-2">
-          <div className="flex flex-row items-center gap-1">
-            <span className="text-[10px] text-gray-600 leading-tight">
-              החל מ
-            </span>
-            <span className="text-sm font-bold text-gray-900 leading-tight whitespace-nowrap">
-              {currencySymbol}
-              {offer.price}
-            </span>
+        {/* Badges */}
+        <div className="flex flex-col justify-center items-center min-w-0">
+          {(isVip || isHospitality) && (
+            <div className="flex flex-col items-center justify-center bg-slate-900 text-amber-200 text-[8px] px-1 py-0.5 rounded border border-amber-500/30 shadow-sm w-full max-w-[56px]">
+              <Crown className="w-2.5 h-2.5 text-amber-400 mb-0" />
+              <span className="leading-[1.1] font-medium text-center mt-0.5">
+                כרטיס אירוח
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Price */}
+        <div className="flex flex-col justify-center items-center w-full min-w-0 px-0.5">
+          <span className="text-[9px] text-gray-600 leading-tight whitespace-nowrap">
+            החל מ
+          </span>
+          <div className="text-xs font-bold text-gray-900 leading-tight whitespace-nowrap flex flex-row items-center gap-0.5">
+            <span>{currencySymbol}</span>
+            <span>{offer.price}</span>
           </div>
         </div>
 
-        {/* Contact/Purchase button - proportional width */}
-        <div className="flex-[0_0_22%] flex justify-center items-center min-w-0 px-1">
+        {/* Contact/Purchase button */}
+        <div className="flex justify-center items-center min-w-0 px-0.5">
           <button
             onClick={handleContactAgent}
             disabled={isButtonDisabled}
-            className="bg-primary hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-1.5 px-2 rounded-lg transition-colors text-[10px] whitespace-nowrap w-full max-w-[70px]"
+            className="bg-primary hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-1.5 px-1 rounded-lg transition-colors text-[10px] whitespace-nowrap w-full shadow-sm"
           >
             {buttonText}
           </button>

@@ -108,6 +108,15 @@ export const useOfferForm = ({
     setIsSubmitting(true);
     setError(null);
 
+    console.log(
+      "%c[OFFER FORM] 🟢 Starting form submission",
+      "color: #10b981; font-weight: bold; font-size: 12px;",
+      {
+        fixtureId,
+        formData,
+      }
+    );
+
     try {
       const offerData = {
         fixtureId,
@@ -117,11 +126,36 @@ export const useOfferForm = ({
         url: formData.url?.trim() || undefined,
       };
 
+      console.log(
+        "%c[OFFER FORM] 📤 Sending create offer request",
+        "color: #3b82f6; font-weight: bold; font-size: 12px;",
+        {
+          fixtureId,
+          offerData,
+        }
+      );
+
       const result = await OfferService.createOffer(offerData);
 
       if (result.success) {
+        console.log(
+          "%c[OFFER FORM] ✅ Offer created successfully, calling onSuccess",
+          "color: #10b981; font-weight: bold; font-size: 12px;",
+          {
+            fixtureId,
+            offerData,
+          }
+        );
         onSuccess();
       } else {
+        console.error(
+          "%c[OFFER FORM] ❌ Offer creation failed",
+          "color: #ef4444; font-weight: bold; font-size: 12px;",
+          {
+            fixtureId,
+            result,
+          }
+        );
         let errorMessage = "שגיאה בהוספת ההצעה. נסה שוב.";
 
         if (result.error) {
@@ -139,7 +173,16 @@ export const useOfferForm = ({
           onError(errorMessage);
         }
       }
-    } catch {
+    } catch (error) {
+      console.error(
+        "%c[OFFER FORM] ❌ Network error",
+        "color: #ef4444; font-weight: bold; font-size: 12px;",
+        {
+          fixtureId,
+          error,
+        }
+      );
+
       const errorMessage = "שגיאת רשת. בדוק את החיבור לאינטרנט.";
       setError(errorMessage);
 
@@ -148,6 +191,11 @@ export const useOfferForm = ({
       }
     } finally {
       setIsSubmitting(false);
+      console.log(
+        "%c[OFFER FORM] 🏁 Form submission finished",
+        "color: #6b7280; font-weight: bold; font-size: 12px;",
+        { fixtureId }
+      );
     }
   };
 

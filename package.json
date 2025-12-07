@@ -16,10 +16,14 @@
     "@tanstack/react-query-persist-client": "^5.90.2",
     "axios": "^1.12.2",
     "clsx": "^2.1.1",
+    "cors": "^2.8.5",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
     "iron-session": "^8.0.4",
     "keen-slider": "^6.8.6",
     "lucide-react": "^0.544.0",
+    "mongoose": "^9.0.0",
     "next": "15.5.4",
     "next-intl": "^4.3.9",
     "next-seo": "^6.8.0",
@@ -41,5 +45,18 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.13",
     "typescript": "^5"
-  }
+  },
+  "description": "פרונט מודרני לאתר השוואת כרטיסים למשחקי כדורגל, בנוי עם Next.js 15, TypeScript, TailwindCSS ותמיכה מלאה בעברית ואנגלית.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yigalipsey/Ticket-Agent-Frontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yigalipsey/Ticket-Agent-Frontend/issues"
+  },
+  "homepage": "https://github.com/yigalipsey/Ticket-Agent-Frontend#readme"
 }

@@ -5,6 +5,7 @@ export interface CreateOfferData {
   price: number;
   currency: string;
   ticketType: string;
+  isHospitality?: boolean;
   url?: string;
 }
 

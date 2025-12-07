@@ -131,7 +131,7 @@ export class FixtureService {
   > {
     try {
       const {
-        limit = 20,
+        limit,
         page = 1,
         month = null,
         venueId = null,
@@ -140,9 +140,12 @@ export class FixtureService {
 
       const params: Record<string, string | number | boolean> = {
         leagueId,
-        limit,
         page,
       };
+      // שולח limit רק אם הוא מוגדר במפורש - כך הבקאנד יחזיר את כל המשחקים מה-cache
+      if (limit !== undefined) {
+        params.limit = limit;
+      }
       if (month) params.month = month;
       if (venueId) params.venueId = venueId;
       if (hasOffers) params.hasOffers = true;
@@ -228,9 +231,7 @@ export class FixtureService {
           date: f.date,
           time: new Date(f.date).toLocaleTimeString(),
           status:
-            f.status === "Not Started"
-              ? "scheduled"
-              : f.status?.toLowerCase(),
+            f.status === "Not Started" ? "scheduled" : f.status?.toLowerCase(),
           round: f.roundNumber || f.round,
           offers: f.offers || [],
           lowestPrice: f.minPrice?.amount || 0,

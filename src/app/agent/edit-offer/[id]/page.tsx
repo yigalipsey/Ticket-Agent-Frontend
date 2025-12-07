@@ -3,33 +3,20 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAgentAuth } from "@/providers";
-import { useRouteValidation, routeValidators } from "@/hooks";
-import OfferForm from "./OfferForm";
-import SuccessModal from "@/components/ui/SuccessModal";
+import EditOfferForm from "./EditOfferForm";
 
-interface AddOfferPageProps {
+interface EditOfferPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default function AddOfferPage({ params }: AddOfferPageProps) {
+export default function EditOfferPage({ params }: EditOfferPageProps) {
   const router = useRouter();
-  const { agent, isAuthenticated, isLoading: authLoading } = useAgentAuth();
-  const [fixtureId, setFixtureId] = useState("");
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-  // Validate the route exists
-  const {
-    isValid,
-    isLoading: validationLoading,
-    error,
-  } = useRouteValidation({
-    validateFunction: routeValidators.agentFixture,
-    timeout: 5000,
-  });
+  const { isAuthenticated, isLoading: authLoading } = useAgentAuth();
+  const [offerId, setOfferId] = useState("");
 
   useEffect(() => {
     params.then((p) => {
-      setFixtureId(p.id);
+      setOfferId(p.id);
     });
   }, [params]);
 
@@ -45,7 +32,7 @@ export default function AddOfferPage({ params }: AddOfferPageProps) {
     }
   }, [authLoading, isAuthenticated, router]);
 
-  if (authLoading || validationLoading) {
+  if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -56,31 +43,8 @@ export default function AddOfferPage({ params }: AddOfferPageProps) {
     );
   }
 
-  if (!isAuthenticated || !fixtureId) {
+  if (!isAuthenticated || !offerId) {
     return null;
-  }
-
-  // Show error if route validation failed
-  if (!isValid) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            משחק לא נמצא
-          </h2>
-          <p className="text-gray-600 mb-4">
-            {error || "המשחק שחיפשת לא קיים או הועבר למיקום אחר"}
-          </p>
-          <button
-            onClick={() => router.back()}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            חזור אחורה
-          </button>
-        </div>
-      </div>
-    );
   }
 
   return (
@@ -110,27 +74,22 @@ export default function AddOfferPage({ params }: AddOfferPageProps) {
 
         {/* Content - Centered */}
         <div className="relative z-10 w-full max-w-2xl px-4 animate-slide-up">
-          <OfferForm
-            fixtureId={fixtureId}
+          <EditOfferForm
+            offerId={offerId}
             onSuccess={() => {
-              setShowSuccessModal(true);
+              alert("ההצעה עודכנה בהצלחה!");
+              router.push("/agent/my-offers");
             }}
-            onCancel={() => router.back()}
+            onCancel={() => router.push("/agent/my-offers")}
           />
         </div>
       </section>
-
-      {/* Success Modal */}
-      <SuccessModal
-        isOpen={showSuccessModal}
-        onClose={() => {
-          setShowSuccessModal(false);
-          router.back();
-        }}
-        title="ההצעה נוספה בהצלחה! ✅"
-        message="ההצעה שלך נשמרה במערכת ותוצג למשתמשים."
-        buttonText="סגור"
-      />
     </div>
   );
 }
+
+
+
+
+
+

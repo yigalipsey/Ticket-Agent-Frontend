@@ -80,7 +80,7 @@ export function useLeagueFixtures(
   initialFixtures?: Fixture[]
 ): LeagueFixturesResult {
   const {
-    limit = 100,
+    limit, // לא נגדיר default - כך אם לא נשלח limit, הבקאנד יחזיר את כל המשחקים מה-cache
     page = 1,
     month = null,
     venueId = null,
@@ -106,13 +106,26 @@ export function useLeagueFixtures(
       // - אם יש חודש: שולף חודש, venue יסונן ב-client
       // - אם יש venue בלי חודש: שולף venue מהשרת
       // - אחרת: שולף הכל
-      const result = await FixtureService.getLeagueFixtures(leagueId, {
-        limit,
+      const queryOptions: {
+        limit?: number;
+        page: number;
+        month: string | null;
+        venueId: string | null;
+        hasOffers: boolean;
+      } = {
         page,
         month,
         venueId: month ? null : venueId, // venue רק אם אין חודש
         hasOffers,
-      });
+      };
+      // שולח limit רק אם הוא מוגדר - כך הבקאנד יחזיר את כל המשחקים מה-cache
+      if (limit !== undefined) {
+        queryOptions.limit = limit;
+      }
+      const result = await FixtureService.getLeagueFixtures(
+        leagueId,
+        queryOptions
+      );
 
       if (!result.success) {
         throw new Error(result.error || "שגיאה בטעינת משחקי הליגה");

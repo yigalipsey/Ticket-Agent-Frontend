@@ -99,9 +99,50 @@ class ApiClient {
     return response.data.data;
   }
 
+  async putAuth<T>(
+    url: string,
+    data?: unknown,
+    tokenType: "user" | "agent" | "auto" = "auto"
+  ): Promise<T> {
+    // All requests use cookies - no headers needed
+    const headers = this.getAuthHeaders();
+
+    const response = await this.client.put<ApiResponse<T>>(url, data, {
+      headers,
+    });
+
+    const responseData = response.data;
+
+    if (responseData && responseData.success && responseData.data) {
+      return responseData.data;
+    }
+
+    return responseData as T;
+  }
+
   async delete<T>(url: string): Promise<T> {
     const response = await this.client.delete<ApiResponse<T>>(url);
     return response.data.data;
+  }
+
+  async deleteAuth<T>(
+    url: string,
+    tokenType: "user" | "agent" | "auto" = "auto"
+  ): Promise<T> {
+    // All requests use cookies - no headers needed
+    const headers = this.getAuthHeaders();
+
+    const response = await this.client.delete<ApiResponse<T>>(url, {
+      headers,
+    });
+
+    const responseData = response.data;
+
+    if (responseData && responseData.success && responseData.data) {
+      return responseData.data;
+    }
+
+    return responseData as T;
   }
 
   async getPaginated<T>(

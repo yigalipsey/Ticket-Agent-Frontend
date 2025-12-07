@@ -71,11 +71,6 @@ export default function Footer() {
                   הצהרת נגישות
                 </Link>
               </li>
-              <li>
-                <Link href="/faq" className="hover:opacity-70 transition">
-                  שאלות נפוצות
-                </Link>
-              </li>
             </ul>
           </div>
 

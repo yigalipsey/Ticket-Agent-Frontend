@@ -1,73 +1,21 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAgentAuth } from "@/providers";
-import { LeagueService } from "@/services";
-import { League } from "@/types/league";
-import LeaguesList from "./LeaguesList";
-import SearchSection from "./SearchSection";
 
 export default function AgentDashboardPage() {
-  const {
-    agent,
-    isAuthenticated,
-    isLoading: authLoading,
-    logout,
-  } = useAgentAuth();
-  const [leagues, setLeagues] = useState<League[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
+  const { agent, isAuthenticated, isLoading: authLoading } = useAgentAuth();
   const router = useRouter();
 
-  // Redirect if not authenticated or not an agent
   useEffect(() => {
-    if (!authLoading) {
-      if (!isAuthenticated) {
-        router.push("/agent/login");
-        return;
-      }
-
-      // Agent auth is handled by useAgentAuth hook
+    if (!authLoading && !isAuthenticated) {
+      router.push("/agent/login");
     }
   }, [isAuthenticated, authLoading, router]);
 
-  // Fetch leagues
-  useEffect(() => {
-    const fetchLeagues = async () => {
-      try {
-        setIsLoading(true);
-        setError("");
-
-        // Fetch all leagues with teams count
-        const response = await LeagueService.getAllLeagues(true);
-
-        if (response.success && response.data) {
-          setLeagues(response.data);
-        } else {
-          setError(response.error || "שגיאה בטעינת הליגות");
-        }
-      } catch (err: unknown) {
-        setError("שגיאה בטעינת הליגות. נסה שוב מאוחר יותר.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (isAuthenticated) {
-      fetchLeagues();
-    }
-  }, [isAuthenticated]);
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
-  };
-
-  if (authLoading || isLoading) {
+  if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -78,78 +26,135 @@ export default function AgentDashboardPage() {
     );
   }
 
-  if (!isAuthenticated) {
-    return null;
-  }
+  if (!isAuthenticated) return null;
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section with Search - starts at top */}
-      <section className="relative h-[45vh] md:h-[400px] w-full pt-20">
-        {/* Background Video */}
-        <video
-          className="absolute inset-0 w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster="/images/people-soccer-stadium.avif"
-        >
-          <source
-            src="/videos/0_Soccer_Football_3840x2160.mp4"
-            type="video/mp4"
-          />
-          <div className="absolute inset-0 bg-[url('/images/people-soccer-stadium.avif')] bg-cover bg-center bg-no-repeat" />
-        </video>
-        <div className="absolute inset-0 bg-[#0A297E60]" />
-
-        {/* Dashboard Header overlay */}
-        <div className="absolute top-0 left-0 right-0 z-[99999] bg-white/95 backdrop-blur-sm shadow">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center py-4">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">
-                  דשבורד סוכן
-                </h1>
-                <p className="text-gray-600">
-                  שלום {agent?.email} -{" "}
-                  {agent?.agentType === "agency" ? "סוכנות" : "סוכן עצמאי"}
-                  {agent?.companyName && ` (${agent.companyName})`}
-                </p>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium"
-              >
-                התנתק
-              </button>
-            </div>
-          </div>
+      {/* Hero Section */}
+      <section className="relative min-h-[350px] w-full pt-20 pb-10 flex flex-col">
+        <div className="absolute inset-0 overflow-hidden">
+          <video
+            className="absolute inset-0 w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster="/images/people-soccer-stadium.avif"
+          >
+            <source
+              src="/videos/0_Soccer_Football_3840x2160.mp4"
+              type="video/mp4"
+            />
+            <div className="absolute inset-0 bg-[url('/images/people-soccer-stadium.avif')] bg-cover bg-center bg-no-repeat" />
+          </video>
+          <div className="absolute inset-0 bg-[#0A297E60]" />
         </div>
 
-        {/* Content */}
-        <div className="relative z-[99998] flex items-center justify-center h-full">
-          <div className="flex flex-col items-center gap-4 md:gap-8 px-4 w-full md:max-w-4xl mx-auto">
-            <p className="text-2xl md:text-5xl text-gray-200 animate-slide-up leading-tight font-extrabold text-center">
-              העלאת הצעות כרטיסים
-              <br />
-              <span className="text-lg md:text-2xl">חפש קבוצה או ליגה</span>
+        <div className="relative z-10 flex flex-col items-center justify-center flex-grow mt-4">
+          <div className="text-center text-white/90 animate-fade-in mb-6">
+            <h1 className="text-3xl md:text-4xl font-bold mb-2">דשבורד סוכן</h1>
+            <p className="text-xl">
+              שלום {agent?.email}
+              {agent?.companyName && ` • ${agent.companyName}`}
             </p>
-
-            <SearchSection />
+            <p className="text-sm opacity-80">
+              {agent?.agentType === "agency" ? "סוכנות" : "סוכן עצמאי"}
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            בחר ליגה להעלאת הצעות
-          </h2>
+      {/* Main Content - Navigation Cards */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-sm md:max-w-4xl mx-auto">
+          {/* Upload Offer Card */}
+          <Link
+            href="/agent/upload-offer"
+            className="group bg-white rounded-2xl shadow-xl p-5 md:p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl border border-gray-100 flex flex-col items-center text-center"
+          >
+            <div className="w-14 h-14 md:w-20 md:h-20 bg-blue-50 rounded-full flex items-center justify-center mb-4 md:mb-6 group-hover:bg-blue-100 transition-colors">
+              <svg
+                className="w-7 h-7 md:w-10 md:h-10 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            </div>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
+              העלאת הצעה חדשה
+            </h2>
+            <p className="text-gray-600 mb-4 md:mb-6">
+              חפש משחק או ליגה, בחר את הפרטים והעלה הצעה חדשה למערכת
+            </p>
+            <span className="inline-flex items-center text-blue-600 font-medium group-hover:translate-x-1 transition-transform">
+              התחל עכשיו
+              <svg
+                className="w-4 h-4 mr-2 transform rotate-180"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+            </span>
+          </Link>
 
-          <LeaguesList leagues={leagues} isLoading={isLoading} error={error} />
+          {/* My Offers Card */}
+          <Link
+            href="/agent/my-offers"
+            className="group bg-white rounded-2xl shadow-xl p-5 md:p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl border border-gray-100 flex flex-col items-center text-center"
+          >
+            <div className="w-14 h-14 md:w-20 md:h-20 bg-purple-50 rounded-full flex items-center justify-center mb-4 md:mb-6 group-hover:bg-purple-100 transition-colors">
+              <svg
+                className="w-7 h-7 md:w-10 md:h-10 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                />
+              </svg>
+            </div>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
+              ההצעות שלי
+            </h2>
+            <p className="text-gray-600 mb-4 md:mb-6">
+              צפה בכל ההצעות שהעלית, נהל אותן, ועדכן פרטים או זמינות
+            </p>
+            <span className="inline-flex items-center text-purple-600 font-medium group-hover:translate-x-1 transition-transform">
+              צפה בהצעות
+              <svg
+                className="w-4 h-4 mr-2 transform rotate-180"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+            </span>
+          </Link>
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ export * from "./search";
 
 // Agent hooks
 export * from "./agents/useOfferForm";
+export * from "./agents/useEditOfferForm";
 
 // Authentication hooks
 

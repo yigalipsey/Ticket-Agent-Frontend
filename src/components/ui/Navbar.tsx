@@ -25,14 +25,20 @@ export default function Navbar() {
     };
   }, [isMobileMenuOpen]);
 
-  // בדף הבית הלוגו יופיע רק כשהוא בתפריט הפתוח, בדסקטופ תמיד
-  const isHomePage = pathname === "/";
-  const showMobileLogo = isHomePage ? isMobileMenuOpen : true;
+  // Navbar is always transparent and absolute (לא דוחף את ההירו למטה)
+  const navbarClasses = "absolute top-0 left-0 right-0 bg-transparent";
 
-  // הסתר ניווט רגיל אם המשתמש הוא סוכן
+  // Show logo logic: On home page, hide desktop logo (because of hero logo). Elsewhere, show it.
+  const isHomePage = pathname === "/";
+  const shouldShowLogo = !isHomePage || isMobileMenuOpen;
+
+  // Hide regular nav if user is agent
   const navigationItems =
     isAuthenticated && agent
-      ? [] // סוכן - אין ניווט רגיל
+      ? [
+          { href: "/agent/upload-offer", label: "העלאת הצעה" },
+          { href: "/agent/my-offers", label: "ההצעות שלי" },
+        ]
       : [
           { href: "/", label: "בית" },
           { href: "/leagues", label: "ליגות" },
@@ -56,7 +62,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`absolute top-0 left-0 right-0 bg-transparent pointer-events-none ${
+      className={`${navbarClasses} ${
         isMobileMenuOpen ? "z-[10000000]" : "z-[99999]"
       }`}
     >
@@ -65,8 +71,8 @@ export default function Navbar() {
           {/* Brand Logo */}
           <div
             className={`${
-              showMobileLogo ? "flex" : "hidden"
-            } md:flex items-center order-2 md:order-1 pointer-events-auto ${
+              shouldShowLogo ? "flex" : "hidden"
+            } md:flex items-center order-2 md:order-1 ${
               isMobileMenuOpen ? "z-[10000000]" : ""
             }`}
           >
@@ -96,7 +102,7 @@ export default function Navbar() {
           </div>
 
           {/* User Menu - Desktop */}
-          <div className="hidden md:flex items-center pointer-events-auto">
+          <div className="hidden md:flex items-center">
             {isAuthenticated ? (
               <div className="relative">
                 <button
@@ -160,8 +166,8 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Desktop Navigation - ממורכז */}
-          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 pointer-events-auto">
+          {/* Desktop Navigation - Centered */}
+          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
             <div className="flex items-baseline space-x-4 space-x-reverse">
               {navigationItems.map((item) => (
                 <Link
@@ -177,7 +183,7 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <div
-            className={`md:hidden order-1 md:order-2 pointer-events-auto ${
+            className={`md:hidden order-1 md:order-2 ${
               isMobileMenuOpen ? "z-[10000000]" : ""
             }`}
           >
@@ -192,7 +198,10 @@ export default function Navbar() {
 
         {/* Mobile Navigation Menu - Full Screen Fixed Overlay */}
         {isMobileMenuOpen && (
-          <div className="fixed inset-0 w-screen h-screen md:hidden flex flex-col overflow-hidden bg-primary z-[999999] pointer-events-auto" style={{ height: '100dvh' }}>
+          <div
+            className="fixed inset-0 w-screen h-screen md:hidden flex flex-col overflow-hidden bg-primary z-[999999] pointer-events-auto"
+            style={{ height: "100dvh" }}
+          >
             {/* Soccer Net Background Pattern for Mobile Menu */}
             <div
               className="absolute inset-0 opacity-[0.04] pointer-events-none"
@@ -213,7 +222,7 @@ export default function Navbar() {
                     key={item.href}
                     className="transform transition-all duration-300 ease-out"
                     style={{
-                      animation: `fadeInUp 0.3s ease-out ${index * 0.1}s both`
+                      animation: `fadeInUp 0.3s ease-out ${index * 0.1}s both`,
                     }}
                   >
                     <Link

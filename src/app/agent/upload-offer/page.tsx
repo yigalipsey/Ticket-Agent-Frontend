@@ -3,46 +3,51 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAgentAuth } from "@/providers";
-import { Fixture } from "@/types/fixture";
-import { TeamCarousel } from "@/components/league/TeamCarousel";
-import { useLeagueData } from "@/hooks/league";
-import SearchSection from "../../dashboard/SearchSection";
-import AgentLeagueFixtures from "./AgentLeagueFixtures";
+import { LeagueService } from "@/services";
+import { League } from "@/types/league";
+import LeaguesList from "../dashboard/LeaguesList";
+import SearchSection from "../dashboard/SearchSection";
 
-interface AgentLeaguePageClientProps {
-  slug: string;
-  leagueId: string | null;
-  initialFixtures: Fixture[];
-}
-
-export default function AgentLeaguePageClient({
-  slug,
-  leagueId,
-  initialFixtures,
-}: AgentLeaguePageClientProps) {
-  const router = useRouter();
+export default function UploadOfferPage() {
   const { isAuthenticated, isLoading: authLoading } = useAgentAuth();
-  const {
-    league,
-    teams,
-    isLoading: leagueLoading,
-  } = useLeagueData(slug, leagueId);
-  const [isClient, setIsClient] = useState(false);
+  const [leagues, setLeagues] = useState<League[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
-  // Redirect if not authenticated
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
       router.push("/agent/login");
     }
-  }, [authLoading, isAuthenticated, router]);
+  }, [isAuthenticated, authLoading, router]);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    const fetchLeagues = async () => {
+      try {
+        setIsLoading(true);
+        setError("");
+        const response = await LeagueService.getAllLeagues(true);
+
+        if (response.success && response.data) {
+          setLeagues(response.data);
+        } else {
+          setError(response.error || "שגיאה בטעינת הליגות");
+        }
+      } catch {
+        setError("שגיאה בטעינת הליגות. נסה שוב מאוחר יותר.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchLeagues();
+    }
+  }, [isAuthenticated]);
 
   if (authLoading) {
     return (
-      <div className="flex items-center justify-center py-12">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">טוען...</p>
@@ -51,13 +56,10 @@ export default function AgentLeaguePageClient({
     );
   }
 
-  if (!isAuthenticated) {
-    return null;
-  }
+  if (!isAuthenticated) return null;
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section - בדיוק כמו בדף upload-offer */}
       <section className="relative min-h-[400px] w-full pt-20 pb-10 flex flex-col">
         <div className="absolute inset-0 overflow-hidden">
           <video
@@ -81,29 +83,28 @@ export default function AgentLeaguePageClient({
         <div className="relative z-10 flex flex-col items-center justify-center flex-grow mt-10">
           <div className="flex flex-col items-center gap-4 md:gap-8 px-4 w-full md:max-w-4xl mx-auto">
             <p className="text-2xl md:text-5xl text-gray-200 animate-slide-up leading-tight font-extrabold text-center">
-              {league?.nameHe || league?.name || "ליגה"}
+              העלאת הצעות כרטיסים
+              <br />
+              <span className="text-lg md:text-2xl">חפש קבוצה או ליגה</span>
             </p>
             <SearchSection />
           </div>
         </div>
       </section>
 
-      {/* קרוסלת קבוצות */}
-      {isClient && !leagueLoading && teams && teams.length > 0 && (
-        <div className="max-w-7xl mx-auto mt-3 md:mt-8 md:p-6 bg-white">
-          <TeamCarousel teams={teams} hrefPrefix="/agent" />
-        </div>
-      )}
-
-      {/* Back button + משחקים (with container) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* משחקים עם טופס הצעה - רכיב מותאם לסוכן */}
-        <AgentLeagueFixtures
-          leagueId={leagueId}
-          leagueSlug={slug}
-          initialFixtures={initialFixtures}
-        />
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            בחר ליגה להעלאת הצעות
+          </h2>
+          <LeaguesList leagues={leagues} isLoading={isLoading} error={error} />
+        </div>
       </div>
     </div>
   );
 }
+
+
+
+
+

@@ -35,10 +35,11 @@ export default function AgentLeagueFixtures({
 
   // שליפת משחקים עם Hook מותאם אישית
   // הסוכן רואה את כל המשחקים (ללא hasOffers) כדי להוסיף הצעות חדשות
+  // משיכת כל המשחקים מה-cache (ללא limit) - אם יש cache עם כל המשחקים, נמשך את כולם
   const { fixtures, isLoading } = useLeagueFixtures(
     leagueId,
     {
-      limit: 100,
+      // לא נשלח limit - כך נמשך את כל המשחקים מה-cache
       page: 1,
       month: filters.month,
       venueId: filters.venueId,
@@ -178,7 +179,7 @@ export default function AgentLeagueFixtures({
 
       {/* רשימת משחקים - תצוגה אופקית ברוחב מלא */}
       {!isLoading && (
-        <div className="flex flex-col gap-0 bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <div className="flex flex-col gap-4 md:gap-0 md:bg-white md:border md:border-gray-200 md:rounded-lg md:overflow-hidden">
           {visibleFixtures.map((fixture: Fixture) => (
             <FixtureCard
               key={fixture.id || fixture._id}
