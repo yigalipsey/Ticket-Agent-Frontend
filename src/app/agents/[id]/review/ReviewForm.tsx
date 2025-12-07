@@ -32,9 +32,9 @@ export default function ReviewForm({ agent }: ReviewFormProps) {
   });
   const [proofFile, setProofFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">(
-    "idle"
-  );
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -99,11 +99,11 @@ export default function ReviewForm({ agent }: ReviewFormProps) {
       // Ideally, we should upload image first or send FormData.
       // Given current ReviewService implementation, we might need to adjust it to support FormData or similar.
       // For this UI task, we'll simulate or send what we can.
-      
+
       // Note: Actual file upload implementation would require backend support for multipart/form-data
-      // or a separate upload endpoint. We'll proceed with existing service for text data 
+      // or a separate upload endpoint. We'll proceed with existing service for text data
       // and assume file handling logic will be added to service/backend.
-      
+
       const result = await ReviewService.submitReview({
         agentId: agent._id,
         rating,
@@ -130,16 +130,19 @@ export default function ReviewForm({ agent }: ReviewFormProps) {
     }
   };
 
-  const getAgentImageUrl = (imageUrl?: string): string | undefined => {
-    if (!imageUrl) return undefined;
-    if (imageUrl.includes("res.cloudinary.com")) {
-      const urlParts = imageUrl.split("/image/upload/");
+  const getAgentLogoUrl = (logoUrl?: string): string | undefined => {
+    if (!logoUrl) return undefined;
+    if (logoUrl.includes("res.cloudinary.com")) {
+      const urlParts = logoUrl.split("/image/upload/");
       if (urlParts.length === 2) {
         return `${urlParts[0]}/image/upload/f_png/${urlParts[1]}`;
       }
     }
-    return imageUrl;
+    return logoUrl;
   };
+
+  // Use logoUrl if available, fallback to imageUrl for backward compatibility
+  const displayLogoUrl = agent.logoUrl || agent.imageUrl;
 
   if (submitStatus === "success") {
     return (
@@ -169,9 +172,9 @@ export default function ReviewForm({ agent }: ReviewFormProps) {
         {/* Header with Agent Info */}
         <div className="flex items-center gap-6 mb-8 pb-8 border-b border-gray-100">
           <div className="relative w-20 h-20 rounded-xl bg-gray-50 border border-gray-100 overflow-hidden flex-shrink-0">
-            {getAgentImageUrl(agent.imageUrl) ? (
+            {getAgentLogoUrl(displayLogoUrl) ? (
               <Image
-                src={getAgentImageUrl(agent.imageUrl)!}
+                src={getAgentLogoUrl(displayLogoUrl)!}
                 alt={agent.name}
                 fill
                 className="object-contain p-2"
@@ -337,8 +340,8 @@ export default function ReviewForm({ agent }: ReviewFormProps) {
                   <button
                     type="button"
                     onClick={(e) => {
-                        e.preventDefault();
-                        handleRemoveFile();
+                      e.preventDefault();
+                      handleRemoveFile();
                     }}
                     className="p-2 hover:bg-red-50 rounded-full text-gray-400 hover:text-red-500 transition-colors"
                   >

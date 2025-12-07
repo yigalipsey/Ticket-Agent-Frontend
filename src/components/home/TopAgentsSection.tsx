@@ -9,13 +9,21 @@ interface TopAgentsSectionProps {
 
 const TopAgentsSection = ({ agents }: TopAgentsSectionProps) => {
   const topAgents = agents
-    .filter((agent) => agent.reviewStats.totalReviews > 0)
-    .sort((a, b) =>
-      b.reviewStats.averageRating !== a.reviewStats.averageRating
-        ? b.reviewStats.averageRating - a.reviewStats.averageRating
-        : b.reviewStats.totalReviews - a.reviewStats.totalReviews
-    )
-    .slice(0, 3);
+    .filter((agent) => {
+      // Filter agents that have externalRating with a valid rating
+      return (
+        agent.externalRating?.rating != null &&
+        typeof agent.externalRating.rating === "number" &&
+        agent.externalRating.rating > 0
+      );
+    })
+    .sort((a, b) => {
+      // Sort by externalRating rating (highest first)
+      const ratingA = a.externalRating?.rating || 0;
+      const ratingB = b.externalRating?.rating || 0;
+      return ratingB - ratingA;
+    })
+    .slice(0, 3); // Top 3 agents
 
   if (topAgents.length === 0) {
     return (
@@ -56,8 +64,10 @@ const TopAgentsSection = ({ agents }: TopAgentsSectionProps) => {
               // Added 'snap-center' and flex-shrink-0
               className="flex-shrink-0 w-[80vw] max-w-[300px] snap-center"
             >
-              <div className="h-full px-1"> {/* Extra horizontal padding inside container */}
-                 <AgentCard agent={agent} variant="minimal" />
+              <div className="h-full px-1">
+                {" "}
+                {/* Extra horizontal padding inside container */}
+                <AgentCard agent={agent} variant="minimal" />
               </div>
             </div>
           ))}

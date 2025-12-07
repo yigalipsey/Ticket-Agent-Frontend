@@ -128,8 +128,13 @@ export function OfferCard({
               />
             </div>
           ) : (
-            <div className="w-32 h-20 flex items-center justify-center flex-shrink-0">
+            <div className="w-32 h-20 flex items-center justify-center gap-2 flex-shrink-0">
               <User className="w-10 h-10 text-gray-400" />
+              {owner?.name && (
+                <span className="text-sm text-gray-700 font-medium truncate max-w-[80px]">
+                  {owner.name}
+                </span>
+              )}
             </div>
           )}
         </div>
@@ -212,8 +217,13 @@ export function OfferCard({
               />
             </div>
           ) : (
-            <div className="w-full h-9 flex items-center justify-center">
-              <User className="w-5 h-5 text-gray-400" />
+            <div className="w-full h-9 flex items-center justify-center gap-1">
+              <User className="w-5 h-5 text-gray-400 flex-shrink-0" />
+              {owner?.name && (
+                <span className="text-[9px] text-gray-700 font-medium truncate max-w-[40px]">
+                  {owner.name}
+                </span>
+              )}
             </div>
           )}
         </div>

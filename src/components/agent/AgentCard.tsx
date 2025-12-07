@@ -24,16 +24,27 @@ const AgentCard: React.FC<AgentCardProps> = ({
   agent,
   variant = "default",
 }) => {
-  const getAgentImageUrl = (imageUrl?: string): string | undefined => {
-    if (!imageUrl) return undefined;
-    if (imageUrl.includes("res.cloudinary.com")) {
-      const urlParts = imageUrl.split("/image/upload/");
+  const getAgentLogoUrl = (logoUrl?: string): string | undefined => {
+    if (!logoUrl) return undefined;
+    if (logoUrl.includes("res.cloudinary.com")) {
+      const urlParts = logoUrl.split("/image/upload/");
       if (urlParts.length === 2) {
         return `${urlParts[0]}/image/upload/f_png/${urlParts[1]}`;
       }
     }
-    return imageUrl;
+    return logoUrl;
   };
+
+  // Use logoUrl if available, fallback to imageUrl for backward compatibility
+  const displayLogoUrl = agent.logoUrl || agent.imageUrl;
+
+  // Get rating from externalRating if available, otherwise fallback to reviewStats
+  const displayRating =
+    agent.externalRating?.rating != null &&
+    typeof agent.externalRating.rating === "number" &&
+    agent.externalRating.rating > 0
+      ? agent.externalRating.rating
+      : agent.reviewStats.averageRating || 0;
 
   const renderStars = (rating: number) =>
     Array.from({ length: 5 }, (_, index) => (
@@ -55,9 +66,9 @@ const AgentCard: React.FC<AgentCardProps> = ({
         {/* Top Section: Logo & Info side-by-side or stacked? User wants wide image. */}
         {/* Let's put the logo in a wide container at the top */}
         <div className="w-full h-32 bg-gray-50 rounded-lg mb-4 relative overflow-hidden border border-gray-100 flex items-center justify-center">
-          {getAgentImageUrl(agent.imageUrl) ? (
+          {getAgentLogoUrl(displayLogoUrl) ? (
             <Image
-              src={getAgentImageUrl(agent.imageUrl)!}
+              src={getAgentLogoUrl(displayLogoUrl)!}
               alt={agent.name}
               fill
               className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
@@ -88,7 +99,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
             <div className="flex items-center gap-1 bg-gray-50 px-2 py-0.5 rounded-md">
               <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
               <span className="text-sm font-bold text-gray-900">
-                {agent.reviewStats.averageRating.toFixed(1)}
+                {displayRating.toFixed(1)}
               </span>
             </div>
           </div>
@@ -175,9 +186,9 @@ const AgentCard: React.FC<AgentCardProps> = ({
     <div className="group bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full">
       {/* Wide Image Area for Logos */}
       <div className="w-full h-40 bg-gray-50 relative overflow-hidden border-b border-gray-100 flex items-center justify-center p-6">
-        {getAgentImageUrl(agent.imageUrl) ? (
+        {getAgentLogoUrl(displayLogoUrl) ? (
           <Image
-            src={getAgentImageUrl(agent.imageUrl)!}
+            src={getAgentLogoUrl(displayLogoUrl)!}
             alt={agent.name}
             fill
             className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
@@ -224,7 +235,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
           <div className="flex items-center gap-1">
             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
             <span className="text-sm font-bold text-gray-900">
-              {agent.reviewStats.averageRating.toFixed(1)}
+              {displayRating.toFixed(1)}
             </span>
           </div>
         </div>

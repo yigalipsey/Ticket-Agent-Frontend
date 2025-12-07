@@ -1,5 +1,11 @@
 import { apiClient } from "@/lib/api";
 
+export interface ExternalRating {
+  rating?: number | null;
+  url?: string | null;
+  provider?: "trustpilot" | "google" | null;
+}
+
 export interface Agent {
   _id: string;
   name: string;
@@ -8,8 +14,10 @@ export interface Agent {
   agentType: "individual" | "agency";
   companyName?: string;
   imageUrl?: string;
+  logoUrl?: string;
   websiteUrl?: string;
   instagramUrl?: string;
+  externalRating?: ExternalRating | null;
   isActive: boolean;
   reviewStats: {
     totalReviews: number;

@@ -21,6 +21,20 @@ async function ReviewsList({ agentId }: { agentId: string }) {
   const agent = agentRes.data;
   const reviews = agent.reviewStats.recentReviews || [];
 
+  // Get rating from externalRating if available, otherwise fallback to reviewStats
+  const displayRating =
+    agent.externalRating?.rating != null &&
+    typeof agent.externalRating.rating === "number" &&
+    agent.externalRating.rating > 0
+      ? agent.externalRating.rating
+      : agent.reviewStats.averageRating || 0;
+
+  const hasExternalRating =
+    agent.externalRating?.rating != null &&
+    typeof agent.externalRating.rating === "number" &&
+    agent.externalRating.rating > 0 &&
+    agent.externalRating?.url;
+
   const renderStars = (rating: number) =>
     Array.from({ length: 5 }, (_, index) => (
       <Star
@@ -33,16 +47,19 @@ async function ReviewsList({ agentId }: { agentId: string }) {
       />
     ));
 
-  const getAgentImageUrl = (imageUrl?: string): string | undefined => {
-    if (!imageUrl) return undefined;
-    if (imageUrl.includes("res.cloudinary.com")) {
-      const urlParts = imageUrl.split("/image/upload/");
+  const getAgentLogoUrl = (logoUrl?: string): string | undefined => {
+    if (!logoUrl) return undefined;
+    if (logoUrl.includes("res.cloudinary.com")) {
+      const urlParts = logoUrl.split("/image/upload/");
       if (urlParts.length === 2) {
         return `${urlParts[0]}/image/upload/f_png/${urlParts[1]}`;
       }
     }
-    return imageUrl;
+    return logoUrl;
   };
+
+  // Use logoUrl if available, fallback to imageUrl for backward compatibility
+  const displayLogoUrl = agent.logoUrl || agent.imageUrl;
 
   return (
     <>
@@ -62,9 +79,9 @@ async function ReviewsList({ agentId }: { agentId: string }) {
         {/* Agent Header */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row items-center gap-6">
           <div className="relative w-24 h-24 rounded-xl bg-gray-50 border border-gray-100 overflow-hidden flex-shrink-0">
-            {getAgentImageUrl(agent.imageUrl) ? (
+            {getAgentLogoUrl(displayLogoUrl) ? (
               <Image
-                src={getAgentImageUrl(agent.imageUrl)!}
+                src={getAgentLogoUrl(displayLogoUrl)!}
                 alt={agent.name}
                 fill
                 className="object-contain p-2"
@@ -80,14 +97,8 @@ async function ReviewsList({ agentId }: { agentId: string }) {
               {agent.name}
             </h1>
             <div className="flex items-center justify-center md:justify-start gap-2 mb-4">
-              <div className="flex">
-                {renderStars(agent.reviewStats.averageRating)}
-              </div>
-              <span className="font-bold text-gray-900">
-                {agent.reviewStats.averageRating.toFixed(1)}
-              </span>
-              <span className="text-gray-500">
-                ({agent.reviewStats.totalReviews} ביקורות)
+              <span className="text-2xl font-bold text-gray-900">
+                {displayRating.toFixed(1)}
               </span>
             </div>
             <Link
@@ -107,15 +118,59 @@ async function ReviewsList({ agentId }: { agentId: string }) {
 
           {reviews.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-2xl border border-gray-100">
-              <p className="text-gray-500">
-                טרם התקבלו ביקורות עבור סוכן זה.
-              </p>
-              <Link
-                href={`/agents/${agent._id}/review`}
-                className="text-primary font-medium mt-2 inline-block"
-              >
-                היה הראשון לדרג!
-              </Link>
+              {hasExternalRating ? (
+                <>
+                  <div className="mb-4">
+                    <div className="text-center mb-4">
+                      <span className="text-4xl font-bold text-gray-900">
+                        {displayRating.toFixed(1)}
+                      </span>
+                    </div>
+                    <p className="text-gray-600 mb-2">
+                      אין ביקורות עדיין מהאתר שלנו
+                    </p>
+                    <p className="text-gray-500 text-sm mb-4">
+                      אבל הדירוג הוא מ-
+                      {agent.externalRating?.provider === "google"
+                        ? "Google"
+                        : "Trustpilot"}
+                    </p>
+                    {agent.externalRating?.url && (
+                      <a
+                        href={agent.externalRating.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center px-6 py-2.5 bg-primary text-white font-medium rounded-xl hover:bg-primary/90 transition-colors"
+                      >
+                        צפה בביקורות ב-
+                        {agent.externalRating?.provider === "google"
+                          ? "Google"
+                          : "Trustpilot"}
+                      </a>
+                    )}
+                  </div>
+                  <div className="pt-4 border-t border-gray-200 mt-4">
+                    <Link
+                      href={`/agents/${agent._id}/review`}
+                      className="text-primary font-medium inline-block"
+                    >
+                      היה הראשון לדרג באתר שלנו!
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="text-gray-500">
+                    טרם התקבלו ביקורות עבור סוכן זה.
+                  </p>
+                  <Link
+                    href={`/agents/${agent._id}/review`}
+                    className="text-primary font-medium mt-2 inline-block"
+                  >
+                    היה הראשון לדרג!
+                  </Link>
+                </>
+              )}
             </div>
           ) : (
             reviews.map((review, index) => (
