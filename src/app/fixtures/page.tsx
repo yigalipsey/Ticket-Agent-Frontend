@@ -4,7 +4,8 @@ import FixtureCard from "@/components/fixture/FixtureCard";
 import FireLoader from "@/components/ui/FireLoader";
 
 export default async function FixturesPage() {
-  const res = await FixtureService.getHotFixtures(20);
+  // שליפת כל המשחקים החמים (limit גדול מאוד)
+  const res = await FixtureService.getHotFixtures(30);
   const fixtures = res.success ? res.data || [] : [];
 
   return (

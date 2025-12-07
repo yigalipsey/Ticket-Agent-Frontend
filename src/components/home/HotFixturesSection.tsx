@@ -10,8 +10,8 @@ interface HotFixturesSectionProps {
 export default function HotFixturesSection({
   fixtures,
 }: HotFixturesSectionProps) {
-  // הצגת כל המשחקים החמים שהתקבלו מה-API
-  const displayFixtures = fixtures || [];
+  // הצגת רק 5 ראשונים בתצוגה מקדימה
+  const displayFixtures = (fixtures || []).slice(0, 5);
 
   return (
     <section className="pb-4 md:pb-8 bg-white">

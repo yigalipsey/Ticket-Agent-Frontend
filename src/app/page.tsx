@@ -16,7 +16,7 @@ import { generateStructuredData } from "@/lib/seo";
 export default async function HomePage() {
   const [leaguesRes, fixturesRes, agentsRes] = await Promise.all([
     LeagueService.getAllLeaguesWithTeams(),
-    FixtureService.getHotFixtures(20),
+    FixtureService.getHotFixtures(5), // תצוגה מקדימה - רק 5 ראשונים
     AgentService.getAllAgents(),
   ]);
 
