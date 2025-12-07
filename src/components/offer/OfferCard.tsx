@@ -250,7 +250,7 @@ export function OfferCard({
               </>
             )}
             <div className="flex items-center justify-center gap-0.5 mt-0.5">
-              {renderStarRow(roundedStarRating ?? 0, "w-2.5 h-2.5")}
+              {renderStarRow(roundedStarRating ?? 0, "w-2.5 h-2.5", "gap-0")}
               <span className="text-[9px] text-gray-600">{ratingLabel}</span>
             </div>
           </div>

@@ -30,10 +30,14 @@ const buildStarFillStates = (rating: number) =>
     return 0 as const;
   });
 
-export const renderStarRow = (rating: number, sizeClass = "w-4 h-4") => {
+export const renderStarRow = (
+  rating: number,
+  sizeClass = "w-4 h-4",
+  gapClass = "gap-1"
+) => {
   const fills = buildStarFillStates(rating);
   return (
-    <div className="flex items-center gap-1">
+    <div className={`flex items-center ${gapClass}`}>
       {fills.map((fill, index) => (
         <div key={`star-${index}`} className="relative">
           <StarIcon className={`${sizeClass} text-gray-300`} />
@@ -50,12 +54,3 @@ export const renderStarRow = (rating: number, sizeClass = "w-4 h-4") => {
     </div>
   );
 };
-
-
-
-
-
-
-
-
-
