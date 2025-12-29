@@ -13,6 +13,9 @@ import AgentService from "@/services/agentService";
 import { StructuredData } from "@/components/seo";
 import { generateStructuredData } from "@/lib/seo";
 
+// Revalidating the page every 5 minutes to ensure "Hot Fixtures" are fresh
+export const revalidate = 300;
+
 export default async function HomePage() {
   const [leaguesRes, fixturesRes, agentsRes] = await Promise.all([
     LeagueService.getAllLeaguesWithTeams(),

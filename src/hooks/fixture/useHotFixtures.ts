@@ -26,9 +26,8 @@ export function useHotFixtures(): HotFixturesResult {
       if (!res.success) throw new Error(res.error || "שגיאה");
       return res.data;
     },
-    // לא לעשות fetch מיידי - רק אם אין cache
-    staleTime: Infinity, // הנתונים תמיד "טריים" (ClientHydration עשה hydration)
-    refetchOnMount: false,
+    // Refresh the data every 5 minutes
+    staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
 

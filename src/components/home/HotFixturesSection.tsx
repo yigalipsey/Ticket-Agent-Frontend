@@ -10,8 +10,11 @@ interface HotFixturesSectionProps {
 export default function HotFixturesSection({
   fixtures,
 }: HotFixturesSectionProps) {
-  // הצגת רק 5 ראשונים בתצוגה מקדימה
-  const displayFixtures = (fixtures || []).slice(0, 5);
+  // סינון משחקים שעבר זמנם (safety check) והצגת רק 5 ראשונים
+  const now = new Date();
+  const displayFixtures = (fixtures || [])
+    .filter((fixture) => new Date(fixture.date) > now)
+    .slice(0, 5);
 
   return (
     <section className="pb-4 md:pb-8 bg-white">

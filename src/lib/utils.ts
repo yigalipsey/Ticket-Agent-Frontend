@@ -99,8 +99,8 @@ export function sortBy<T>(
   });
 }
 
-// Local storage cache duration
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24h
+// Local storage cache duration - reduced to 4h to prevent stale hot fixtures
+const CACHE_DURATION = 4 * 60 * 60 * 1000; // 4h
 
 interface CachedData<T> {
   data: T[];
@@ -143,11 +143,12 @@ export function removeFromStorage(key: string): void {
 export function saveToLocalStorage<T>(data: T[], storageKey: string): void {
   if (typeof window === "undefined") return;
 
+  const cachedData: CachedData<T> = {
+    data,
+    timestamp: Date.now(),
+  };
+
   try {
-    const cachedData: CachedData<T> = {
-      data,
-      timestamp: Date.now(),
-    };
     localStorage.setItem(storageKey, JSON.stringify(cachedData));
   } catch (error: any) {
     console.error(
