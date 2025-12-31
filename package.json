@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
+    "@lucide/lab": "^0.1.2",
     "@tanstack/query-sync-storage-persister": "^5.90.2",
     "@tanstack/react-query": "^5.90.2",
     "@tanstack/react-query-devtools": "^5.90.2",

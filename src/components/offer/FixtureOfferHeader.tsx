@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { MapPin } from "lucide-react";
+import { MapPin, Calendar, Clock } from "lucide-react";
 
 interface FixtureOfferHeaderProps {
   homeTeam: { name: string; logo?: string };
@@ -30,97 +30,101 @@ export function FixtureOfferHeader({
   });
 
   return (
-    <>
-      {/* HERO */}
-      <div className="relative overflow-hidden w-full -mt-16 pt-16 h-[400px] md:h-[450px] mb-8">
-        {/* Background layers */}
-        <div className="absolute inset-0">
-          <div
-            className="absolute inset-0"
-            style={{ backgroundColor: "#092274" }}
-          />
-          <div className="absolute inset-0 bg-[url('/images/spotlight.avif')] bg-cover bg-center opacity-40" />
-          <div className="absolute inset-0 bg-[url('/images/small-pitch.avif')] bg-cover bg-center opacity-20" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/10" />
-        </div>
+    <section className="relative w-full h-[320px] md:h-[420px] overflow-hidden -mt-16">
+      {/* Background Section - Matching LeagueHero */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/people-soccer-stadium.avif"
+          alt="Stadium Background"
+          fill
+          className="object-cover"
+          priority
+        />
+        {/* Color Overlay - Same as LeagueHero */}
+        <div
+          className="absolute inset-0"
+          style={{ backgroundColor: "#09227459" }}
+        />
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40" />
+      </div>
 
-        {/* Centered content */}
-        <div className="relative z-10 w-full mt-5 h-full flex items-center justify-center">
-          <div className="flex flex-col items-center justify-center text-center px-4">
-            {/* Teams block: increased horizontal gap, logos boxed, names below, VS centered absolute */}
-            <div className="relative flex  items-center justify-center gap-12 w-full ">
-              {/* HOME */}
-              <div className="flex flex-col items-center gap-2 w-[140px] md:w-[200px]">
-                <div className="w-20 h-20 md:w-32 md:h-32 flex items-center justify-center rounded-sm overflow-hidden bg-white/0">
-                  {homeTeam.logo ? (
-                    <Image
-                      src={homeTeam.logo}
-                      alt={homeTeam.name}
-                      width={128}
-                      height={128}
-                      className="object-contain w-full h-full"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600">
-                      {homeTeam.name?.charAt(0) ?? "?"}
-                    </div>
-                  )}
-                </div>
-                <div className="text-sm md:text-xl font-semibold text-white truncate w-full">
-                  {homeTeam.name}
-                </div>
-              </div>
+      {/* Content Section - Accounting for Transparent Nav (Bottom aligned) */}
+      <div className="relative z-10 h-full pb-8 flex flex-col items-center justify-end">
+        <div className="w-full max-w-5xl mx-auto px-4">
 
-              {/* VS centered text-only (no background) */}
-              <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
-                <div className="text-white font-bold text-2xl md:text-4xl drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
-                  VS
-                </div>
-              </div>
 
-              {/* AWAY */}
-              <div className="flex  flex-col items-center gap-2 w-[140px] md:w-[200px]">
-                <div className="w-20 h-20 md:w-32 md:h-32 flex items-center justify-center rounded-sm overflow-hidden bg-white/0">
-                  {awayTeam.logo ? (
-                    <Image
-                      src={awayTeam.logo}
-                      alt={awayTeam.name}
-                      width={128}
-                      height={128}
-                      className="object-contain w-full h-full"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600">
-                      {awayTeam.name?.charAt(0) ?? "?"}
-                    </div>
-                  )}
-                </div>
-                <div className="text-sm md:text-xl font-semibold text-white truncate w-full">
-                  {awayTeam.name}
-                </div>
+          {/* Teams Matchup Row */}
+          <div className="flex items-center justify-center gap-6 md:gap-16 w-full mb-4">
+
+            {/* Home Team */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="relative w-20 h-20 md:w-32 md:h-32 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-3 flex items-center justify-center shadow-xl">
+                {homeTeam.logo ? (
+                  <Image
+                    src={homeTeam.logo}
+                    alt={homeTeam.name}
+                    width={100}
+                    height={100}
+                    className="w-full h-full object-contain"
+                  />
+                ) : (
+                  <div className="w-10 h-10 md:w-16 md:h-16 rounded-full bg-white/5 border border-white/10" />
+                )}
               </div>
+              <h2 className="text-white text-base md:text-2xl font-black text-center drop-shadow-md">
+                {homeTeam.name}
+              </h2>
             </div>
 
-            {/* Date under teams */}
-            <div className="mt-6 text-lg md:text-xl text-white font-medium flex items-center gap-2 dir-rtl">
+            {/* VS Divider */}
+            <div className="flex flex-col items-center px-2">
+              <span className="text-2xl md:text-5xl font-black text-white/20 italic tracking-tighter">VS</span>
+            </div>
+
+            {/* Away Team */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="relative w-20 h-20 md:w-32 md:h-32 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-3 flex items-center justify-center shadow-xl">
+                {awayTeam.logo ? (
+                  <Image
+                    src={awayTeam.logo}
+                    alt={awayTeam.name}
+                    width={100}
+                    height={100}
+                    className="w-full h-full object-contain"
+                  />
+                ) : (
+                  <div className="w-10 h-10 md:w-16 md:h-16 rounded-full bg-white/5 border border-white/10" />
+                )}
+              </div>
+              <h2 className="text-white text-base md:text-2xl font-black text-center drop-shadow-md">
+                {awayTeam.name}
+              </h2>
+            </div>
+          </div>
+
+          {/* Info Bar */}
+          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-8 text-white/90">
+            <div className="flex items-center gap-2 text-xs md:text-sm font-bold bg-black/20 px-3 py-1 rounded-full backdrop-blur-sm border border-white/5">
+              <Calendar className="w-3.5 h-3.5 text-white/70" />
               <span>{formattedDate}</span>
-              <span className="mx-1">•</span>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs md:text-sm font-bold bg-black/20 px-3 py-1 rounded-full backdrop-blur-sm border border-white/5">
+              <Clock className="w-3.5 h-3.5 text-white/70" />
               <span>{formattedTime}</span>
             </div>
 
-            {/* Venue small under teams */}
             {venue && (
-              <div className="mt-4 text-sm text-white/80 px-3 py-1 bg-black/20 rounded flex items-center gap-2">
-                <MapPin className="w-4 h-4 flex-shrink-0" />
-                <span>
-                  {venue.name}
-                  {venue.city ? `, ${venue.city}` : ""}
-                </span>
+              <div className="flex items-center gap-2 text-xs md:text-sm font-bold bg-black/20 px-3 py-1 rounded-full backdrop-blur-sm border border-white/5">
+                <MapPin className="w-3.5 h-3.5 text-white/70" />
+                <span>{venue.name}</span>
               </div>
             )}
           </div>
+
         </div>
       </div>
-    </>
+    </section>
   );
 }

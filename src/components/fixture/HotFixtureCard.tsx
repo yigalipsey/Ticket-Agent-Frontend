@@ -1,10 +1,37 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Ticket } from "lucide-react";
+import { MapPin, Ticket, Icon } from "lucide-react";
+import { soccerBall } from "@lucide/lab";
 import { Fixture } from "@/types";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui";
+
+// Constants moved outside component to prevent recreation on every render
+const HEBREW_DAYS = [
+  "יום א'",
+  "יום ב'",
+  "יום ג'",
+  "יום ד'",
+  "יום ה'",
+  "יום ו'",
+  "שבת",
+];
+
+const HEBREW_MONTHS = [
+  "ינואר",
+  "פברואר",
+  "מרץ",
+  "אפריל",
+  "מאי",
+  "יוני",
+  "יולי",
+  "אוגוסט",
+  "ספטמבר",
+  "אוקטובר",
+  "נובמבר",
+  "דצמבר",
+];
 
 export interface HotFixtureCardProps {
   fixture: Fixture;
@@ -21,33 +48,9 @@ const HotFixtureCard: React.FC<HotFixtureCardProps> = ({
   const formatHebrewDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
-      const days = [
-        "יום א'",
-        "יום ב'",
-        "יום ג'",
-        "יום ד'",
-        "יום ה'",
-        "יום ו'",
-        "שבת",
-      ];
-      const months = [
-        "ינואר",
-        "פברואר",
-        "מרץ",
-        "אפריל",
-        "מאי",
-        "יוני",
-        "יולי",
-        "אוגוסט",
-        "ספטמבר",
-        "אוקטובר",
-        "נובמבר",
-        "דצמבר",
-      ];
-
-      const dayOfWeek = days[date.getDay()];
+      const dayOfWeek = HEBREW_DAYS[date.getDay()];
       const day = date.getDate();
-      const month = months[date.getMonth()];
+      const month = HEBREW_MONTHS[date.getMonth()];
 
       return `${dayOfWeek}, ${day} ב${month}`;
     } catch {
@@ -56,21 +59,21 @@ const HotFixtureCard: React.FC<HotFixtureCardProps> = ({
   };
 
   const isCompact = variant === "compact";
+  const startPrice = fixture.minPrice?.amount || fixture.lowestPrice;
+  const currency = fixture.minPrice?.currency || "EUR";
 
   return (
     <div
-      className={`bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-200 ${
-        isCompact ? "max-w-[360px] max-h-[405px]" : "w-full"
-      } p-6 ${className}`}
+      className={`bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-200 ${isCompact ? "max-w-[360px] max-h-[405px]" : "w-full"
+        } p-6 ${className}`}
     >
       {/* Top Section - Date and Event Type */}
       <div
         className={`text-center ${isCompact ? "pt-0 pb-2 px-4" : "py-4 px-6"}`}
       >
         <div
-          className={`text-gray-700 font-medium ${
-            isCompact ? "text-xs mb-1" : "text-sm mb-2"
-          }`}
+          className={`text-gray-700 font-medium ${isCompact ? "text-xs mb-1" : "text-sm mb-2"
+            }`}
         >
           {formatHebrewDate(fixture.date)}
         </div>
@@ -89,9 +92,8 @@ const HotFixtureCard: React.FC<HotFixtureCardProps> = ({
           <div className="flex flex-col items-center flex-1">
             {/* Fixed height container for icon */}
             <div
-              className={`${
-                isCompact ? "w-8 h-8 mb-2" : "w-[72px] h-[81px] mb-2"
-              } flex items-center justify-center`}
+              className={`${isCompact ? "w-8 h-8 mb-2" : "w-[72px] h-[81px] mb-2"
+                } flex items-center justify-center`}
             >
               {fixture.homeTeam.logo || fixture.homeTeam.logoUrl ? (
                 <Image
@@ -105,14 +107,19 @@ const HotFixtureCard: React.FC<HotFixtureCardProps> = ({
                   className="w-full h-full object-contain"
                 />
               ) : (
-                <div className="w-8 h-8 bg-gray-300"></div>
+                <div className="w-full h-full flex items-center justify-center">
+                  <Icon
+                    iconNode={soccerBall}
+                    className={`${isCompact ? "w-6 h-6" : "w-12 h-12"
+                      } text-gray-400`}
+                  />
+                </div>
               )}
             </div>
             {/* Fixed height container for text */}
             <div
-              className={`text-center ${
-                isCompact ? "h-12" : "h-10"
-              } flex items-start justify-center pt-1`}
+              className={`text-center ${isCompact ? "h-12" : "h-10"
+                } flex items-start justify-center pt-1`}
             >
               <div className="text-gray-700 text-sm font-medium leading-tight">
                 {fixture.homeTeam.name}
@@ -129,9 +136,8 @@ const HotFixtureCard: React.FC<HotFixtureCardProps> = ({
           <div className="flex flex-col items-center flex-1">
             {/* Fixed height container for icon */}
             <div
-              className={`${
-                isCompact ? "w-8 h-8 mb-2" : "w-[72px] h-[81px] mb-2"
-              } flex items-center justify-center`}
+              className={`${isCompact ? "w-8 h-8 mb-2" : "w-[72px] h-[81px] mb-2"
+                } flex items-center justify-center`}
             >
               {fixture.awayTeam.logo || fixture.awayTeam.logoUrl ? (
                 <Image
@@ -145,14 +151,19 @@ const HotFixtureCard: React.FC<HotFixtureCardProps> = ({
                   className="w-full h-full object-contain"
                 />
               ) : (
-                <div className="w-8 h-8 bg-gray-300"></div>
+                <div className="w-full h-full flex items-center justify-center">
+                  <Icon
+                    iconNode={soccerBall}
+                    className={`${isCompact ? "w-6 h-6" : "w-12 h-12"
+                      } text-gray-400`}
+                  />
+                </div>
               )}
             </div>
             {/* Fixed height container for text */}
             <div
-              className={`text-center ${
-                isCompact ? "h-12" : "h-10"
-              } flex items-start justify-center pt-1`}
+              className={`text-center ${isCompact ? "h-12" : "h-10"
+                } flex items-start justify-center pt-1`}
             >
               <div className="text-gray-700 text-sm font-medium leading-tight">
                 {fixture.awayTeam.name}
@@ -170,12 +181,10 @@ const HotFixtureCard: React.FC<HotFixtureCardProps> = ({
           className="w-full mb-3"
         >
           <button
-            className={`w-full bg-primary text-white font-medium rounded-lg ${
-              isCompact ? "px-3 py-2 text-sm" : "px-4 py-2 text-base"
-            } flex items-center justify-center gap-2`}
+            className={`w-full bg-primary text-white font-medium rounded-lg ${isCompact ? "px-3 py-2 text-sm" : "px-4 py-2 text-base"
+              } flex items-center justify-center gap-2`}
           >
-            השווה מחירים
-            <Ticket className={isCompact ? "w-3 h-3" : "w-4 h-4"} />
+            צפה בהצעות            <Ticket className={isCompact ? "w-3 h-3" : "w-4 h-4"} />
           </button>
         </Link>
 
@@ -187,9 +196,9 @@ const HotFixtureCard: React.FC<HotFixtureCardProps> = ({
               {fixture.venue?.name || "מיקום לא זמין"}
             </span>
           </div>
-          {(fixture.venue?.cityHe || fixture.venue?.city) && (
+          {(fixture.venue?.city_he || fixture.venue?.city) && (
             <span className="text-xs text-gray-500 mt-1">
-              {fixture.venue.cityHe || fixture.venue.city}
+              {fixture.venue.city_he || fixture.venue.city}
             </span>
           )}
         </div>

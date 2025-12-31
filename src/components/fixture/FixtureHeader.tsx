@@ -2,7 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
-import { Calendar, Clock, MapPin } from "lucide-react";
+import { Calendar, Clock, MapPin, Icon } from "lucide-react";
+import { soccerBall } from "@lucide/lab";
 import { formatDate, formatTime } from "@/lib/utils";
 
 export interface FixtureHeaderProps {
@@ -56,15 +57,24 @@ export default function FixtureHeader({ fixture, slug }: FixtureHeaderProps) {
         <div className="flex items-center justify-center space-x-8 mb-6">
           {/* קבוצה ביתית */}
           <div className="flex flex-col items-center space-y-2">
-            {fixture.homeTeam.logo && (
-              <Image
-                src={fixture.homeTeam.logo}
-                alt={fixture.homeTeam.name}
-                width={64}
-                height={64}
-                className="rounded-lg"
-              />
-            )}
+            <div className="w-16 h-16 flex items-center justify-center">
+              {fixture.homeTeam.logo ? (
+                <Image
+                  src={fixture.homeTeam.logo}
+                  alt={fixture.homeTeam.name}
+                  width={64}
+                  height={64}
+                  className="rounded-lg"
+                />
+              ) : (
+                <div className="w-16 h-16 flex items-center justify-center">
+                  <Icon
+                    iconNode={soccerBall}
+                    className="w-12 h-12 text-gray-400"
+                  />
+                </div>
+              )}
+            </div>
             <span className="text-xl font-bold text-gray-900 text-center">
               {fixture.homeTeam.name}
             </span>
@@ -77,15 +87,24 @@ export default function FixtureHeader({ fixture, slug }: FixtureHeaderProps) {
 
           {/* קבוצה אורחת */}
           <div className="flex flex-col items-center space-y-2">
-            {fixture.awayTeam.logo && (
-              <Image
-                src={fixture.awayTeam.logo}
-                alt={fixture.awayTeam.name}
-                width={64}
-                height={64}
-                className="rounded-lg"
-              />
-            )}
+            <div className="w-16 h-16 flex items-center justify-center">
+              {fixture.awayTeam.logo ? (
+                <Image
+                  src={fixture.awayTeam.logo}
+                  alt={fixture.awayTeam.name}
+                  width={64}
+                  height={64}
+                  className="rounded-lg"
+                />
+              ) : (
+                <div className="w-16 h-16 flex items-center justify-center">
+                  <Icon
+                    iconNode={soccerBall}
+                    className="w-12 h-12 text-gray-400"
+                  />
+                </div>
+              )}
+            </div>
             <span className="text-xl font-bold text-gray-900 text-center">
               {fixture.awayTeam.name}
             </span>

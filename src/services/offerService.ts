@@ -99,6 +99,109 @@ class OfferService {
     }
   }
 
+  /**
+   * Stream offers by fixture ID using Server-Sent Events (SSE)
+   * Returns offers in real-time as they become available
+   */
+  streamOffersByFixture(
+    fixtureId: string,
+    callbacks: {
+      onFixture?: (fixture: any) => void;
+      onOffers?: (data: { offers: OfferResponse[]; source: string; count: number }) => void;
+      onOffer?: (data: { offer: OfferResponse; source: string; fromCache: boolean; isLive: boolean }) => void;
+      onMetadata?: (data: { totalChunks: number }) => void;
+      onError?: (error: { message: string; offerId?: string; fatal?: boolean }) => void;
+      onComplete?: (summary: { total: number; agents: number; suppliers: number; errors: number }) => void;
+    }
+  ): () => void {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+    const eventSource = new EventSource(`${apiUrl}/offers/fixture/${fixtureId}/stream`);
+
+    // Listen for metadata event - provides the total number of expected chunks
+    eventSource.addEventListener('metadata', (e: Event) => {
+      try {
+        const data = JSON.parse((e as MessageEvent).data);
+        callbacks.onMetadata?.(data);
+      } catch (error) {
+        console.error('[SSE] Error parsing metadata event:', error);
+      }
+    });
+
+    // Listen for fixture event
+    eventSource.addEventListener('fixture', (e: Event) => {
+      try {
+        const fixture = JSON.parse((e as MessageEvent).data);
+        callbacks.onFixture?.(fixture);
+      } catch (error) {
+        console.error('[SSE] Error parsing fixture event:', error);
+      }
+    });
+
+    // Listen for batch offers event
+    eventSource.addEventListener('offers', (e: Event) => {
+      try {
+        const data = JSON.parse((e as MessageEvent).data);
+        callbacks.onOffers?.(data);
+      } catch (error) {
+        console.error('[SSE] Error parsing offers event:', error);
+      }
+    });
+
+    // Listen for individual offer event
+    eventSource.addEventListener('offer', (e: Event) => {
+      try {
+        const data = JSON.parse((e as MessageEvent).data);
+        callbacks.onOffer?.(data);
+      } catch (error) {
+        console.error('[SSE] Error parsing offer event:', error);
+      }
+    });
+
+    // Listen for custom error events from backend (with data)
+    eventSource.addEventListener('error', (e: Event) => {
+      const messageEvent = e as MessageEvent;
+      // Only parse if there's actual data (custom error event from backend)
+      if (messageEvent.data) {
+        try {
+          const data = JSON.parse(messageEvent.data);
+          callbacks.onError?.(data);
+
+          // Close connection on fatal errors
+          if (data.fatal) {
+            eventSource.close();
+          }
+        } catch (error) {
+          // If parsing fails, ignore - it's not a JSON error event
+          console.warn('[SSE] Received error event but could not parse data');
+        }
+      }
+    });
+
+    // Listen for complete event
+    eventSource.addEventListener('complete', (e: Event) => {
+      try {
+        const summary = JSON.parse((e as MessageEvent).data);
+        callbacks.onComplete?.(summary);
+        eventSource.close();
+      } catch (error) {
+        console.error('[SSE] Error parsing complete event:', error);
+        eventSource.close();
+      }
+    });
+
+    // Handle EventSource connection errors (not custom events)
+    eventSource.onerror = () => {
+      console.warn('[SSE] Connection closed or error occurred');
+      // Don't treat this as a fatal error - stream might have completed
+      eventSource.close();
+    };
+
+    // Return cleanup function
+    return () => {
+      eventSource.close();
+    };
+  }
+
   async createOffer(offerData: CreateOfferData): Promise<CreateOfferResponse> {
     console.log(
       "%c[OFFER CREATE] 🟢 Starting to create offer",

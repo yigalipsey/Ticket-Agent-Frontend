@@ -1,6 +1,6 @@
 import { apiClient } from "@/lib/api";
-import { Fixture } from "@/types/fixture";
+import { Team } from "@/types";
 
-export class TeamService {}
+export class TeamService { }
 
 export default TeamService;

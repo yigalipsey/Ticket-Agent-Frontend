@@ -41,8 +41,8 @@ const AgentCard: React.FC<AgentCardProps> = ({
   // Get rating from externalRating if available, otherwise fallback to reviewStats
   const displayRating =
     agent.externalRating?.rating != null &&
-    typeof agent.externalRating.rating === "number" &&
-    agent.externalRating.rating > 0
+      typeof agent.externalRating.rating === "number" &&
+      agent.externalRating.rating > 0
       ? agent.externalRating.rating
       : agent.reviewStats.averageRating || 0;
 
@@ -50,11 +50,10 @@ const AgentCard: React.FC<AgentCardProps> = ({
     Array.from({ length: 5 }, (_, index) => (
       <Star
         key={index}
-        className={`w-3.5 h-3.5 ${
-          index < Math.floor(rating)
+        className={`w-3.5 h-3.5 ${index < Math.floor(rating)
             ? "fill-yellow-400 text-yellow-400"
             : "text-gray-200"
-        }`}
+          }`}
       />
     ));
 
@@ -71,6 +70,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
               src={getAgentLogoUrl(displayLogoUrl)!}
               alt={agent.name}
               fill
+              loading="lazy"
               className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
@@ -191,6 +191,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
             src={getAgentLogoUrl(displayLogoUrl)!}
             alt={agent.name}
             fill
+            loading="lazy"
             className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
@@ -202,11 +203,10 @@ const AgentCard: React.FC<AgentCardProps> = ({
         )}
         <div className="absolute top-3 right-3">
           <span
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border ${
-              isAgency
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border ${isAgency
                 ? "bg-white border-gray-200 text-gray-600"
                 : "bg-white border-gray-200 text-gray-600"
-            }`}
+              }`}
           >
             {isAgency ? (
               <Building2 className="w-3 h-3" />

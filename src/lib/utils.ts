@@ -148,24 +148,34 @@ export function saveToLocalStorage<T>(data: T[], storageKey: string): void {
     timestamp: Date.now(),
   };
 
-  try {
-    localStorage.setItem(storageKey, JSON.stringify(cachedData));
-  } catch (error: any) {
-    console.error(
-      `❌ [localStorage] Failed to save "${storageKey}":`,
-      error.name
-    );
+  // Use requestIdleCallback to avoid blocking the main thread
+  const saveOperation = () => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(cachedData));
+    } catch (error: any) {
+      console.error(
+        `❌ [localStorage] Failed to save "${storageKey}":`,
+        error.name
+      );
 
-    // אם זו שגיאת quota - ננסה לנקות cache ישן
-    if (error.name === "QuotaExceededError") {
-      console.warn("⚠️ localStorage quota exceeded! Clearing old cache...");
-      try {
-        localStorage.removeItem(storageKey);
-        localStorage.setItem(storageKey, JSON.stringify(cachedData));
-      } catch (retryError) {
-        console.error("❌ Retry failed - localStorage full");
+      // אם זו שגיאת quota - ננסה לנקות cache ישן
+      if (error.name === "QuotaExceededError") {
+        console.warn("⚠️ localStorage quota exceeded! Clearing old cache...");
+        try {
+          localStorage.removeItem(storageKey);
+          localStorage.setItem(storageKey, JSON.stringify(cachedData));
+        } catch (retryError) {
+          console.error("❌ Retry failed - localStorage full");
+        }
       }
     }
+  };
+
+  // Use requestIdleCallback if available, otherwise use setTimeout as fallback
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(saveOperation, { timeout: 2000 });
+  } else {
+    setTimeout(saveOperation, 0);
   }
 }
 

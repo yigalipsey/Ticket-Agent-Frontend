@@ -41,8 +41,8 @@ export function OfferCard({
     hasOwner && externalRating?.rating != null
       ? Number(externalRating.rating)
       : isSupplier && owner?.trustpilotRating != null
-      ? Number(owner.trustpilotRating)
-      : null;
+        ? Number(owner.trustpilotRating)
+        : null;
   const normalizedRating =
     typeof ratingValue === "number" && Number.isFinite(ratingValue)
       ? Math.round(Math.min(5, Math.max(0, ratingValue)) * 10) / 10
@@ -58,8 +58,8 @@ export function OfferCard({
     hasOwner && externalRating?.url
       ? externalRating.url
       : isSupplier && typeof owner?.trustpilotUrl === "string"
-      ? owner.trustpilotUrl
-      : null;
+        ? owner.trustpilotUrl
+        : null;
   const ratingProvider =
     externalRating?.provider || (owner?.trustpilotUrl ? "trustpilot" : null);
   const hasRatingLink = Boolean(ratingUrl);
@@ -69,8 +69,8 @@ export function OfferCard({
     ratingProvider === "google"
       ? "Google"
       : ratingProvider === "trustpilot"
-      ? "Trustpilot"
-      : ratingProvider || "Trustpilot"; // Default fallback
+        ? "Trustpilot"
+        : ratingProvider || "Trustpilot"; // Default fallback
 
   const handleContactAgent = () => {
     if (offer.url) {
@@ -112,184 +112,101 @@ export function OfferCard({
   const isHospitality = offer.isHospitality;
 
   return (
-    <div className="bg-white border-t last:border-b border-gray-200 px-0 md:px-4 hover:bg-gray-50 transition-colors">
-      {/* Desktop layout */}
-      <div className="hidden md:flex flex-row items-center gap-8">
-        {/* Agent logo */}
-        <div className="flex-shrink-0">
-          {imageUrl ? (
-            <div className="w-32 h-20 flex items-center justify-center flex-shrink-0">
-              <Image
-                src={imageUrl}
-                alt={owner?.name || "ספק כרטיסים"}
-                width={128}
-                height={80}
-                className="w-full h-full object-contain"
-              />
-            </div>
-          ) : (
-            <div className="w-32 h-20 flex items-center justify-center gap-2 flex-shrink-0">
-              <User className="w-10 h-10 text-gray-400" />
-              {owner?.name && (
-                <span className="text-sm text-gray-700 font-medium truncate max-w-[80px]">
-                  {owner.name}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Star rating */}
-        {hasRating && (
-          <div className="flex-shrink-0 flex flex-col items-center text-center pr-6">
-            {normalizedRating !== null && (
-              <>
-                {hasRatingLink ? (
-                  <a
-                    href={ratingUrl ?? "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[10px] uppercase tracking-wide text-primary font-semibold hover:text-primary-dark transition-colors"
-                  >
-                    {providerLabel}
-                  </a>
-                ) : (
-                  <span className="text-[10px] uppercase tracking-wide text-gray-400">
-                    {providerLabel}
-                  </span>
-                )}
-              </>
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-500 mb-2 overflow-hidden group relative">
+      {/* Desktop layout: Premium Single Row */}
+      <div className="hidden md:flex flex-row items-center justify-between p-2 pl-6 pr-2 min-h-[84px] relative z-10">
+        {/* Right: Brand Identity */}
+        <div className="flex items-center gap-6 h-16">
+          <div className="w-32 h-16 bg-white rounded-xl border border-slate-100 flex items-center justify-center p-1 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] group-hover:border-primary/20 transition-colors">
+            {imageUrl ? (
+              <Image src={imageUrl} alt={owner?.name || "ספק"} width={110} height={55} className="max-h-full w-auto object-contain brightness-[1.02]" />
+            ) : (
+              <User className="w-8 h-8 text-slate-300" />
             )}
-            <div className="flex items-center gap-1">
-              {renderStarRow(roundedStarRating ?? 0, "w-4 h-4 md:w-5 md:h-5")}
-              <span className="hidden md:inline text-sm text-gray-600 ml-1">
-                {ratingLabel}
-              </span>
-            </div>
           </div>
-        )}
-
-        {/* Badges - Separate container */}
-        <div className="flex-shrink-0 flex flex-col items-center justify-center gap-1.5 min-w-[100px]">
-          {isVip || isHospitality ? (
-            <div className="flex items-center gap-1.5 bg-slate-900 text-amber-200 text-xs px-3 py-1 rounded-full font-medium border border-amber-500/30 shadow-sm">
-              <Crown className="w-3.5 h-3.5 text-amber-400" />
-              <span>כרטיס אירוח</span>
-            </div>
-          ) : null}
-        </div>
-
-        {/* Price */}
-        <div className="flex-1 text-right pr-6 flex flex-col justify-center items-end">
-          <div className="flex flex-col md:flex-row md:items-center gap-0 md:gap-3">
-            <span className="text-xs md:text-sm text-gray-600">החל מ</span>
-            <div className="text-lg md:text-2xl font-bold text-gray-900 flex flex-row items-center gap-1">
-              <span>{currencySymbol}</span>
-              <span>{offer.price}</span>
-            </div>
+          <div className="flex flex-col">
+            <span className="text-sm font-black text-slate-900 tracking-tight leading-none mb-1.5">{owner?.name || "ספק רשמי"}</span>
+            {hasRating && (
+              <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1 bg-amber-50/50 px-2 py-0.5 rounded-lg border border-amber-100/50">
+                  <span className="text-[11px] font-black text-amber-700">{ratingLabel}</span>
+                  <svg className="w-3 h-3 text-amber-500 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                </div>
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{providerLabel}</span>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Contact/Purchase button */}
-        <div className="flex-shrink-0">
+        {/* Left: Price & Action */}
+        <div className="flex items-center gap-8">
+          <div className="flex flex-col items-end">
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter mb-0.5">מחיר סופי</span>
+            <div className="flex items-baseline gap-1">
+              <span className="text-3xl font-[1000] text-slate-900 leading-none">{offer.price}</span>
+              <span className="text-xl font-bold text-primary">{currencySymbol}</span>
+            </div>
+          </div>
           <button
             onClick={handleContactAgent}
             disabled={isButtonDisabled}
-            className="bg-primary hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-6 rounded-lg transition-colors text-base whitespace-nowrap min-w-[140px] flex justify-center items-center"
+            className="group/btn relative bg-primary hover:bg-primary-dark disabled:bg-slate-200 text-white font-black py-4 px-10 rounded-2xl transition-all shadow-md active:scale-95 overflow-hidden"
           >
-            {buttonText}
+            <div className="relative z-10 flex items-center gap-2">
+              <span className="text-sm tracking-tight">{buttonText}</span>
+              <svg className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5-5 5M6 12h12" />
+              </svg>
+            </div>
           </button>
         </div>
       </div>
 
-      {/* Mobile layout - Proportional width distribution */}
-      <div className="md:hidden grid grid-cols-[1fr_1fr_1fr_0.8fr_1.2fr] items-center w-full gap-1 py-2 px-1">
-        {/* Agent logo */}
-        <div className="flex justify-center items-center min-w-0">
-          {imageUrl ? (
-            <div className="w-full h-9 flex items-center justify-center px-1">
-              <Image
-                src={imageUrl}
-                alt={owner?.name || "ספק כרטיסים"}
-                width={50}
-                height={36}
-                className="w-full h-full object-contain"
-              />
-            </div>
-          ) : (
-            <div className="w-full h-9 flex items-center justify-center gap-1">
-              <User className="w-5 h-5 text-gray-400 flex-shrink-0" />
-              {owner?.name && (
-                <span className="text-[9px] text-gray-700 font-medium truncate max-w-[40px]">
-                  {owner.name}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Star rating */}
-        {hasRating && (
-          <div className="flex flex-col justify-center items-center min-w-0">
-            {normalizedRating !== null && (
-              <>
-                {hasRatingLink ? (
-                  <a
-                    href={ratingUrl ?? "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[9px] uppercase tracking-wide text-primary font-semibold hover:text-primary-dark transition-colors leading-tight text-center w-full truncate px-0.5"
-                  >
-                    {providerLabel}
-                  </a>
-                ) : (
-                  <span className="text-[9px] uppercase tracking-wide text-gray-400 leading-tight text-center w-full truncate px-0.5">
-                    {providerLabel}
-                  </span>
-                )}
-              </>
+      {/* Mobile layout: Clean Vertical Identity (RTL) */}
+      <div className="md:hidden flex flex-row items-center justify-between py-2 px-3 gap-2 relative z-10 font-heebo">
+        {/* Mobile Right: Identity - Big Logo & Name, No Box */}
+        <div className="flex flex-col items-center gap-1.5 min-w-0">
+          <div className="w-32 h-16 flex items-center justify-center relative">
+            {imageUrl ? (
+              <Image src={imageUrl} alt="ספק" width={128} height={64} className="w-full h-full object-contain" />
+            ) : (
+              <User className="w-10 h-10 text-slate-300" />
             )}
-            <div className="flex items-center justify-center gap-0.5 mt-0.5">
-              {renderStarRow(roundedStarRating ?? 0, "w-2.5 h-2.5", "gap-0")}
-              <span className="text-[9px] text-gray-600">{ratingLabel}</span>
+          </div>
+
+        </div>
+
+        {/* Mobile Middle: Rating & Price (Divided into 2 centered divs) */}
+        <div className="flex  w-[40%]">
+          <div className="flex w-1/2 flex-col items-center justify-center">
+            {hasRating && (
+              <div className="bg-amber-50 px-2 py-1 rounded border border-amber-100 flex items-center gap-1.5 shrink-0">
+                <span className="text-xs font-black text-amber-700 leading-none">{ratingLabel}</span>
+                <svg className="w-3.5 h-3.5 text-amber-500 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              </div>
+            )}
+          </div>
+
+          <div className="flex w-1/2 flex-col items-center justify-center">
+            <span className="text-[8px] font-black text-slate-400 uppercase tracking-tighter leading-none mb-0.5">החל מ</span>
+            <div className="flex items-baseline gap-0.5">
+              <span className="text-xl font-[1000] text-slate-900 leading-none tracking-tighter">{offer.price}</span>
+              <span className="text-sm font-bold text-primary leading-none">{currencySymbol}</span>
             </div>
           </div>
-        )}
-
-        {/* Badges */}
-        <div className="flex flex-col justify-center items-center min-w-0">
-          {(isVip || isHospitality) && (
-            <div className="flex flex-col items-center justify-center bg-slate-900 text-amber-200 text-[8px] px-1 py-0.5 rounded border border-amber-500/30 shadow-sm w-full max-w-[56px]">
-              <Crown className="w-2.5 h-2.5 text-amber-400 mb-0" />
-              <span className="leading-[1.1] font-medium text-center mt-0.5">
-                כרטיס אירוח
-              </span>
-            </div>
-          )}
         </div>
-
-        {/* Price */}
-        <div className="flex flex-col justify-center items-center w-full min-w-0 px-0.5">
-          <span className="text-[9px] text-gray-600 leading-tight whitespace-nowrap">
-            החל מ
-          </span>
-          <div className="text-xs font-bold text-gray-900 leading-tight whitespace-nowrap flex flex-row items-center gap-0.5">
-            <span>{currencySymbol}</span>
-            <span>{offer.price}</span>
-          </div>
-        </div>
-
-        {/* Contact/Purchase button */}
-        <div className="flex justify-center items-center min-w-0 px-0.5">
-          <button
-            onClick={handleContactAgent}
-            disabled={isButtonDisabled}
-            className="bg-primary hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-1.5 px-1 rounded-lg transition-colors text-[10px] whitespace-nowrap w-full shadow-sm"
-          >
-            {buttonText}
-          </button>
-        </div>
+        {/* Mobile Left: Minimal Action */}
+        <button
+          onClick={handleContactAgent}
+          disabled={isButtonDisabled}
+          className="bg-primary hover:bg-primary-dark disabled:bg-slate-200 text-white font-black h-11 px-5 rounded-2xl transition-all shadow-md active:scale-95 flex items-center justify-center shrink-0"
+        >
+          <span className="text-[11px] tracking-tight">{buttonText}</span>
+        </button>
       </div>
+
+      {/* Premium Background Hover Effect */}
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/[0.02] to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
     </div>
   );
 }

@@ -34,13 +34,6 @@ export default function SectionHeader({
       <Link href={href}>
         <Button
           variant="outline-primary"
-          size="sm"
-          className="text-right md:hidden"
-        >
-          {buttonText}
-        </Button>
-        <Button
-          variant="outline-primary"
           size="design-spec"
           className="text-right hidden md:block"
         >

@@ -187,7 +187,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
             fullWidth
             className="group-hover:bg-primary-dark group-hover:text-white group-hover:border-primary-dark"
           >
-            צפה במשחקים
+            צפה בהצעות
           </Button>
         </Link>
       </div>

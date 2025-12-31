@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { Fixture } from "@/types";
 import HotFixtureCard from "@/components/fixture/HotFixtureCard";
 import SectionHeader from "./SectionHeader";
@@ -52,6 +53,13 @@ export default function HotFixturesSection({
             </p>
           </div>
         )}
+        <div className="md:hidden">
+          <Link href="/fixtures">
+            <button className="text-primary font-bold border-2 border-primary rounded-lg px-4 py-2 text-sm hover:bg-primary hover:text-white transition-all">
+              עוד משחקים
+            </button>
+          </Link>
+        </div>
       </div>
     </section>
   );

@@ -53,6 +53,7 @@ export default function PopularLeaguesSection({
                               alt={league.nameHe || league.name}
                               width={48}
                               height={48}
+                              loading="lazy"
                               className="object-contain"
                             />
                           ) : (
@@ -72,13 +73,13 @@ export default function PopularLeaguesSection({
                       <div className="flex items-center gap-2">
                         {/* Mobile: text only */}
                         <button className="md:hidden bg-primary text-white px-3 py-2 rounded text-xs font-medium">
-                          השווה מחירים
+                          צפה בהצעות
                         </button>
 
                         {/* Desktop: icon + text */}
                         <button className="hidden md:flex items-center gap-2 bg-primary text-white px-4 py-2 rounded">
                           <span className="text-sm font-medium">
-                            השווה מחירים
+                            צפה בהצעות
                           </span>
                           <Ticket className="w-4 h-4" />
                         </button>
@@ -97,6 +98,12 @@ export default function PopularLeaguesSection({
             </p>
           </div>
         )}
+        <div className="mt-8 md:hidden">
+          <Link href="/leagues">
+            <button className="text-primary font-bold border-2 border-primary rounded-lg px-4 py-2 text-sm hover:bg-primary hover:text-white transition-all">
+              ליגות נוספות             </button>
+          </Link>
+        </div>
       </div>
     </section>
   );

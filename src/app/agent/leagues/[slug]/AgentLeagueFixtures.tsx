@@ -138,14 +138,16 @@ export default function AgentLeagueFixtures({
   if (!leagueId || visibleFixtures.length === 0) {
     return (
       <div className="mb-8">
-        <LeagueFixturesFilter
-          selectedMonth={filters.month || null}
-          selectedVenue={filters.venueId || null}
-          availableMonths={availableMonths}
-          availableVenues={availableVenues}
-          onMonthChange={handleMonthChange}
-          onVenueChange={handleVenueChange}
-        />
+        <div className="mb-4">
+          <LeagueFixturesFilter
+            selectedMonth={filters.month || null}
+            selectedVenue={filters.venueId || null}
+            availableMonths={availableMonths}
+            availableVenues={availableVenues}
+            onMonthChange={handleMonthChange}
+            onVenueChange={handleVenueChange}
+          />
+        </div>
         <div className="text-center py-12">
           <p className="text-gray-500">אין משחקים להצגה</p>
         </div>
@@ -161,14 +163,16 @@ export default function AgentLeagueFixtures({
       </h2>
 
       {/* פילטרים */}
-      <LeagueFixturesFilter
-        selectedMonth={filters.month || null}
-        selectedVenue={filters.venueId || null}
-        availableMonths={availableMonths}
-        availableVenues={availableVenues}
-        onMonthChange={handleMonthChange}
-        onVenueChange={handleVenueChange}
-      />
+      <div className="mb-4">
+        <LeagueFixturesFilter
+          selectedMonth={filters.month || null}
+          selectedVenue={filters.venueId || null}
+          availableMonths={availableMonths}
+          availableVenues={availableVenues}
+          onMonthChange={handleMonthChange}
+          onVenueChange={handleVenueChange}
+        />
+      </div>
 
       {/* טוען */}
       {isLoading && (

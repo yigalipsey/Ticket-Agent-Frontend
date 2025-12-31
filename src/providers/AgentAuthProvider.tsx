@@ -35,6 +35,18 @@ export function AgentAuthProvider({ children }: { children: React.ReactNode }) {
     const initializeAuth = async () => {
       try {
         setIsLoading(true);
+
+        // Optimization: check if agent cookie exists before making API call
+        // This prevents 401 errors in console for regular users
+        const hasAgentCookie = document.cookie.includes("agent_auth_token");
+
+        if (!hasAgentCookie) {
+          setAgent(null);
+          setIsAuthenticated(false);
+          setIsLoading(false);
+          return;
+        }
+
         const currentAgent = await agentAuthService.getCurrentAgent();
 
         if (currentAgent) {

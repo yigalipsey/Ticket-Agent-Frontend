@@ -31,9 +31,8 @@ export default function HotTeamsSection({ teams }: HotTeamsSectionProps) {
               <Link
                 key={team._id || team.id}
                 href={`/teams/${team.slug}?id=${team._id || team.id}`}
-                className={`group flex flex-col items-center text-center transition-all duration-300 bg-white p-6 rounded-2xl border border-gray-100 hover:border-blue-100 hover:shadow-lg hover:-translate-y-1 ${
-                  index >= 10 ? "hidden md:flex" : ""
-                }`}
+                className={`group flex flex-col items-center text-center transition-all duration-300 bg-white p-6 rounded-2xl border border-gray-100 hover:border-blue-100 hover:shadow-lg hover:-translate-y-1 ${index >= 10 ? "hidden md:flex" : ""
+                  }`}
               >
                 <div className="w-20 h-20 mb-4 flex items-center justify-center relative">
                   <div className="absolute inset-0 bg-gray-50 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300 ease-out -z-10" />
@@ -43,6 +42,7 @@ export default function HotTeamsSection({ teams }: HotTeamsSectionProps) {
                       alt={team.name}
                       width={64}
                       height={64}
+                      loading="lazy"
                       className="w-16 h-16 object-contain group-hover:scale-110 transition-transform duration-300"
                     />
                   ) : (
@@ -67,6 +67,13 @@ export default function HotTeamsSection({ teams }: HotTeamsSectionProps) {
             </p>
           </div>
         )}
+        <div className="mt-8 md:hidden">
+          <Link href="/teams">
+            <button className="text-primary font-bold border-2 border-primary rounded-lg px-4 py-2 text-sm hover:bg-primary hover:text-white transition-all">
+              כל הקבוצות
+            </button>
+          </Link>
+        </div>
       </div>
     </section>
   );

@@ -6,6 +6,18 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAgentAuth } from "@/providers";
 import HamburgerButton from "./HamburgerButton";
+import {
+  Home,
+  Trophy,
+  Users,
+  Calendar,
+  MapPin,
+  UserCheck,
+  PlusCircle,
+  LayoutDashboard,
+  ChevronLeft,
+  User
+} from "lucide-react";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -36,17 +48,17 @@ export default function Navbar() {
   const navigationItems =
     isAuthenticated && agent
       ? [
-          { href: "/agent/upload-offer", label: "העלאת הצעה" },
-          { href: "/agent/my-offers", label: "ההצעות שלי" },
-        ]
+        { href: "/agent/upload-offer", label: "העלאת הצעה", icon: PlusCircle },
+        { href: "/agent/my-offers", label: "ההצעות שלי", icon: LayoutDashboard },
+      ]
       : [
-          { href: "/", label: "בית" },
-          { href: "/leagues", label: "ליגות" },
-          { href: "/teams", label: "קבוצות" },
-          { href: "/fixtures", label: "משחקים" },
-          { href: "/venues", label: "אצטדיונים" },
-          { href: "/agents", label: "סוכנים" },
-        ];
+        { href: "/", label: "בית", icon: Home },
+        { href: "/leagues", label: "ליגות", icon: Trophy },
+        { href: "/teams", label: "קבוצות", icon: Users },
+        { href: "/fixtures", label: "משחקים", icon: Calendar },
+        { href: "/venues", label: "אצטדיונים", icon: MapPin },
+        { href: "/agents", label: "סוכנים", icon: UserCheck },
+      ];
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
   const closeUserMenu = () => setIsUserMenuOpen(false);
@@ -62,19 +74,91 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`${navbarClasses} ${
-        isMobileMenuOpen ? "z-[10000000]" : "z-[99999]"
-      }`}
+      className={`${navbarClasses} ${isMobileMenuOpen ? "z-[10000000]" : "z-[99999]"
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Brand Logo */}
+          {/* Right Side Items: User Menu (Desktop) + Hamburger (Mobile) - Appears on the RIGHT in RTL */}
+          <div className={`flex items-center gap-4 flex-row-reverse md:flex-row ${isMobileMenuOpen ? 'relative z-[10000000]' : ''}`}>
+            {/* User Menu Area */}
+            <div className="hidden md:flex items-center">
+              {isAuthenticated ? (
+                <div className="relative">
+                  <button
+                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                    className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-medium">
+                        {agent?.email?.slice(-2) || "?"}
+                      </span>
+                    </div>
+                    <span className="mr-2 text-white transition-colors">
+                      {agent?.agentType === "agency" ? "סוכנות" : "סוכן עצמאי"}
+                    </span>
+                    <svg
+                      className="h-4 w-4 text-white/70 transition-colors"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {isUserMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                      <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                        {agent?.email}
+                      </div>
+                      {agent && (
+                        <Link
+                          href="/agent/dashboard"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={closeUserMenu}
+                        >
+                          דשבורד סוכן
+                        </Link>
+                      )}
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        התנתק
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  href="/agent/login"
+                  className="px-4 py-2 rounded-md text-sm font-medium bg-transparent border border-white/30 hover:bg-white/10 text-white transition-colors"
+                >
+                  כניסת סוכנים
+                </Link>
+              )}
+            </div>
+
+            {/* Hamburger Button (Mobile) */}
+            <div className="md:hidden">
+              <HamburgerButton
+                isOpen={isMobileMenuOpen}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label={isMobileMenuOpen ? "סגור תפריט" : "פתח תפריט"}
+              />
+            </div>
+          </div>
+
+          {/* Brand Logo - Appears on the LEFT in RTL */}
           <div
-            className={`${
-              shouldShowLogo ? "flex" : "hidden"
-            } md:flex items-center order-2 md:order-1 ${
-              isMobileMenuOpen ? "z-[10000000]" : ""
-            }`}
+            className={`${shouldShowLogo ? "flex" : "hidden"} md:flex items-center ${isMobileMenuOpen ? "relative z-[10000000]" : ""}`}
           >
             <Link
               href="/"
@@ -82,12 +166,8 @@ export default function Navbar() {
               onClick={closeMobileMenu}
             >
               <div
-                className={`h-10 w-auto md:h-14 ${
-                  isMobileMenuOpen ? "drop-shadow-lg" : ""
-                }`}
-                style={{
-                  filter: "brightness(0) invert(1)",
-                }}
+                className="h-10 w-auto md:h-14"
+                style={{ filter: "brightness(0) invert(1)" }}
               >
                 <Image
                   src="/logo.svg"
@@ -99,71 +179,6 @@ export default function Navbar() {
                 />
               </div>
             </Link>
-          </div>
-
-          {/* User Menu - Desktop */}
-          <div className="hidden md:flex items-center">
-            {isAuthenticated ? (
-              <div className="relative">
-                <button
-                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center">
-                    <span className="text-white text-sm font-medium">
-                      {agent?.email?.slice(-2) || "?"}
-                    </span>
-                  </div>
-                  <span className="mr-2 text-white transition-colors">
-                    {agent?.agentType === "agency" ? "סוכנות" : "סוכן עצמאי"}
-                  </span>
-                  <svg
-                    className="h-4 w-4 text-white/70 transition-colors"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
-
-                {/* Dropdown Menu */}
-                {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
-                    <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
-                      {agent?.email}
-                    </div>
-                    {agent && (
-                      <Link
-                        href="/agent/dashboard"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={closeUserMenu}
-                      >
-                        דשבורד סוכן
-                      </Link>
-                    )}
-                    <button
-                      onClick={handleLogout}
-                      className="block w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      התנתק
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Link
-                href="/agent/login"
-                className="px-4 py-2 rounded-md text-sm font-medium bg-transparent border border-white/30 hover:bg-white/10 text-white transition-colors"
-              >
-                כניסת סוכנים
-              </Link>
-            )}
           </div>
 
           {/* Desktop Navigation - Centered */}
@@ -181,19 +196,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Mobile menu button */}
-          <div
-            className={`md:hidden order-1 md:order-2 ${
-              isMobileMenuOpen ? "z-[10000000]" : ""
-            }`}
-          >
-            <HamburgerButton
-              isOpen={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label={isMobileMenuOpen ? "סגור תפריט" : "פתח תפריט"}
-              aria-expanded={isMobileMenuOpen}
-            />
-          </div>
+
         </div>
 
         {/* Mobile Navigation Menu - Full Screen Fixed Overlay */}
@@ -215,23 +218,31 @@ export default function Navbar() {
             />
 
             {/* Menu Content */}
-            <div className="flex flex-col h-full w-full relative z-10 pt-20 pb-8 px-6 overflow-y-auto">
-              <div className="flex-1 flex flex-col justify-center space-y-6 text-center">
+            <div className="flex flex-col h-full w-full relative z-10 pt-24 pb-8 px-4 overflow-y-auto">
+              <div className="flex-1 flex flex-col space-y-2">
                 {navigationItems.map((item, index) => (
                   <div
                     key={item.href}
                     className="transform transition-all duration-300 ease-out"
                     style={{
-                      animation: `fadeInUp 0.3s ease-out ${index * 0.1}s both`,
+                      animation: `fadeInUp 0.3s ease-out ${index * 0.05}s both`,
                     }}
                   >
                     <Link
                       href={item.href}
-                      className="inline-block text-3xl font-bold text-white/90 hover:text-white hover:scale-110 transition-all duration-300 py-2 relative group"
+                      className="flex items-center justify-between p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all duration-200 group active:scale-[0.98]"
                       onClick={closeMobileMenu}
                     >
-                      <span className="relative z-10">{item.label}</span>
-                      <span className="absolute bottom-0 left-1/2 w-0 h-1 bg-blue-500 transition-all duration-300 group-hover:w-full group-hover:left-0 rounded-full opacity-0 group-hover:opacity-100" />
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                          <item.icon className="w-5 h-5" />
+                        </div>
+                        <span className="text-lg font-medium text-white/90 group-hover:text-white">
+                          {item.label}
+                        </span>
+                      </div>
+
+                      <ChevronLeft className="w-5 h-5 text-white/20 group-hover:text-white transition-colors" />
                     </Link>
                   </div>
                 ))}
@@ -251,43 +262,60 @@ export default function Navbar() {
               `}</style>
 
               {/* User Menu / Login */}
-              <div className="mt-auto border-t border-white/10 pt-8">
+              <div className="mt-8 border-t border-white/10 pt-6">
                 {isAuthenticated ? (
-                  <div className="space-y-4 text-center">
-                    <div className="text-white/90">
-                      <p className="font-medium text-lg">{agent?.email}</p>
-                      <p className="text-sm text-white/60 mt-1">
-                        {agent?.agentType === "agency"
-                          ? "סוכנות"
-                          : "סוכן עצמאי"}
-                      </p>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-end gap-4 p-4 mb-2">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                        <User className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold text-white">{agent?.email}</p>
+                        <p className="text-xs text-white/50">
+                          {agent?.agentType === "agency"
+                            ? "סוכנות מורשית"
+                            : "סוכן עצמאי"}
+                        </p>
+                      </div>
                     </div>
+
                     {agent && (
                       <Link
                         href="/agent/dashboard"
-                        className="block w-full py-3 rounded-xl bg-white/10 text-white font-medium hover:bg-white/20 transition-all"
+                        className="flex items-center justify-between p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all"
                         onClick={closeMobileMenu}
                       >
-                        דשבורד סוכן
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400">
+                            <LayoutDashboard className="w-5 h-5" />
+                          </div>
+                          <span className="font-medium text-white/90">דשבורד ניהול</span>
+                        </div>
+                        <ChevronLeft className="w-5 h-5 text-white/20" />
                       </Link>
                     )}
+
                     <button
                       onClick={() => {
                         handleLogout();
                         closeMobileMenu();
                       }}
-                      className="block w-full py-3 rounded-xl text-red-300 hover:text-red-200 hover:bg-white/5 transition-all"
+                      className="flex items-center justify-end w-full p-4 text-red-400 hover:text-red-300 transition-colors"
                     >
-                      התנתק
+                      <span className="font-medium mr-4">התנתק מהמערכת</span>
                     </button>
                   </div>
                 ) : (
                   <Link
                     href="/agent/login"
-                    className="block w-full py-4 rounded-xl bg-white text-primary text-xl font-bold text-center shadow-lg hover:bg-white/90 transition-transform active:scale-95"
+                    className="group relative flex items-center justify-center w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold text-lg shadow-xl shadow-blue-500/25 overflow-hidden transition-all hover:scale-[1.02] active:scale-95"
                     onClick={closeMobileMenu}
                   >
-                    כניסת סוכנים
+                    <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span className="relative flex items-center gap-2">
+                      כניסת סוכנים
+                      <User className="w-5 h-5" />
+                    </span>
                   </Link>
                 )}
               </div>

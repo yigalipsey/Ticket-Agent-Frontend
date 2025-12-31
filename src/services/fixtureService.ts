@@ -12,6 +12,7 @@ export interface ServiceResult<T> {
 }
 
 export class FixtureService {
+
   /**
    * קבלת משחקים חמים
    */
@@ -31,71 +32,71 @@ export class FixtureService {
         id: fixture._id || fixture.id,
         homeTeam: fixture.homeTeam
           ? ({
-              ...fixture.homeTeam,
-              id: fixture.homeTeam._id || fixture.homeTeam.id,
-              name: fixture.homeTeam.name || fixture.homeTeam.name_en || "",
-              slug: fixture.homeTeam.slug || "",
-              country:
-                fixture.homeTeam.country_he ||
-                fixture.homeTeam.country_en ||
-                fixture.homeTeam.country ||
-                "",
-              logo: fixture.homeTeam.logoUrl || fixture.homeTeam.logo,
-              logoUrl: fixture.homeTeam.logoUrl || fixture.homeTeam.logo,
-            } as Team)
+            ...fixture.homeTeam,
+            id: fixture.homeTeam._id || fixture.homeTeam.id,
+            name: fixture.homeTeam.name || fixture.homeTeam.name_en || "",
+            slug: fixture.homeTeam.slug || "",
+            country:
+              fixture.homeTeam.country_he ||
+              fixture.homeTeam.country_en ||
+              fixture.homeTeam.country ||
+              "",
+            logo: fixture.homeTeam.logoUrl || fixture.homeTeam.logo,
+            logoUrl: fixture.homeTeam.logoUrl || fixture.homeTeam.logo,
+          } as Team)
           : ({
-              name: "",
-              slug: "",
-              country: "",
-            } as Team),
+            name: fixture.homeTeamName || "",
+            slug: "",
+            country: "",
+          } as Team),
         awayTeam: fixture.awayTeam
           ? ({
-              ...fixture.awayTeam,
-              id: fixture.awayTeam._id || fixture.awayTeam.id,
-              name: fixture.awayTeam.name || fixture.awayTeam.name_en || "",
-              slug: fixture.awayTeam.slug || "",
-              country:
-                fixture.awayTeam.country_he ||
-                fixture.awayTeam.country_en ||
-                fixture.awayTeam.country ||
-                "",
-              logo: fixture.awayTeam.logoUrl || fixture.awayTeam.logo,
-              logoUrl: fixture.awayTeam.logoUrl || fixture.awayTeam.logo,
-            } as Team)
+            ...fixture.awayTeam,
+            id: fixture.awayTeam._id || fixture.awayTeam.id,
+            name: fixture.awayTeam.name || fixture.awayTeam.name_en || "",
+            slug: fixture.awayTeam.slug || "",
+            country:
+              fixture.awayTeam.country_he ||
+              fixture.awayTeam.country_en ||
+              fixture.awayTeam.country ||
+              "",
+            logo: fixture.awayTeam.logoUrl || fixture.awayTeam.logo,
+            logoUrl: fixture.awayTeam.logoUrl || fixture.awayTeam.logo,
+          } as Team)
           : ({
-              name: "",
-              slug: "",
-              country: "",
-            } as Team),
+            name: fixture.awayTeamName || "",
+            slug: "",
+            country: "",
+          } as Team),
         venue: fixture.venue
           ? ({
-              ...fixture.venue,
-              id: fixture.venue._id || fixture.venue.id,
-              slug: fixture.venue.slug || "",
-              name: fixture.venue.name || "",
-              nameHe: fixture.venue.name,
-              country:
-                fixture.venue.country_he ||
-                fixture.venue.country_en ||
-                fixture.venue.country ||
-                "",
-              city:
-                fixture.venue.city_he ||
-                fixture.venue.city_en ||
-                fixture.venue.city ||
-                "",
-              cityHe: fixture.venue.city_he,
-              capacity: fixture.venue.capacity || 0,
-              surface:
-                (fixture.venue.surface as "grass" | "artificial" | "hybrid") ||
-                "grass",
-            } as Venue)
+            ...fixture.venue,
+            id: fixture.venue._id || fixture.venue.id,
+            slug: fixture.venue.slug || "",
+            name: fixture.venue.name || "",
+            nameHe: fixture.venue.name,
+            country:
+              fixture.venue.country_he ||
+              fixture.venue.country_en ||
+              fixture.venue.country ||
+              "",
+            city:
+              fixture.venue.city_he ||
+              fixture.venue.city_en ||
+              fixture.venue.city ||
+              "",
+            cityHe: fixture.venue.city_he,
+            capacity: fixture.venue.capacity || 0,
+            surface:
+              (fixture.venue.surface as "grass" | "artificial" | "hybrid") ||
+              "grass",
+          } as Venue)
           : ({
-              slug: "",
-              country: "",
-              capacity: 0,
-              surface: "grass" as const,
-            } as Venue),
+            slug: "",
+            country: "",
+            capacity: 0,
+            surface: "grass" as const,
+          } as Venue),
       }));
 
       return {
@@ -173,34 +174,52 @@ export class FixtureService {
           id: f._id || f.id,
           _id: f._id || f.id,
           slug: f.slug,
-          homeTeam: {
-            id: f.homeTeam?._id || f.homeTeam?.id,
-            _id: f.homeTeam?._id || f.homeTeam?.id,
-            name: f.homeTeam?.name || f.homeTeam?.name_en || "",
-            slug: f.homeTeam?.slug || "",
-            country:
-              f.homeTeam?.country_he ||
-              f.homeTeam?.country_en ||
-              f.homeTeam?.country ||
-              "",
-            logo: f.homeTeam?.logoUrl || f.homeTeam?.logo,
-            logoUrl: f.homeTeam?.logoUrl || f.homeTeam?.logo,
-            city: f.venue?.city_he || f.venue?.city_en || f.venue?.city || "",
-          } as Team,
-          awayTeam: {
-            id: f.awayTeam?._id || f.awayTeam?.id,
-            _id: f.awayTeam?._id || f.awayTeam?.id,
-            name: f.awayTeam?.name || f.awayTeam?.name_en || "",
-            slug: f.awayTeam?.slug || "",
-            country:
-              f.awayTeam?.country_he ||
-              f.awayTeam?.country_en ||
-              f.awayTeam?.country ||
-              "",
-            logo: f.awayTeam?.logoUrl || f.awayTeam?.logo,
-            logoUrl: f.awayTeam?.logoUrl || f.awayTeam?.logo,
-            city: f.venue?.city_he || f.venue?.city_en || f.venue?.city || "",
-          } as Team,
+          homeTeam: f.homeTeam
+            ? ({
+              id: f.homeTeam._id || f.homeTeam.id,
+              _id: f.homeTeam._id || f.homeTeam.id,
+              name: f.homeTeam.name || f.homeTeam.name_en || "",
+              slug: f.homeTeam.slug || "",
+              country:
+                f.homeTeam.country_he ||
+                f.homeTeam.country_en ||
+                f.homeTeam.country ||
+                "",
+              logo: f.homeTeam.logoUrl || f.homeTeam.logo,
+              logoUrl: f.homeTeam.logoUrl || f.homeTeam.logo,
+              city:
+                f.venue?.city_he || f.venue?.city_en || f.venue?.city || "",
+            } as Team)
+            : ({
+              name: f.homeTeamName || "",
+              slug: "",
+              country: "",
+              city:
+                f.venue?.city_he || f.venue?.city_en || f.venue?.city || "",
+            } as Team),
+          awayTeam: f.awayTeam
+            ? ({
+              id: f.awayTeam._id || f.awayTeam.id,
+              _id: f.awayTeam._id || f.awayTeam.id,
+              name: f.awayTeam.name || f.awayTeam.name_en || "",
+              slug: f.awayTeam.slug || "",
+              country:
+                f.awayTeam.country_he ||
+                f.awayTeam.country_en ||
+                f.awayTeam.country ||
+                "",
+              logo: f.awayTeam.logoUrl || f.awayTeam.logo,
+              logoUrl: f.awayTeam.logoUrl || f.awayTeam.logo,
+              city:
+                f.venue?.city_he || f.venue?.city_en || f.venue?.city || "",
+            } as Team)
+            : ({
+              name: f.awayTeamName || "",
+              slug: "",
+              country: "",
+              city:
+                f.venue?.city_he || f.venue?.city_en || f.venue?.city || "",
+            } as Team),
           venue: {
             id: f.venue?._id || f.venue?.id,
             _id: f.venue?._id || f.venue?.id,
@@ -311,34 +330,48 @@ export class FixtureService {
             id: f._id || f.id,
             _id: f._id || f.id,
             slug: f.slug,
-            homeTeam: {
-              id: f.homeTeam?._id || f.homeTeam?.id,
-              _id: f.homeTeam?._id || f.homeTeam?.id,
-              name: f.homeTeam?.name || f.homeTeam?.name_en || "",
-              slug: f.homeTeam?.slug || "",
-              country:
-                f.homeTeam?.country_he ||
-                f.homeTeam?.country_en ||
-                f.homeTeam?.country ||
-                "",
-              logo: f.homeTeam?.logoUrl || f.homeTeam?.logo,
-              logoUrl: f.homeTeam?.logoUrl || f.homeTeam?.logo,
-              city: f.venue?.city || "",
-            } as Team,
-            awayTeam: {
-              id: f.awayTeam?._id || f.awayTeam?.id,
-              _id: f.awayTeam?._id || f.awayTeam?.id,
-              name: f.awayTeam?.name || f.awayTeam?.name_en || "",
-              slug: f.awayTeam?.slug || "",
-              country:
-                f.awayTeam?.country_he ||
-                f.awayTeam?.country_en ||
-                f.awayTeam?.country ||
-                "",
-              logo: f.awayTeam?.logoUrl || f.awayTeam?.logo,
-              logoUrl: f.awayTeam?.logoUrl || f.awayTeam?.logo,
-              city: f.venue?.city || "",
-            } as Team,
+            homeTeam: f.homeTeam
+              ? ({
+                id: f.homeTeam._id || f.homeTeam.id,
+                _id: f.homeTeam._id || f.homeTeam.id,
+                name: f.homeTeam.name || f.homeTeam.name_en || "",
+                slug: f.homeTeam.slug || "",
+                country:
+                  f.homeTeam.country_he ||
+                  f.homeTeam.country_en ||
+                  f.homeTeam.country ||
+                  "",
+                logo: f.homeTeam.logoUrl || f.homeTeam.logo,
+                logoUrl: f.homeTeam.logoUrl || f.homeTeam.logo,
+                city: f.venue?.city || "",
+              } as Team)
+              : ({
+                name: f.homeTeamName || "",
+                slug: "",
+                country: "",
+                city: f.venue?.city || "",
+              } as Team),
+            awayTeam: f.awayTeam
+              ? ({
+                id: f.awayTeam._id || f.awayTeam.id,
+                _id: f.awayTeam._id || f.awayTeam.id,
+                name: f.awayTeam.name || f.awayTeam.name_en || "",
+                slug: f.awayTeam.slug || "",
+                country:
+                  f.awayTeam.country_he ||
+                  f.awayTeam.country_en ||
+                  f.awayTeam.country ||
+                  "",
+                logo: f.awayTeam.logoUrl || f.awayTeam.logo,
+                logoUrl: f.awayTeam.logoUrl || f.awayTeam.logo,
+                city: f.venue?.city || "",
+              } as Team)
+              : ({
+                name: f.awayTeamName || "",
+                slug: "",
+                country: "",
+                city: f.venue?.city || "",
+              } as Team),
             venue: {
               id: f.venue?._id || f.venue?.id,
               _id: f.venue?._id || f.venue?.id,
@@ -390,6 +423,36 @@ export class FixtureService {
       console.error("Team ID:", teamId);
       console.error("Options:", options);
       throw error;
+    }
+  }
+
+  /**
+   * קבלת פרטי משחק מלאים לפי Slug
+   */
+  static async getFixtureBySlug(slug: string): Promise<Fixture | null> {
+    try {
+      const response = await apiClient.get<Fixture>(
+        `${API_ENDPOINTS.FIXTURES}/by-slug/${slug}`
+      );
+      return response;
+    } catch (error) {
+      console.error("❌ שגיאה בטעינת פרטי משחק לפי Slug:", error);
+      return null;
+    }
+  }
+
+  /**
+   * קבלת פרטי משחק מלאים לפי ID
+   */
+  static async getFixtureById(id: string): Promise<Fixture | null> {
+    try {
+      const response = await apiClient.get<Fixture>(
+        `${API_ENDPOINTS.FIXTURES}/${id}`
+      );
+      return response;
+    } catch (error) {
+      console.error("❌ שגיאה בטעינת פרטי משחק:", error);
+      return null;
     }
   }
 }

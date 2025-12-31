@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import SectionHeader from "./SectionHeader";
 import AgentCard from "@/components/agent/AgentCard";
 import { Agent } from "@/services/agentService";
@@ -82,6 +83,13 @@ const TopAgentsSection = ({ agents }: TopAgentsSectionProps) => {
               <AgentCard agent={agent} variant="minimal" />
             </div>
           ))}
+        </div>
+        <div className="mt-8 md:hidden">
+          <Link href="/agents">
+            <button className="text-primary font-bold border-2 border-primary rounded-lg px-4 py-2 text-sm hover:bg-primary hover:text-white transition-all">
+              לכל הסוכנים
+            </button>
+          </Link>
         </div>
       </div>
     </section>

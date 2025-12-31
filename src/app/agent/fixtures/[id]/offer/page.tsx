@@ -17,6 +17,18 @@ export default function AddOfferPage({ params }: AddOfferPageProps) {
   const [fixtureId, setFixtureId] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+  // Auto-close success modal after 500ms and navigate back
+  useEffect(() => {
+    if (showSuccessModal) {
+      const timer = setTimeout(() => {
+        setShowSuccessModal(false);
+        router.back();
+      }, 500); // Half a second
+
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccessModal, router]);
+
   // Validate the route exists
   const {
     isValid,

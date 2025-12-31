@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { saveToLocalStorage } from "@/lib/utils";
 import { League } from "@/types/league";
@@ -30,18 +30,21 @@ export default function ClientHydration({
   initialHotFixtures,
 }: ClientHydrationProps) {
   const queryClient = useQueryClient();
+  const hydratedRef = useRef({ leagues: false, fixtures: false });
 
   useEffect(() => {
     // Hydration של ליגות → cache + localStorage["all-leagues-with-teams"]
-    if (initialLeagues?.length) {
+    if (initialLeagues?.length && !hydratedRef.current.leagues) {
       queryClient.setQueryData(["all-leagues-with-teams"], initialLeagues);
       saveToLocalStorage(initialLeagues, "all-leagues-with-teams");
+      hydratedRef.current.leagues = true;
     }
 
     // Hydration של משחקים חמים → cache + localStorage["hot-fixtures"]
-    if (initialHotFixtures?.length) {
+    if (initialHotFixtures?.length && !hydratedRef.current.fixtures) {
       queryClient.setQueryData(["hot-fixtures"], initialHotFixtures);
       saveToLocalStorage(initialHotFixtures, "hot-fixtures");
+      hydratedRef.current.fixtures = true;
     }
   }, [queryClient, initialLeagues, initialHotFixtures]);
 

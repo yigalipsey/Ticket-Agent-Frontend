@@ -46,12 +46,11 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <p className="text-3xl md:text-[56px] text-gray-200 animate-slide-up leading-tight font-extrabold text-center">
-            השוואת מחירי כרטיסים
+          <h1 className="text-3xl md:text-5xl lg:text-5xl text-white animate-slide-up leading-[1.2] font-black text-center drop-shadow-2xl">
+            כרטיסים למשחקי
             <br />
-            למשחקי כדורגל
-          </p>
-
+            כדורגל בחו"ל
+          </h1>
           <SearchSection />
         </div>
       </div>

@@ -12,30 +12,35 @@ import "./globals.css";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  preload: false,
 });
 
 const heebo = Heebo({
   subsets: ["hebrew"],
   variable: "--font-heebo",
+  display: 'swap',
 });
 
 const rubik = Rubik({
   subsets: ["latin", "hebrew"],
   variable: "--font-rubik",
+  preload: false,
+  display: 'swap',
 });
 
 const openSans = Open_Sans({
   subsets: ["latin", "hebrew"],
   variable: "--font-open-sans",
+  display: 'swap',
 });
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "https://www.ticketagent.co.il";
 
 export const metadata: Metadata = {
-  title: "TicketAgent - השוואת כרטיסים למשחקי כדורגל",
-  description: "צפו בהצעות כרטיסים למשחקים שאתם אוהבים. השוואת מחירים  .",
-  keywords: "כרטיסים, כדורגל, משחקים, ליגות, קבוצות, אצטדיונים, השוואת מחירים",
+  title: "TicketAgent | כל מי שמוכר כרטיסים למשחק שלך במקום אחד",
+  description: "זירת הכרטיסים המרכזית למשחקי כדורגל. פלטפורמה אחת המרכזת עבורכם את כל מי שמוכר כרטיסים למשחק שלכם, עם מגוון הצעות מהספקים המובילים בעולם.",
+  keywords: "כרטיסים לכדורגל, ליגה אנגלית, ליגה ספרדית, ליגת האלופות, כרטיסים למשחקים, ספקי כרטיסים, טיקטאג'נט",
   authors: [{ name: "TicketAgent Team" }],
   creator: "TicketAgent",
   publisher: "TicketAgent",
@@ -55,8 +60,8 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "TicketAgent - השוואת כרטיסים למשחקי כדורגל",
-    description: "הרכיבו את החבילה המושלמת למשחקים שאתם אוהבים",
+    title: "TicketAgent - פלטפורמת הכרטיסים המרכזית למשחקי כדורגל",
+    description: "כל מי שמוכר כרטיס למשחק שלך, עכשיו במקום אחד. ריכוז הצעות מגוון מכל הספקים המובילים.",
     url: baseUrl,
     siteName: "TicketAgent",
     images: [
@@ -64,7 +69,7 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "TicketAgent - השוואת כרטיסים למשחקי כדורגל",
+        alt: "TicketAgent - זירת הכרטיסים למשחקי כדורגל",
       },
     ],
     locale: "he_IL",
@@ -72,8 +77,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "TicketAgent - השוואת כרטיסים למשחקי כדורגל",
-    description: "הרכיבו את החבילה המושלמת למשחקים שאתם אוהבים",
+    title: "TicketAgent - כל מי שמוכר כרטיס למשחק שלך",
+    description: "מרכזים עבורכם את כל אפשרויות הכרטיסים מכל הספקים במקום אחד.",
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -107,7 +112,6 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#0D329A" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* Accessibility metadata */}
         <meta
           name="accessibility"
           content="This website complies with Israeli Standard 5568 and WCAG 2.1 Level AA"
@@ -119,21 +123,12 @@ export default function RootLayout({
         <ReactQueryProvider>
           <AgentAuthProvider>
             <div className="flex flex-col min-h-screen bg-white">
-              {/* Header */}
               <Navbar />
-
-              {/* Main Content */}
               <main className="flex-1 bg-white" id="main-content">
                 {children}
               </main>
-
-              {/* Footer - hidden on agent pages */}
               <ConditionalFooter />
-
-              {/* Accessibility Toolbar - globally available */}
               <AccessibilityToolbar />
-
-              {/* Cookie Consent Banner */}
               <CookieConsent />
             </div>
           </AgentAuthProvider>

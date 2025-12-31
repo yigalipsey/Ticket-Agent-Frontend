@@ -48,14 +48,14 @@ export function TeamHeader({
           <div className="flex items-center gap-4">
             {/* Team Logo */}
             {(team.logoUrl || team.logo) && (
-              <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg bg-white/10 backdrop-blur-md border border-white/20 flex-shrink-0">
-                <div className="w-full h-full flex items-center justify-center p-4">
+              <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden shadow-2xl bg-white p-3 flex-shrink-0 border-4 border-white/20">
+                <div className="relative w-full h-full">
                   <Image
                     src={team.logoUrl || team.logo || ""}
                     alt={`לוגו ${team.nameHe || team.name}`}
-                    width={120}
-                    height={120}
+                    fill
                     className="object-contain"
+                    priority
                   />
                 </div>
               </div>
